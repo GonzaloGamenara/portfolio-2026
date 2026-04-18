@@ -39,9 +39,8 @@ const Contact = () => {
             ></textarea>
           </div>
 
-          <button 
-            type="submit"
-            className="bg-black text-white font-black text-xl py-4 border-[3px] border-black shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none hover:bg-gray-800 transition-all mt-4"
+          <button type="submit"
+            className="bg-black text-white font-black text-xl py-4 border-[3px] border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none hover:bg-gray-800 transition-all mt-4"
           >
             Enviar Mensaje
           </button>

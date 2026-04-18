@@ -1,27 +1,47 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 @theme {
-  /* Tus colores Neo-Brutalistas */
+  /* Variables base (Modo Claro) */
   --color-neo-green: #a3d9b1;
-  --color-neo-yellow: #fcd34d;
+  --color-neo-yellow: #F7C236;
+  --color-neo-yellow-light: #F5D381;
   --color-neo-pink: #fca5d3;
   --color-neo-bg: #fcf5e3;
-
-  /* Tus sombras duras */
+  --color-neo-border: #000000;
   --shadow-neo: 4px 4px 0px 0px rgba(0,0,0,1);
   --shadow-neo-hover: 2px 2px 0px 0px rgba(0,0,0,1);
 
-  /* NUEVA ANIMACIÓN */
+  --font-mono: 'Space Mono', monospace;
   --animate-slide-up: slide-up 0.6s ease-out both;
-  
+  --animate-marquee: marquee 15s linear infinite;
+
   @keyframes slide-up {
     0% { opacity: 0; transform: translateY(30px); }
     100% { opacity: 1; transform: translateY(0); }
   }
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
+/* LA MAGIA: Definimos qué pasa cuando se activa la clase .dark */
+.dark {
+  --color-neo-bg: #121212;
+  --color-neo-green: #1a3a25; /* Verde más profundo */
+  --color-neo-border: #ffffff;
+  --shadow-neo: 4px 4px 0px 0px rgba(255,255,255,1);
+  --shadow-neo-hover: 2px 2px 0px 0px rgba(255,255,255,1);
 }
 
 @layer base {
   body {
-    @apply bg-neo-green text-black font-sans antialiased;
+    /* Usamos la variable de borde para que los textos cambien solos */
+    @apply transition-colors duration-300 antialiased;
+    color: var(--color-neo-border);
+    background-color: var(--color-neo-green);
+    background-image: radial-gradient(var(--color-neo-border) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 }

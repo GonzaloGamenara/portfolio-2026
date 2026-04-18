@@ -1,24 +1,67 @@
 import ProfileCard from '../components/ProfileCard';
 import ReviewCard from '../components/ReviewCard';
+import Marquee from '../components/Marquee';
 
 const Home = () => {
   return (
-    <main className="flex-1 p-6 md:p-10 overflow-y-auto">
-      <header className="flex justify-between items-center mb-8 border-b-[3px] border-black pb-4 animate-slide-up">
-        <button className="border-2 border-black p-1 hover:bg-neo-green transition-colors">←</button>
-        <div className="flex gap-4">
-          <input type="text" placeholder="Find projects, skills..." className="border-2 border-black px-4 py-1 outline-none focus:bg-white bg-transparent" />
-        </div>
-      </header>
+    <main className="flex-1 p-6 md:p-10 overflow-y-auto animate-slide-up" style={{ animationDelay: "50ms" }}>
 
-      <div className="animate-slide-up" style={{ animationDelay: "150ms" }}>
-        <h1 className="text-4xl font-black mb-6 tracking-tight">Trainer info</h1>
-        <ProfileCard />
+      {/* Título */}
+      <div className="mt-6 animate-slide-up" style={{ animationDelay: "150ms" }}>
+        <div className="flex justify-between items-end mb-4">
+          <h1 className="text-6xl font-black font-mono tracking-tight">Portafolio</h1>
+          <h2 className="hidden xl:block text-3xl font-black tracking-tight w-1/3 pl-8 font-mono">Experiencia</h2>
+        </div>
+        
+        {/* Contenedor dividido: Tarjeta Amarilla (2/3) y Work Experience (1/3) */}
+        <div className="flex flex-col xl:flex-row gap-8">
+          
+          <div className="xl:w-2/3">
+            <ProfileCard />
+          </div>
+
+          {/* Columna Derecha de Experiencia */}
+          <div className="xl:w-1/3 flex flex-col gap-4">
+            <h2 className="xl:hidden text-2xl font-black tracking-tight mt-4 font-mono">Experiencia</h2>
+            
+            <div className="bg-white border-[3px] border-black p-4 flex gap-3 hover:bg-neo-bg transition-colors shadow-neo">
+              <div className="text-2xl border-2 border-black p-1 h-fit bg-neo-green">🪑</div>
+              <div>
+                <h4 className="font-black text-sm">Emprendedor</h4>
+                <p className="text-[10px] font-bold text-gray-600 mb-1">Entre Vetas Fábrica de Muebles</p>
+                <p className="text-xs font-medium">Nov 2023 - Present</p>
+              </div>
+            </div>
+
+            <div className="bg-white border-[3px] border-black p-4 flex gap-3 hover:bg-neo-bg transition-colors shadow-neo">
+              <div className="text-2xl border-2 border-black p-1 h-fit bg-neo-pink">📱</div>
+              <div>
+                <h4 className="font-black text-sm">Encargado</h4>
+                <p className="text-[10px] font-bold text-gray-600 mb-1">Eneldo</p>
+                <p className="text-xs font-medium">Mar 2020 - Nov 2025</p>
+              </div>
+            </div>
+
+            <div className="bg-white border-[3px] border-black p-4 flex gap-3 hover:bg-neo-bg transition-colors shadow-neo">
+              <div className="text-2xl border-2 border-black p-1 h-fit bg-neo-yellow">🎥</div>
+              <div>
+                <h4 className="font-black text-sm">Docu-Style Content Creator</h4>
+                <p className="text-[10px] font-bold text-gray-600 mb-1">Freelance</p>
+                <p className="text-xs font-medium">Apr 2026 - Present</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
+      
+
+      {/* Acá metemos la cinta infinita */}
+      <Marquee />
 
       <div className="flex justify-between items-end mb-4 mt-12 animate-slide-up" style={{ animationDelay: "300ms" }}>
         <h2 className="text-4xl font-black tracking-tight">Reviews & Stats</h2>
-        <button className="border-2 border-black px-4 py-1 text-sm font-bold bg-white hover:bg-neo-yellow shadow-neo transition-colors">Ver todos</button>
+        <button className="border-2 border-black px-4 py-1 text-sm font-bold bg-white hover:bg-neo-yellow shadow-neo transition-colors">Ver todos</button>  
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 animate-slide-up" style={{ animationDelay: "450ms" }}>
