@@ -1,27 +1,53 @@
 const Marquee = () => {
+  const skills = [
+    "⚡ React",
+    "•",
+    "🎨 Tailwind",
+    "•",
+    "📜 JavaScript",
+    "•",
+    "🚀 Node.js",
+    "•",
+    "🐍 Python",
+    "•",
+    "☕ Java",
+    "•",
+    "⚙️ C++",
+    "•",
+    "📊 SQL",
+    "•",
+    "🍃 MongoDB",
+    "•",
+    "📈 PowerBI",
+  ];
+
   return (
-    <div className="w-full bg-neo-yellow border-y-[3px] border-black overflow-hidden py-2 my-8 shadow-neo relative rotate-1deg hover:rotate-0 transition-transform">
-      <div className="flex w-[200%] animate-marquee whitespace-nowrap">
-        {/* Repetimos el texto varias veces para que el bucle sea fluido */}
-        <div className="flex text-xl font-black uppercase w-1/2 justify-around">
-          <span>⚡ React</span>
-          <span>•</span>
-          <span>🎨 TailWind</span>
-          <span>•</span>
-          <span>🕹️ Vite</span>
-          <span>•</span>
-          <span>🎥 Node</span>
-          <span>•</span>
+    <div
+      className="w-full bg-neo-yellow border-y-[3px] border-black overflow-hidden py-3 my-8 shadow-neo relative rotate-1deg hover:rotate-0 transition-transform animate-scale-up"
+      style={{ animationDelay: "2600ms" }}
+    >
+      {/* Añadimos 'flex' aquí para que el contenedor hijo no necesite anchos fijos */}
+      <div className="flex animate-marquee w-max">
+        {/* Usamos dos listas idénticas */}
+        <div className="flex gap-6 px-3 shrink-0">
+          {skills.map((skill, index) => (
+            <span
+              key={index}
+              className="text-xl font-black uppercase whitespace-nowrap"
+            >
+              {skill}
+            </span>
+          ))}
         </div>
-        <div className="flex text-xl font-black uppercase w-1/2 justify-around">
-          <span>⚡ React</span>
-          <span>•</span>
-          <span>🎨 TailWind</span>  
-          <span>•</span>
-          <span>🕹️ Vite</span>
-          <span>•</span>
-          <span>🎥 Node</span>
-          <span>•</span>
+        <div className="flex gap-6 px-3 shrink-0">
+          {skills.map((skill, index) => (
+            <span
+              key={`dup-${index}`}
+              className="text-xl font-black uppercase whitespace-nowrap"
+            >
+              {skill}
+            </span>
+          ))}
         </div>
       </div>
     </div>

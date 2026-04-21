@@ -1,28 +1,75 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 @theme {
   /* Variables base (Modo Claro) */
+  --color-background-general: #a3d9b1;
+  --color-background-border-general: #fcf5e3;
+
   --color-neo-green: #a3d9b1;
-  --color-neo-yellow: #F7C236;
-  --color-neo-yellow-light: #F5D381;
+  --color-neo-yellow: #f7c236;
+  --color-neo-yellow-light: #f5d381;
   --color-neo-pink: #fca5d3;
   --color-neo-bg: #fcf5e3;
   --color-neo-border: #000000;
-  --shadow-neo: 4px 4px 0px 0px rgba(0,0,0,1);
-  --shadow-neo-hover: 2px 2px 0px 0px rgba(0,0,0,1);
+  --shadow-neo: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-neo-hover: 2px 2px 0px 0px rgba(0, 0, 0, 1);
 
-  --font-mono: 'Space Mono', monospace;
+  --font-mono: "Space Mono", monospace;
   --animate-slide-up: slide-up 0.6s ease-out both;
-  --animate-marquee: marquee 15s linear infinite;
+  --animate-marquee: marquee 25s linear infinite;
+  --animate-main-morph: main-morph 2s ease-in-out both;
+  --animate-scale-up: scale-up 0.5s ease-out both;
+
+  @keyframes scale-up {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 
   @keyframes slide-up {
-    0% { opacity: 0; transform: translateY(30px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   @keyframes marquee {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-50%); }
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes main-morph {
+    0% {
+      width: 0vw;
+      height: 0vh;
+    }
+    50% {
+      transform: rotate(10deg);
+      width: 5vw;
+      height: 85vh;
+    }
+    90% {
+      transform: rotate(-2deg);
+    }
+    95% {
+      transform: rotate(2deg);
+      width: 70vw;
+    }
+    100% {
+      transform: rotate(0deg);
+    }
   }
 }
 
@@ -31,17 +78,137 @@
   --color-neo-bg: #121212;
   --color-neo-green: #1a3a25; /* Verde más profundo */
   --color-neo-border: #ffffff;
-  --shadow-neo: 4px 4px 0px 0px rgba(255,255,255,1);
-  --shadow-neo-hover: 2px 2px 0px 0px rgba(255,255,255,1);
+  --shadow-neo: 4px 4px 0px 0px rgba(255, 255, 255, 1);
+  --shadow-neo-hover: 2px 2px 0px 0px rgba(255, 255, 255, 1);
 }
 
 @layer base {
   body {
-    /* Usamos la variable de borde para que los textos cambien solos */
     @apply transition-colors duration-300 antialiased;
-    color: var(--color-neo-border);
-    background-color: var(--color-neo-green);
-    background-image: radial-gradient(var(--color-neo-border) 1px, transparent 1px);
-    background-size: 24px 24px;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh; /* Asegura que cubra todo el viewport */
+
+    --color: var(--color-background-border-general);
+    background-color: var(--color-background-general);
+
+    background-image:
+      /* --- CAPAS DE VINIETADO ADAPTATIVO (de arriba a abajo en CSS) --- */
+      /* Usamos sutiles oscurecimientos elípticos y lineales para seguir el contorno */
+
+      /* 1. Oscurecimiento General muy sutil en el centro */
+      radial-gradient(
+        circle at center,
+        transparent 20%,
+        rgba(0, 0, 0, 0.3) 100%
+      ),
+      /* 2-5. Oscurecimientos de bordes específicos (con porcentajes adaptativos) */
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 25%),
+      /* Borde Superior */
+        linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent 25%),
+      /* Borde Inferior */
+        linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent 25%),
+      /* Borde Izquierdo */
+        linear-gradient(to left, rgba(0, 0, 0, 0.2), transparent 25%),
+      /* Borde Derecho */
+        /* 6-9. Oscurecimientos de esquinas específicos (elípticos para seguir contornos) */
+        radial-gradient(
+          ellipse at top left,
+          rgba(0, 0, 0, 0.2),
+          transparent 40%
+        ),
+      /* Esquina Sup-Izq */
+        radial-gradient(
+          ellipse at top right,
+          rgba(0, 0, 0, 0.2),
+          transparent 40%
+        ),
+      /* Esquina Sup-Der */
+        radial-gradient(
+          ellipse at bottom right,
+          rgba(0, 0, 0, 0.2),
+          transparent 40%
+        ),
+      /* Esquina Inf-Der */
+        radial-gradient(
+          ellipse at bottom left,
+          rgba(0, 0, 0, 0.2),
+          transparent 40%
+        ),
+      /* Esquina Inf-Izq */
+        /* --- CAPAS DEL PATRÓN DE LA CUADRÍCULA ORIGINAL (Preservadas) --- */
+        linear-gradient(
+          0deg,
+          transparent 24%,
+          var(--color) 25%,
+          var(--color) 26%,
+          transparent 27%,
+          transparent 74%,
+          var(--color) 75%,
+          var(--color) 76%,
+          transparent 77%,
+          transparent
+        ),
+      linear-gradient(
+        90deg,
+        transparent 24%,
+        var(--color) 25%,
+        var(--color) 26%,
+        transparent 27%,
+        transparent 74%,
+        var(--color) 75%,
+        var(--color) 76%,
+        transparent 77%,
+        transparent
+      );
+
+    /* --- TAMAÑOS DE FONDO ESPECÍFICOS PARA CADA CAPA --- */
+    /* Para las capas de vinietado: porcentajes adaptativos */
+    /* Para las capas de cuadrícula: 200px (preservado) */
+    background-size:
+      /* Vinietado adaptativo */
+      100% 100%,
+      /* General */ 100% 25%,
+      /* Sup */ 100% 25%,
+      /* Inf */ 25% 100%,
+      /* Izq */ 25% 100%,
+      /* Der */ 40% 40%,
+      /* Esqu Sup-Izq */ 40% 40%,
+      /* Esqu Sup-Der */ 40% 40%,
+      /* Esqu Inf-Der */ 40% 40%,
+      /* Esqu Inf-Izq */ /* Cuadrícula */ 200px 200px,
+      200px 200px;
+
+    /* --- POSICIONES DE FONDO ESPECÍFICOS PARA CADA CAPA --- */
+    background-position:
+      /* Vinietado adaptativo */
+      center center,
+      top center,
+      bottom center,
+      left center,
+      right center,
+      top left,
+      top right,
+      bottom right,
+      bottom left,
+      /* Cuadrícula */ 0 0,
+      0 0;
+
+    /* --- REPETICIÓN DE FONDO ESPECÍFICOS PARA CADA CAPA --- */
+    /* Las capas de vinietado no se repiten para que no 'parpadeen' */
+    /* Las capas de cuadrícula sí se repiten (preservado) */
+    background-repeat:
+      /* Vinietado adaptativo */
+      no-repeat,
+      no-repeat,
+      no-repeat,
+      no-repeat,
+      no-repeat,
+      no-repeat,
+      no-repeat,
+      no-repeat,
+      no-repeat,
+      /* Cuadrícula */ repeat,
+      repeat;
   }
 }
