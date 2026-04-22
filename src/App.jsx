@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home";
-import Schedule from "./pages/Schedule";
+import Detail from "./pages/Detail";
 import Portfolio from "./pages/Portfolio";
 import Contact from "./pages/Contact";
 
@@ -27,7 +27,7 @@ function App() {
             {/* Acá cambian las pantallas mágicamente */}
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/schedule" element={<Schedule />} />
+              <Route path="/detail" element={<Detail />} />
               <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/contact" element={<Contact />} />
             </Routes>

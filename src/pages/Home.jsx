@@ -150,22 +150,22 @@ const Home = () => {
         <ProjectCard
           name="StellarSights"
           videoUrl="/videos/stellar.mp4" // Solo necesitas el video
-          resume="Web dinamica de exploracion"
+          resume="Web completa con Frontend y backend"
           tech="React, Tailwind"
           delay="2900ms"
         />
         <ProjectCard
-          name="Stellar App"
-          videoUrl="/videos/stellar.mp4" // Solo necesitas el video
-          resume="Diseño UI/UX"
-          tech="React, Tailwind"
+          name="Accidentes Automovilisticos"
+          videoUrl="/videos/accidentes.mp4" // Solo necesitas el video
+          resume="Analisis de Datos y Visualizacion"
+          tech="Excel, Power BI, DAX"
           delay="3100ms"
         />
         <ProjectCard
-          name="Stellar App"
-          videoUrl="/videos/stellar.mp4" // Solo necesitas el video
-          resume="Diseño UI/UX"
-          tech="React, Tailwind"
+          name="Analisis E-Commerce"
+          videoUrl="/videos/ecommerce.mp4" // Solo necesitas el video
+          resume="Analisis de Datos y Visualizacion"
+          tech="Excel, Power BI, DAX"
           delay="3300ms"
         />
       </div>

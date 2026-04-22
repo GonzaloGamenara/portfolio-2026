@@ -21,7 +21,7 @@ const Sidebar = () => {
   // Definición de enlaces para facilitar el renderizado
   const navLinks = [
     { name: "Resumen", path: "/", icon: <Home size={20} /> },
-    { name: "Detalle", path: "/Detalle", icon: <FileText size={20} /> },
+    { name: "Detalle", path: "/Detail", icon: <FileText size={20} /> },
     { name: "Proyectos", path: "/Portfolio", icon: <Calendar size={20} /> },
     { name: "Contacto", path: "/Contact", icon: <GraduationCap size={20} /> },
   ];
