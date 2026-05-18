@@ -10,7 +10,6 @@ export const AnimationProvider = ({ children }) => {
 
   useEffect(() => {
     if (isFirstLoad) {
-      // El tiempo debe coincidir con tu animación más larga de la intro
       const timer = setTimeout(() => {
         sessionStorage.setItem("animation_played", "true");
         setIsFirstLoad(false);

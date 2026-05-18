@@ -1,11 +1,12 @@
 import miFoto from "../assets/gonza.png";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const ProfileCard = () => {
+  const navigate = useNavigate();
+
   return (
-    // Le sacamos el xl:w-2/3 de acá, lo va a manejar el Home
     <div className="bg-neo-yellow border-[3px] border-black shadow-neo p-6 w-full">
       <div className="flex flex-col sm:flex-row gap-6 items-start">
-        {/* Avatar más grande (w-40 h-40 en vez de 32) */}
         <div
           className="w-32 h-32 sm:w-40 sm:h-40 md:w-65 md:h-80 border-[3px]  shrink-0 overflow-hidden animate-scale-up"
           style={{ animationDelay: "2300ms" }}
@@ -45,7 +46,7 @@ const ProfileCard = () => {
                   </span>
                 </a>
               </button>
-              <button className="w-10 h-10   border-2 border-black flex items-center justify-center bg-white font-bold hover:bg-neo-green transition-colors">
+              <button className="w-10 h-10  cursor-pointer  border-2 border-black flex items-center justify-center bg-white font-bold hover:bg-neo-green transition-colors">
                 <a
                   href="https://github.com/GonzaloGamenara"
                   target="_blank"
@@ -95,11 +96,11 @@ const ProfileCard = () => {
             Godot, busco oportunidades para aplicar mis habilidades y seguir
             creciendo profesionalmente.
           </p>
-
-          {/* Botones ajustados: ya no tienen flex-1, se adaptan a su contenido */}
           <div className="flex gap-4 font-mono w-full">
-            <button className="flex flex-1 items-center justify-center gap-2 bg-black text-white font-bold py-2 border-2 border-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
-              {/* Ícono de teléfono en SVG */}
+            <button
+              onClick={() => navigate("/contact")}
+              className="flex flex-1 items-center justify-center gap-2 bg-black text-white font-bold py-2 border-2 border-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -115,7 +116,10 @@ const ProfileCard = () => {
               </svg>
               Contactar
             </button>
-            <button className="flex-1 bg-white font-bold py-2 border-2 border-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+            <button
+              onClick={() => navigate("/portfolio")}
+              className="flex-1 bg-white font-bold py-2 border-2 border-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
+            >
               Ver Portfolio
             </button>
           </div>

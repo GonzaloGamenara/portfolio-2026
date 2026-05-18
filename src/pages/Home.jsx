@@ -1,18 +1,29 @@
 import ProfileCard from "../components/ProfileCard";
 import ProjectCard from "../components/ProjectCard";
 import Marquee from "../components/Marquee";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  //Flag para desactivar los delays y navegar bien despues del primer load
+  const isFirstLoad = !sessionStorage.getItem("introVista");
+
+  //trabajando...
+  if (isFirstLoad) {
+    sessionStorage.setItem("introVista", "true");
+  }
+
   return (
     <main
-      className="flex-1 p-6 md:p-10 overflow-y-auto animate-slide-up "
+      className="flex-1 p-6 md:p-10 overflow-y-auto scroll-smooth animate-slide-up "
       style={{ animationDelay: "2000ms" }}
     >
       {/* Título */}
       <div className="animate-scale-up" style={{ animationDelay: "2100ms" }}>
         <div className="flex justify-between items-end mb-4">
           <h1 className="text-6xl font-black font-mono tracking-tight">
-            Portafolio
+            Mi resumen
           </h1>
           <h2 className="hidden xl:block text-3xl font-black tracking-tight w-1/3 pl-8 font-mono">
             Experiencia
@@ -26,7 +37,7 @@ const Home = () => {
           </div>
 
           {/* Columna Derecha de Experiencia */}
-          <div className="xl:w-1/4 flex flex-col h-window justify-evenly border-[3px] border-black shadow-neo ">
+          <div className="xl:w-1/3 flex flex-col h-window justify-evenly border-[3px] border-black shadow-neo">
             <h2 className="xl:hidden text-2xl font-black tracking-tight mt-4 font-mono">
               Experiencia
             </h2>
@@ -80,7 +91,10 @@ const Home = () => {
           {" "}
           Proyectos destacados
         </h2>
-        <button className="border-2 border-black px-4 py-1 text-sm font-bold bg-white hover:bg-neo-yellow shadow-neo transition-colors">
+        <button
+          onClick={() => navigate("/portfolio")}
+          className="border-2 border-black px-4 py-1 text-sm font-bold bg-white hover:bg-neo-yellow shadow-neo transition-colors"
+        >
           Ver todos
         </button>
       </div>
@@ -147,27 +161,35 @@ const Home = () => {
           </div>
         </div>
 
-        <ProjectCard
-          name="StellarSights"
-          videoUrl="/videos/stellar.mp4" // Solo necesitas el video
-          resume="Web completa con Frontend y backend"
-          tech="React, Tailwind"
-          delay="2900ms"
-        />
-        <ProjectCard
-          name="Accidentes Automovilisticos"
-          videoUrl="/videos/accidentes.mp4" // Solo necesitas el video
-          resume="Analisis de Datos y Visualizacion"
-          tech="Excel, Power BI, DAX"
-          delay="3100ms"
-        />
-        <ProjectCard
-          name="Analisis E-Commerce"
-          videoUrl="/videos/ecommerce.mp4" // Solo necesitas el video
-          resume="Analisis de Datos y Visualizacion"
-          tech="Excel, Power BI, DAX"
-          delay="3300ms"
-        />
+        <Link to="/Portfolio" className="cursor-pointer">
+          <ProjectCard
+            name="StellarSights"
+            videoUrl="/videos/stellar.mp4"
+            resume="Web completa con Frontend y backend"
+            tech="React, Tailwind"
+            delay="2900ms"
+          />
+        </Link>
+
+        <Link to="/Portfolio" className="cursor-pointer">
+          <ProjectCard
+            name="Accidentes Automovilisticos"
+            videoUrl="/videos/accidentes.mp4"
+            resume="Analisis de Datos y Visualizacion"
+            tech="Excel, Power BI, DAX"
+            delay="3100ms"
+          />
+        </Link>
+
+        <Link to="/Portfolio" className="cursor-pointer">
+          <ProjectCard
+            name="Analisis E-Commerce"
+            videoUrl="/videos/ecommerce.mp4"
+            resume="Analisis de Datos y Visualizacion"
+            tech="Excel, Power BI, DAX"
+            delay="3300ms"
+          />
+        </Link>
       </div>
     </main>
   );
