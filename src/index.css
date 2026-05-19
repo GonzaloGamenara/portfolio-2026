@@ -13,19 +13,17 @@
   --color-neo-bg: #fcf5e3;
   --color-neo-border: #000000;
 
-  --shadow-neo: 4px 4px 0px 0px rgba(0, 0, 0, 1);
-  --shadow-neo-hover: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-neo: 4px 4px 0px rgba(0, 0, 0, 1);
+  --shadow-neo-hover: 2px 2px 0px rgba(0, 0, 0, 1);
 
   --font-mono: "Space Mono", monospace;
 
-  /* En Tailwind v4, las utilidades de animación se declaran así en @theme */
   --animate-slide-up: slide-up 0.6s ease-out both;
   --animate-marquee: marquee 25s linear infinite;
   --animate-main-morph: main-morph 2s ease-in-out both;
   --animate-scale-up: scale-up 0.5s ease-out both;
 }
 
-/* Los @keyframes en v4 se definen fuera del bloque @theme usando CSS estándar */
 @keyframes scale-up {
   0% {
     transform: scale(0);
@@ -79,13 +77,15 @@
   }
 }
 
-/* Modo Oscuro: Sobrescribimos las variables usando la estrategia de clase */
+/* Modo Oscuro: Sobrescritura de variables mediante clase global */
 .dark {
   --color-neo-bg: #121212;
   --color-neo-green: #1a3a25;
   --color-neo-border: #ffffff;
-  --shadow-neo: 4px 4px 0px 0px rgba(255, 255, 255, 1);
-  --shadow-neo-hover: 2px 2px 0px 0px rgba(255, 255, 255, 1);
+  --shadow-neo: 4px 4px 0px rgba(255, 255, 255, 1);
+  --shadow-neo-hover: 2px 2px 0px rgba(255, 255, 255, 1);
+  --color-background-general: #121212;
+  --color-background-border-general: #1a1a1a;
 }
 
 @layer base {
@@ -98,28 +98,19 @@
     width: 100%;
     min-height: 100vh;
 
-    /* Declaramos variables internas locales */
-    --grid-color: var(--color-background-border-general);
-    background-color: var(--color-background-general);
+    background-color: #a3d9b1;
 
     background-image:
-      /* 1. Oscurecimiento General sutil en el centro */
       radial-gradient(
         circle at center,
         transparent 20%,
         rgba(0, 0, 0, 0.3) 100%
       ),
-      /* 2-5. Oscurecimientos de bordes específicos */
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 25%),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 25%),
       linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent 25%),
       linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent 25%),
       linear-gradient(to left, rgba(0, 0, 0, 0.2), transparent 25%),
-      /* 6-9. Oscurecimientos de esquinas específicos */
-        radial-gradient(
-          ellipse at top left,
-          rgba(0, 0, 0, 0.2),
-          transparent 40%
-        ),
+      radial-gradient(ellipse at top left, rgba(0, 0, 0, 0.2), transparent 40%),
       radial-gradient(
         ellipse at top right,
         rgba(0, 0, 0, 0.2),
@@ -135,28 +126,27 @@
         rgba(0, 0, 0, 0.2),
         transparent 40%
       ),
-      /* Patrón de la cuadrícula original (Preservado con la nueva variable) */
-        linear-gradient(
-          0deg,
-          transparent 24%,
-          var(--grid-color) 25%,
-          var(--grid-color) 26%,
-          transparent 27%,
-          transparent 74%,
-          var(--grid-color) 75%,
-          var(--grid-color) 76%,
-          transparent 77%,
-          transparent
-        ),
+      linear-gradient(
+        0deg,
+        transparent 24%,
+        var(--color-background-border-general) 25%,
+        var(--color-background-border-general) 26%,
+        transparent 27%,
+        transparent 74%,
+        var(--color-background-border-general) 75%,
+        var(--color-background-border-general) 76%,
+        transparent 77%,
+        transparent
+      ),
       linear-gradient(
         90deg,
         transparent 24%,
-        var(--grid-color) 25%,
-        var(--grid-color) 26%,
+        var(--color-background-border-general) 25%,
+        var(--color-background-border-general) 26%,
         transparent 27%,
         transparent 74%,
-        var(--grid-color) 75%,
-        var(--grid-color) 76%,
+        var(--color-background-border-general) 75%,
+        var(--color-background-border-general) 76%,
         transparent 77%,
         transparent
       );
@@ -193,33 +183,29 @@
   }
 }
 
-/* ==========================================================================
-   SCROLLBAR ESTILO NEO-BRUTALISTA
-   ========================================================================== */
 ::-webkit-scrollbar {
   width: 14px;
   height: 14px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #fcf5e3; /* Sincronizado con tu color base original */
+  background-color: #fcf5e3;
   border-left: 3px solid #000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #f7c236; /* Sincronizado con tu amarillo del theme */
+  background-color: #f7c236;
   border: 3px solid #000000;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #a3d9b1; /* Sincronizado con tu verde del theme */
+  background-color: #a3d9b1;
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background-color: #fca5d3; /* Sincronizado con tu rosa del theme */
+  background-color: #fca5d3;
 }
 
-/* Compatibilidad moderna para navegadores como Firefox */
 @supports (scrollbar-color: auto) {
   html {
     scrollbar-color: #f7c236 #fcf5e3;

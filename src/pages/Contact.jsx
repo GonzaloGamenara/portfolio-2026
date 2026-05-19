@@ -17,7 +17,6 @@ const Contact = () => {
               onSubmit={(e) => e.preventDefault()}
               className="border-[3px] border-black bg-[#FFDE4D] p-6 md:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-5 h-full"
             >
-              {/* Campo: Nombre / Empresa */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-xl font-bold text-black uppercase tracking-wide">
                   Nombre / Empresa
@@ -30,7 +29,6 @@ const Contact = () => {
                 />
               </div>
 
-              {/* Campo: Email */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-xl font-bold text-black uppercase tracking-wide">
                   Tu Email
@@ -43,7 +41,6 @@ const Contact = () => {
                 />
               </div>
 
-              {/* Campo: Mensaje */}
               <div className="flex flex-col gap-1.5 flex-1">
                 <label className="text-xl font-bold text-black uppercase tracking-wide">
                   Mensaje
@@ -56,7 +53,6 @@ const Contact = () => {
                 ></textarea>
               </div>
 
-              {/* Botón Enviar */}
               <button
                 type="submit"
                 className="w-full py-3.5 bg-black text-white font-bold text-sm uppercase tracking-wider border-2 border-black hover:bg-slate-900 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] shadow-[4px_4px_0px_0px_rgba(100,100,100,0.3)] transition-all mt-2"
@@ -66,16 +62,13 @@ const Contact = () => {
             </form>
           </div>
 
-          {/* COLUMNA DERECHA: Canales Directos e Info del CV */}
           <div className="flex flex-col gap-6 justify-between">
-            {/* Tarjeta 1: Canales Directos */}
             <div className="border-[3px] border-black bg-[#A1E3CB] p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-4">
               <h2 className="font-bold text-lg uppercase tracking-wide text-black flex items-center gap-1.5">
                 <span>📩</span> Canales Directos
               </h2>
 
               <div className="flex flex-col gap-2.5">
-                {/* Email */}
                 <a
                   href="mailto:gonzagamenara@gmail.com"
                   className="flex items-center gap-3 bg-white p-2.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all text-xs"
@@ -91,7 +84,6 @@ const Contact = () => {
                   </div>
                 </a>
 
-                {/* LinkedIn */}
                 <a
                   href="https://linkedin.com/in/tu-usuario"
                   target="_blank"
@@ -109,7 +101,6 @@ const Contact = () => {
                   </div>
                 </a>
 
-                {/* GitHub */}
                 <a
                   href="https://github.com/GonzaloGamenara"
                   target="_blank"
@@ -129,11 +120,8 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Tarjeta 2: Info de Currículum (Mini Ficha de Identificación) */}
-            {/* Tarjeta 2: Info de Currículum (Mini Ficha de Identificación) */}
             <div className="border-[3px] border-black bg-white p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-5 flex-1 justify-between font-mono">
               <div>
-                {/* Encabezado de la Ficha */}
                 <div className="flex items-center justify-between border-b-[3px] border-black pb-3 mb-4">
                   <h2 className="font-bold text-lg uppercase tracking-wide text-black flex items-center gap-1.5">
                     <span>📄</span> Currículum Vitae
@@ -143,7 +131,6 @@ const Contact = () => {
                   </span>
                 </div>
 
-                {/* Grupo 1: Datos Personales */}
                 <div className="mb-4">
                   <span className="text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 text-slate-500 uppercase tracking-wider border border-slate-200">
                     01 / Identificación
@@ -176,7 +163,6 @@ const Contact = () => {
                   </ul>
                 </div>
 
-                {/* Grupo 2: Core Académico */}
                 <div className="mb-4">
                   <span className="text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 text-slate-500 uppercase tracking-wider border border-slate-200">
                     02 / Académico
@@ -209,7 +195,6 @@ const Contact = () => {
                   </ul>
                 </div>
 
-                {/* Grupo 3: Historial de Operaciones */}
                 <div>
                   <span className="text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 text-slate-500 uppercase tracking-wider border border-slate-200">
                     03 / Trayectoria Comercial
@@ -243,7 +228,6 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Botón de descarga con estados de animación Neo-brutalistas */}
               <a
                 href="/tu-cv-file.pdf"
                 download="CV_Gonzalo_Gamenara.pdf"

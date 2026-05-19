@@ -1,30 +1,30 @@
 const Detail = () => {
   return (
-    <main className="flex-1 p-6 md:p-10 overflow-y-auto animate-slide-up flex flex-col gap-8 bg-[#FDFBF7]">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 flex flex-col gap-8">
-          <div className="border-[3px] border-black bg-[#FFDE4D] p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-            <h2 className="font-mono font-bold text-2xl mb-4 uppercase tracking-wider text-black">
+    <main className="flex-1 p-4 sm:p-6 md:p-10 overflow-y-auto animate-slide-up flex flex-col gap-6 sm:gap-8 bg-[#FDFBF7]">
+      <div className="flex flex-col-reverse lg:grid lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="lg:col-span-2 flex flex-col gap-6 sm:gap-8">
+          <div className="border-[3px] border-black bg-[#FFDE4D] p-4 sm:p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+            <h2 className="font-mono font-bold text-xl sm:text-2xl mb-4 uppercase tracking-wider text-black flex items-center gap-2">
               🎓 Educación & Universidad
             </h2>
 
             <div className="flex flex-col gap-4">
-              <div className="bg-white p-5 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-mono">
-                <h3 className="font-bold text-xl text-black tracking-tight">
+              <div className="bg-white p-4 sm:p-5 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-mono">
+                <h3 className="font-bold text-lg sm:text-xl text-black tracking-tight leading-tight">
                   Licenciatura en Desarrollo de Software
                 </h3>
-                <p className="text-xs font-bold text-slate-500 mt-0.5 mb-4">
+                <p className="text-[11px] sm:text-xs font-bold text-slate-500 mt-1 mb-4">
                   UNSAM (Universidad Nacional de San Martín) • 2025 - Presente
                 </p>
 
-                <p className="text-sm text-slate-700 leading-relaxed mb-4 border-l-2 border-black pl-3">
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed mb-4 border-l-2 border-black pl-3">
                   Formación universitaria enfocada en el diseño, arquitectura y
                   ciclo de vida completo de productos digitales.
                 </p>
 
-                <ul className="space-y-3 text-sm text-slate-800">
+                <ul className="space-y-3 text-xs sm:text-sm text-slate-800">
                   <li className="flex items-baseline gap-2">
-                    <span className="text-black font-bold text-xs select-none">
+                    <span className="text-black font-bold text-xs select-none shrink-0">
                       ▪
                     </span>
                     <span>
@@ -36,7 +36,7 @@ const Detail = () => {
                     </span>
                   </li>
                   <li className="flex items-baseline gap-2">
-                    <span className="text-black font-bold text-xs select-none">
+                    <span className="text-black font-bold text-xs select-none shrink-0">
                       ▪
                     </span>
                     <span>
@@ -46,7 +46,7 @@ const Detail = () => {
                     </span>
                   </li>
                   <li className="flex items-baseline gap-2">
-                    <span className="text-black font-bold text-xs select-none">
+                    <span className="text-black font-bold text-xs select-none shrink-0">
                       ▪
                     </span>
                     <span>
@@ -59,7 +59,7 @@ const Detail = () => {
 
                 {/* SECCIÓN DE TRAYECTORIA PREVIA */}
                 <div className="mt-5 pt-4 border-t-2 border-dashed border-slate-200">
-                  <span className="text-[10px] font-extrabold bg-slate-100 px-2 py-0.5 text-slate-600 border border-slate-300 uppercase tracking-wider">
+                  <span className="text-[9px] sm:text-[10px] font-extrabold bg-slate-100 px-2 py-0.5 text-slate-600 border border-slate-300 uppercase tracking-wider inline-block">
                     Trayectoria Previa
                   </span>
                   <p className="text-xs text-slate-600 mt-2 leading-relaxed">
@@ -77,24 +77,24 @@ const Detail = () => {
           </div>
 
           {/* Tarjeta Rosa - Cursos y Certificaciones */}
-          <div className="border-[3px] border-black bg-[#FFB0B0] p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-            <h2 className="font-mono font-bold text-2xl mb-4 uppercase tracking-wider text-black">
+          <div className="border-[3px] border-black bg-[#FFB0B0] p-4 sm:p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+            <h2 className="font-mono font-bold text-xl sm:text-2xl mb-4 uppercase tracking-wider text-black">
               📜 Cursos y Certificaciones
             </h2>
-            <div className="bg-white p-5 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-mono">
+            <div className="bg-white p-4 sm:p-5 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-mono">
               <div className="space-y-6">
                 {/* Certificado 1: Data Analytics */}
                 <div className="border-l-2 border-black pl-3">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h4 className="font-bold text-base text-black tracking-tight">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 items-start">
+                    <h4 className="font-bold text-base text-black tracking-tight leading-tight">
                       Certificación en Data Analytics
                     </h4>
-                    <span className="bg-[#FFFF00] text-black text-[10px] font-extrabold px-1.5 py-0.5 border border-black uppercase tracking-wider shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] select-none">
+                    <span className="bg-[#FFFF00] text-black text-[9px] sm:text-[10px] font-extrabold px-1.5 py-0.5 border border-black uppercase tracking-wider shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] select-none shrink-0 mt-1 sm:mt-0">
                       ⭐ Top 10%
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2 text-xs text-slate-500 mt-1 flex-wrap">
+                  <div className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-500 mt-1.5 flex-wrap">
                     <span>Coderhouse • 2025</span>
                     <span>•</span>
                     <a
@@ -107,7 +107,7 @@ const Detail = () => {
                     </a>
                   </div>
 
-                  <p className="text-xs md:text-sm text-slate-700 mt-2 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-700 mt-2 leading-relaxed">
                     Modelado de bases de datos relacionales y manipulación
                     avanzada con{" "}
                     <strong className="text-black font-bold">SQL</strong> (Joins
@@ -123,12 +123,11 @@ const Detail = () => {
                   </p>
                 </div>
 
-                {/* Certificado 2: Scientific Computing with Python */}
                 <div className="border-l-2 border-slate-300 pl-3">
-                  <h4 className="font-bold text-base text-slate-900 tracking-tight">
+                  <h4 className="font-bold text-base text-slate-900 tracking-tight leading-tight">
                     Scientific Computing with Python
                   </h4>
-                  <div className="flex items-center gap-2 text-xs text-slate-500 mt-1 flex-wrap">
+                  <div className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-500 mt-1.5 flex-wrap">
                     <span>freeCodeCamp • ~300 hs • 2025</span>
                     <span>•</span>
                     <a
@@ -140,7 +139,7 @@ const Detail = () => {
                       Ver credencial ↗
                     </a>
                   </div>
-                  <p className="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
                     Enfoque en desarrollo lógico puro, estructuras de datos
                     avanzadas y resolución de problemas algorítmicos complejos
                     utilizando{" "}
@@ -148,12 +147,11 @@ const Detail = () => {
                   </p>
                 </div>
 
-                {/* Certificado 3: Responsive Web Design */}
                 <div className="border-l-2 border-slate-300 pl-3">
-                  <h4 className="font-bold text-base text-slate-900 tracking-tight">
+                  <h4 className="font-bold text-base text-slate-900 tracking-tight leading-tight">
                     Responsive Web Design
                   </h4>
-                  <div className="flex items-center gap-2 text-xs text-slate-500 mt-1 flex-wrap">
+                  <div className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-500 mt-1.5 flex-wrap">
                     <span>freeCodeCamp • ~300 hs • 2024</span>
                     <span>•</span>
                     <a
@@ -165,7 +163,7 @@ const Detail = () => {
                       Ver credencial ↗
                     </a>
                   </div>
-                  <p className="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
                     Estructuración de arquitecturas web semánticas, maquetación
                     adaptativa nativa y diseño responsivo utilizando{" "}
                     <strong className="text-black font-medium">
@@ -179,20 +177,20 @@ const Detail = () => {
           </div>
         </div>
 
-        {/* COLUMNA DERECHA (Habilidades blandas e Idiomas) */}
-        <div className="flex flex-col gap-8">
-          {/* HEADER DE LA SECCIÓN */}
-          <div className="border-[3px] border-black bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] max-w-max">
-            <h1 className="font-mono font-bold text-4xl md:text-5xl text-black tracking-tight">
+        <div className="flex flex-col gap-6 sm:gap-8">
+          {/* Header Introductorio */}
+          <div className="border-[3px] border-black bg-white p-4 sm:p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] w-full">
+            <h1 className="font-mono font-bold text-3xl sm:text-4xl md:text-5xl text-black tracking-tight leading-tight">
               Mi trayectoria
             </h1>
-            <p className="font-mono text-sm text-slate-600 mt-2">
+            <p className="font-mono text-xs sm:text-sm text-slate-600 mt-2">
               En esta sección detallo mi trayectoria académica y laboral!
             </p>
           </div>
-          {/* Tarjeta Verde - Soft Skills */}
-          <div className="border-[3px] border-black bg-[#A1E3CB] p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex-1">
-            <h2 className="font-mono font-bold text-2xl mb-4 uppercase tracking-wider text-black flex items-center gap-2">
+
+          {/* Tarjeta Verde - Más Sobre Mí */}
+          <div className="border-[3px] border-black bg-[#A1E3CB] p-4 sm:p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex-1">
+            <h2 className="font-mono font-bold text-xl sm:text-2xl mb-4 uppercase tracking-wider text-black flex items-center gap-2">
               <span>🧠</span> MÁS SOBRE MÍ
             </h2>
 
@@ -203,10 +201,10 @@ const Detail = () => {
                   Idiomas
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  <span className="bg-white px-3 py-1 border-2 border-black text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <span className="bg-white px-2.5 py-1 border-2 border-black text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                     Español (Nativo)
                   </span>
-                  <span className="bg-white px-3 py-1 border-2 border-black text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <span className="bg-white px-2.5 py-1 border-2 border-black text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                     Inglés (B1+ - Intermedio)
                   </span>
                 </div>
@@ -227,7 +225,7 @@ const Detail = () => {
                   ].map((skill) => (
                     <span
                       key={skill}
-                      className="bg-white px-3 py-1 border-2 border-black text-xs font-medium shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      className="bg-white px-2.5 py-1 border-2 border-black text-xs font-medium shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                     >
                       {skill}
                     </span>
@@ -235,7 +233,7 @@ const Detail = () => {
                 </div>
               </div>
 
-              {/* Perfil Híbrido (¡Limpiado de bugs!) */}
+              {/* Perfil Híbrido */}
               <div className="bg-white p-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                 <h3 className="font-bold text-sm mb-1.5 text-black flex items-center gap-1">
                   ⚡ Perfil Híbrido
@@ -273,14 +271,13 @@ const Detail = () => {
                 </div>
               </div>
 
-              {/* Perfil en Cifras */}
               <div className="pt-2">
                 <h3 className="font-bold text-xs mb-3 uppercase text-slate-600 tracking-wider">
                   Perfil en Cifras
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-white p-3 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center">
-                    <span className="block font-black text-xl text-black">
+                    <span className="block font-black text-lg sm:text-xl text-black">
                       +5 Años
                     </span>
                     <span className="text-[9px] text-slate-500 uppercase font-bold tracking-tight block mt-0.5 leading-none">
@@ -288,7 +285,7 @@ const Detail = () => {
                     </span>
                   </div>
                   <div className="bg-white p-3 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center">
-                    <span className="block font-black text-xl text-black">
+                    <span className="block font-black text-lg sm:text-xl text-black">
                       +15
                     </span>
                     <span className="text-[9px] text-slate-500 uppercase font-bold tracking-tight block mt-0.5 leading-none">
@@ -296,7 +293,7 @@ const Detail = () => {
                     </span>
                   </div>
                   <div className="bg-white p-3 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center col-span-2">
-                    <span className="block font-black text-xl text-black">
+                    <span className="block font-black text-lg sm:text-xl text-black">
                       600+ Horas
                     </span>
                     <span className="text-[9px] text-slate-500 uppercase font-bold tracking-tight block mt-0.5 leading-none">
