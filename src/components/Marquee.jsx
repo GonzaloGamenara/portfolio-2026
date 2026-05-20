@@ -28,7 +28,7 @@ const Marquee = () => {
           {skills.map((skill, index) => (
             <span
               key={index}
-              className="text-base sm:text-xl font-black uppercase whitespace-nowrap"
+              className="text-base sm:text-sm font-black uppercase whitespace-nowrap"
             >
               {skill}
             </span>
@@ -39,7 +39,7 @@ const Marquee = () => {
           {skills.map((skill, index) => (
             <span
               key={`dup-${index}`}
-              className="text-base sm:text-xl font-black uppercase whitespace-nowrap"
+              className="text-base sm:text-sm font-black uppercase whitespace-nowrap"
             >
               {skill}
             </span>

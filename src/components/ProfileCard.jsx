@@ -7,11 +7,11 @@ const ProfileCard = () => {
   return (
     <div className="bg-neo-yellow border-[3px] border-black shadow-neo p-4 sm:p-6 w-full">
       <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
-        <div className="w-36 h-36 sm:w-44 sm:h-44 md:w-64 md:h-72 border-[3px] border-black shrink-0 overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-none">
+        <div className="w-36 h-36 sm:w-44 sm:h-44 md:w-70 md:h-80 border-[3px] border-black shrink-0 overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-none my-auto">
           <img
             src={miFoto}
             alt="Gonza"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover justify-center items-center"
           />
         </div>
 
@@ -65,22 +65,24 @@ const ProfileCard = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
             <div className="border-2 border-black p-2 text-center bg-neo-yellow-light">
               <p className="font-black font-mono text-base sm:text-lg">
-                Frontend
+                Analista
               </p>
               <p className="text-[10px] sm:text-xs font-bold uppercase text-gray-700">
-                React / Tailwind
+                Funcional
               </p>
             </div>
             <div className="border-2 border-black bg-neo-yellow-light p-2 text-center">
               <p className="font-black font-mono text-base sm:text-lg">
-                Backend
+                FullStack
               </p>
               <p className="text-[10px] sm:text-xs font-bold uppercase text-gray-700">
-                Node / Java
+                React / Java
               </p>
             </div>
             <div className="border-2 border-black bg-neo-yellow-light p-2 text-center">
-              <p className="font-black font-mono text-base sm:text-lg">Data</p>
+              <p className="font-black font-mono text-base sm:text-lg">
+                Data Analist
+              </p>
               <p className="text-[10px] sm:text-xs font-bold uppercase text-gray-700">
                 Python / PowerBi
               </p>
@@ -89,11 +91,13 @@ const ProfileCard = () => {
 
           {/* Biografía */}
           <p className="text-sm font-medium mb-6 leading-relaxed text-center sm:text-left balance">
-            Estudiante de Ingeniería en Informática con una pasión por el
-            desarrollo frontend, el diseño UI/UX y la creación de videojuegos.
-            Con experiencia en React, diseño de interfaces y desarrollo con
-            Godot, busco oportunidades para aplicar mis habilidades y seguir
-            creciendo profesionalmente.
+            Estudiante de la Licenciatura en Desarrollo de Software (UNSAM) con
+            perfil Full Stack y fuerte orientación al Análisis Funcional. Cuento
+            con experiencia práctica gestionando el ciclo de vida completo del
+            software (SDLC), desde el relevamiento de requerimientos y modelado
+            de negocio hasta el despliegue. Me destaco en la integración de
+            metodologías ágiles (Scrum), el diseño de arquitecturas escalables y
+            la toma de decisiones respaldada por análisis de datos.
           </p>
 
           {/* Botones de Acción Principales */}

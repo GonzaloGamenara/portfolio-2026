@@ -48,7 +48,7 @@ const Sidebar = () => {
       <div
         className={`
           /* Comportamiento base en Escritorio */
-          md:w-64 md:h-screen md:sticky md:top-0 md:flex md:flex-col md:border-r-[3px] md:border-black p-6 bg-neo-green font-mono z-40 shrink-0
+          md:w-64 md:h-screen md:sticky md:top-0 md:flex md:flex-col p-6 bg-neo-green font-mono z-40 shrink-0
           
           /* Comportamiento en Móvil (Menú desplegable) */
           fixed inset-0 top-[71px] flex-col justify-between transition-transform duration-300

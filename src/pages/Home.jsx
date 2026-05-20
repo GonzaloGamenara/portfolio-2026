@@ -14,10 +14,10 @@ const Home = () => {
   }
 
   return (
-    <main className="flex-1 p-4 sm:p-6 md:p-10 overflow-y-auto scroll-smooth animate-slide-up">
+    <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto scroll-smooth animate-slide-up">
       {/* Título */}
       <div>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-2">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-8">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black font-mono tracking-tight">
             Mi resumen
           </h1>
@@ -27,25 +27,25 @@ const Home = () => {
         </div>
 
         <div className="flex flex-col xl:flex-row gap-8">
-          <div className="xl:w-2/3">
+          <div className="xl:w-3/3">
             <ProfileCard />
           </div>
 
-          <div className="xl:w-1/3 flex flex-col border-[3px] border-black shadow-neo bg-white">
+          <div className="xl:w-1/3 flex flex-col border-[3px] border-black shadow-neo bg-white justify-center">
             <h2 className="xl:hidden text-3xl font-black tracking-tight p-4 border-b-[3px] border-black bg-neo-yellow font-mono">
               Experiencia
             </h2>
 
-            <div className="bg-white p-4 sm:pl-8 flex gap-3 hover:bg-neo-bg transition-colors border-b-2 py-6 items-center justify-start">
+            <div className="bg-white h-full p-4 sm:pl-8 flex gap-3 hover:bg-neo-bg transition-colors border-b-2 py-6 items-center justify-start">
               <div className="text-2xl p-1 h-fit bg-neo-green border-2 flex-shrink-0">
                 💼
               </div>
               <div>
                 <h4 className="font-black text-lg leading-tight">
-                  Emprendedor - dueño
+                  Fundador - CEO
                 </h4>
                 <p className="text-[15px] font-bold text-gray-600 my-1">
-                  Entre Vetas Fábrica de Muebles
+                  Entre Vetas Muebleria Digital
                 </p>
                 <p className="text-sm font-medium text-gray-500">
                   Nov 2023 - Presente
@@ -53,7 +53,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="bg-white p-4 sm:pl-8 flex gap-3 hover:bg-neo-bg transition-colors border-b-2 py-6 items-center justify-start">
+            <div className="bg-white h-full p-4 sm:pl-8 flex gap-3 hover:bg-neo-bg transition-colors border-b-2 py-6 items-center justify-start">
               <div className="text-2xl p-1 h-fit bg-neo-pink border-2 flex-shrink-0">
                 💼
               </div>
@@ -70,7 +70,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="bg-white p-4 sm:pl-8 flex gap-3 hover:bg-neo-bg transition-colors py-6 items-center justify-start">
+            <div className="bg-white h-full p-4 sm:pl-8 flex gap-3 hover:bg-neo-bg transition-colors py-6 items-center justify-start">
               <div className="text-2xl p-1 h-fit bg-neo-yellow border-2 flex-shrink-0">
                 💼
               </div>

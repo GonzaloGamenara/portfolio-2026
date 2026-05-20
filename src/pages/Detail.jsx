@@ -181,10 +181,12 @@ const Detail = () => {
           {/* Header Introductorio */}
           <div className="border-[3px] border-black bg-white p-4 sm:p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] w-full">
             <h1 className="font-mono font-bold text-3xl sm:text-4xl md:text-5xl text-black tracking-tight leading-tight">
-              Mi trayectoria
+              Mi Trayectoria
             </h1>
-            <p className="font-mono text-xs sm:text-sm text-slate-600 mt-2">
-              En esta sección detallo mi trayectoria académica y laboral!
+            <p className="font-mono text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+              Combinando mi background comercial con la ingeniería de software
+              para construir soluciones digitales con impacto real en el
+              negocio.
             </p>
           </div>
 
@@ -217,11 +219,11 @@ const Detail = () => {
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {[
-                    "Resolutivo",
-                    "Organizado",
-                    "Gestión de Equipos",
-                    "Facilidad de Aprendizaje",
-                    "Trabajo en Equipo",
+                    "Problem-Solving",
+                    "Time Management",
+                    "Liderazgo Colaborativo",
+                    "Learning Agility",
+                    "Comunicación Asertiva",
                   ].map((skill) => (
                     <span
                       key={skill}
@@ -239,11 +241,10 @@ const Detail = () => {
                   ⚡ Perfil Híbrido
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Combino una base de escuela técnica (electrónica y taller) que
-                  estructuró mi pensamiento lógico y de sistemas, con más de 5
-                  años de experiencia liderando y gestionando equipos en el
-                  ámbito comercial como encargado. Un puente sólido entre la
-                  resolución analítica y las habilidades interpersonales.
+                  Combino análisis funcional y desarrollo Full Stack para actuar
+                  como puente entre negocio y tecnología, traduciendo
+                  requerimientos en soluciones técnicas precisas para cada
+                  equipo.
                 </p>
               </div>
 
@@ -254,12 +255,12 @@ const Detail = () => {
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {[
-                    "Scrum",
-                    "Kanban",
-                    "Git / GitHub",
-                    "QA / Testing",
-                    "CI/CD Básico",
-                    "C++ Embebido",
+                    "Product Discovery (USM, BMC)",
+                    "Requirements Elicitation",
+                    "Agile Frameworks (Scrum)",
+                    "Release Planning",
+                    "Data-Driven Metrics",
+                    "End-to-End SDLC",
                   ].map((item) => (
                     <span
                       key={item}
@@ -271,6 +272,7 @@ const Detail = () => {
                 </div>
               </div>
 
+              {/* Perfil en Cifras */}
               <div className="pt-2">
                 <h3 className="font-bold text-xs mb-3 uppercase text-slate-600 tracking-wider">
                   Perfil en Cifras
