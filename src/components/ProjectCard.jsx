@@ -41,14 +41,10 @@ const ProjectCard = ({ name, videoUrl, resume, tech, delay }) => {
           />
 
           <div
-            className={`absolute inset-0 bg-gray-300 transition-opacity duration-150 flex items-center justify-center ${
+            className={`absolute inset-0 transition-opacity duration-150 flex items-center justify-center ${
               isHovered ? "opacity-0" : "opacity-100"
             }`}
-          >
-            <span className="font-black text-xs uppercase text-black tracking-widest">
-              Vista Previa
-            </span>
-          </div>
+          ></div>
 
           <video
             ref={videoPlayingRef}

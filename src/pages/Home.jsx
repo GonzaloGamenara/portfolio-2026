@@ -17,11 +17,11 @@ const Home = () => {
     <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto scroll-smooth animate-slide-up">
       {/* Título */}
       <div>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-8 items-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black font-mono tracking-tight">
             Mi resumen
           </h1>
-          <h2 className="hidden xl:block text-3xl font-black tracking-tight w-1/3 pl-8 font-mono">
+          <h2 className="hidden xl:block text-3xl font-black tracking-tight pr-10 font-mono">
             Experiencia
           </h2>
         </div>
@@ -32,10 +32,6 @@ const Home = () => {
           </div>
 
           <div className="xl:w-1/3 flex flex-col border-[3px] border-black shadow-neo bg-white justify-center">
-            <h2 className="xl:hidden text-3xl font-black tracking-tight p-4 border-b-[3px] border-black bg-neo-yellow font-mono">
-              Experiencia
-            </h2>
-
             <div className="bg-white h-full p-4 sm:pl-8 flex gap-3 hover:bg-neo-bg transition-colors border-b-2 py-6 items-center justify-start">
               <div className="text-2xl p-1 h-fit bg-neo-green border-2 flex-shrink-0">
                 💼
