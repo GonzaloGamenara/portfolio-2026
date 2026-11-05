@@ -9,10 +9,13 @@ export function LanguageToggle() {
       onClick={toggleLang}
       aria-label={s.langSwitch}
       title={s.langSwitch}
-      className="flex h-10 items-center border-2 border-line bg-surface font-mono text-sm font-bold shadow-neo-sm transition-transform hover:-translate-y-0.5"
+      className="flex h-10 items-stretch border-2 border-line bg-surface font-mono text-xs font-bold shadow-sm transition-transform hover:-translate-y-0.5"
     >
-      <span className={`px-2.5 py-1.5 ${lang === "es" ? "bg-ink text-paper" : ""}`}>ES</span>
-      <span className={`px-2.5 py-1.5 ${lang === "en" ? "bg-ink text-paper" : ""}`}>EN</span>
+      {["es", "en"].map((l) => (
+        <span key={l} className={`grid w-10 place-items-center uppercase ${lang === l ? "bg-ink text-bg" : "text-faint"}`}>
+          {l}
+        </span>
+      ))}
     </button>
   );
 }
@@ -27,9 +30,11 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={label}
       title={label}
-      className={`on-accent flex h-10 w-12 items-center justify-center border-2 border-line shadow-neo-sm transition-transform hover:-translate-y-0.5 ${dark ? "bg-purple" : "bg-yellow"}`}
+      className={`on-accent inline-grid h-10 w-10 place-items-center border-2 border-line shadow-sm transition-transform hover:-translate-y-0.5 ${
+        dark ? "bg-purple" : "bg-yellow"
+      }`}
     >
-      {dark ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
+      {dark ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
     </button>
   );
 }

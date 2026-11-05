@@ -13,15 +13,17 @@ export default function Projects() {
   usePageMeta(s.meta.projects, s.meta.projectsDesc);
 
   const visible = filter === "all" ? projects : projects.filter((p) => p.tags.includes(filter));
+  const count = (id) => (id === "all" ? projects.length : projects.filter((p) => p.tags.includes(id)).length);
 
   return (
-    <div className="flex flex-col gap-12">
-      <header className="flex flex-col gap-6 border-b-[3px] border-line pb-6 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <h1 className="font-mono text-4xl font-bold tracking-tight sm:text-5xl">{s.projects.title}</h1>
-          <p className="mt-3 max-w-xl text-lg leading-relaxed text-muted">{s.projects.intro}</p>
+    <div className="container-page pt-12 pb-24 md:pt-20">
+      <header className="flex flex-col gap-8 pb-12">
+        <div className="max-w-2xl">
+          <p className="eyebrow">{s.nav.projects}</p>
+          <h1 className="mt-5 text-4xl sm:text-6xl">{s.projects.title}</h1>
+          <p className="mt-5 text-xl leading-relaxed text-muted">{s.projects.intro}</p>
         </div>
-        <div role="group" aria-label={s.projects.filterLabel} className="flex flex-wrap gap-2.5">
+        <div role="group" aria-label={s.projects.filterLabel} className="-mx-5 flex gap-2.5 overflow-x-auto px-5 pt-1 pb-2 sm:mx-0 sm:px-0">
           {projectFilters.map((f) => {
             const active = f.id === filter;
             return (
@@ -30,9 +32,10 @@ export default function Projects() {
                 type="button"
                 aria-pressed={active}
                 onClick={() => setFilter(f.id)}
-                className={`btn px-4 py-2 ${active ? "on-accent bg-yellow" : "bg-surface"}`}
+                className={`btn h-10 shrink-0 px-4 text-sm ${active ? "btn-primary" : "btn-secondary"}`}
               >
                 {t(f.label)}
+                <span className="font-mono text-[11px] opacity-70">{count(f.id)}</span>
               </button>
             );
           })}
@@ -42,32 +45,36 @@ export default function Projects() {
       <section aria-live="polite">
         <p className="sr-only">{s.projects.count(visible.length)}</p>
         {visible.length === 0 ? (
-          <p className="py-10 text-center font-mono font-bold text-muted">{s.projects.empty}</p>
+          <p className="py-10 text-center text-muted">{s.projects.empty}</p>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
             {visible.map((p, i) => (
-              <ProjectCard key={p.slug} project={p} onOpen={modal.open} priority={i < 2} headingLevel={2} />
+              <ProjectCard key={p.slug} project={p} onOpen={modal.open} priority={i < 3} headingLevel={2} />
             ))}
           </div>
         )}
       </section>
 
-      <section aria-labelledby="archive-title">
-        <h2 id="archive-title" className="font-mono text-2xl font-bold tracking-tight sm:text-3xl">
-          {s.projects.archive}
-        </h2>
-        <p className="mt-2 text-muted">{s.projects.archiveIntro}</p>
-        <ul className="card mt-5 divide-y-2 divide-dashed divide-line/40 bg-surface">
-          {archive.map((a) => (
-            <li key={a.title} className="grid gap-1 p-4 sm:grid-cols-[10rem_1fr] sm:gap-4">
-              <span className="font-mono font-bold">{a.title}</span>
-              <span>
-                {t(a.desc)}
-                <span className="mt-1 block font-mono text-xs font-bold text-muted">{a.stack}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
+      <section aria-labelledby="archive-title" className="mt-20 border-t-2 border-line pt-14">
+        <div className="grid gap-6 md:grid-cols-[14rem_1fr] md:gap-12">
+          <div>
+            <h2 id="archive-title" className="text-2xl">
+              {s.projects.archive}
+            </h2>
+            <p className="mt-2 text-muted">{s.projects.archiveIntro}</p>
+          </div>
+          <ul className="card divide-y-2 divide-line">
+            {archive.map((a) => (
+              <li key={a.title} className="grid gap-1 px-5 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6">
+                <span className="font-mono font-bold">{a.title}</span>
+                <span className="text-muted">
+                  {t(a.desc)}
+                  <span className="mt-1 block font-mono text-xs text-faint">{a.stack}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <ProjectModal project={modal.project} onClose={modal.close} />

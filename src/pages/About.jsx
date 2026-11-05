@@ -1,16 +1,16 @@
-import { ArrowUpRight, Award, Briefcase, GraduationCap, Languages, Sparkles } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { usePreferences } from "../context/preferences";
-import { certifications, education, experience, languages, skills, softSkills } from "../data/profile";
+import { certifications, education, experience, languages, profile, skills, softSkills } from "../data/profile";
 import usePageMeta from "../hooks/usePageMeta";
 
-function Heading({ Icon, children, id }) {
+function Row({ title, children, id }) {
   return (
-    <h2 id={id} className="mb-5 flex items-center gap-3 font-mono text-2xl font-bold tracking-tight sm:text-3xl">
-      <span className="on-accent grid h-10 w-10 place-items-center border-2 border-line bg-yellow shadow-neo-sm">
-        <Icon size={20} aria-hidden="true" />
-      </span>
-      {children}
-    </h2>
+    <section aria-labelledby={id} className="grid gap-6 border-t-2 border-line py-14 md:grid-cols-[14rem_1fr] md:gap-12">
+      <h2 id={id} className="text-2xl md:sticky md:top-24 md:self-start">
+        {title}
+      </h2>
+      <div>{children}</div>
+    </section>
   );
 }
 
@@ -19,66 +19,59 @@ export default function About() {
   usePageMeta(s.meta.about, s.meta.aboutDesc);
 
   return (
-    <div className="flex flex-col gap-14">
-      <header className="border-b-[3px] border-line pb-6">
-        <h1 className="font-mono text-4xl font-bold tracking-tight sm:text-5xl">{s.about.title}</h1>
-        <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted">{s.about.intro}</p>
+    <div className="container-page pt-12 pb-16 md:pt-20">
+      <header className="max-w-3xl pb-14">
+        <p className="eyebrow">{s.nav.about}</p>
+        <h1 className="mt-5 text-4xl sm:text-6xl">{s.about.title}</h1>
+        <p className="mt-5 text-xl leading-relaxed text-muted">{s.about.intro}</p>
+        <p className="mt-4 text-lg leading-relaxed text-muted">{t(profile.pitch)}</p>
       </header>
 
-      {/* EXPERIENCE TIMELINE */}
-      <section aria-labelledby="exp">
-        <Heading Icon={Briefcase} id="exp">
-          {s.about.experience}
-        </Heading>
-        <ol className="relative ml-3 border-l-[3px] border-line pl-6 sm:ml-5 sm:pl-8">
-          {experience.map((job) => (
-            <li key={job.id} className="relative pb-8 last:pb-0">
-              <span
-                aria-hidden="true"
-                className={`absolute top-5 -left-[36px] h-5 w-5 border-[3px] border-line sm:-left-[44px] ${job.accent}`}
-              />
-              <article className="card bg-surface p-5">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="text-lg font-bold sm:text-xl">{t(job.role)}</h3>
-                  <span className={`on-accent border-2 border-line px-2 py-0.5 font-mono text-xs font-bold ${job.accent}`}>
-                    {t(job.start)} — {t(job.end)}
-                  </span>
-                </div>
-                <p className="mt-1 font-mono text-sm font-bold text-muted">
-                  {job.url ? (
-                    <a href={job.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 underline underline-offset-4 hover:no-underline">
-                      {t(job.company)} <ArrowUpRight size={14} aria-hidden="true" />
-                    </a>
-                  ) : (
-                    t(job.company)
+      <Row title={s.about.experience} id="exp">
+        <ol className="flex flex-col gap-12">
+          {experience.map((job, i) => (
+            <li key={job.id} className="relative">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                <h3 className="text-xl font-bold">
+                  {t(job.role)}
+                  {i === 0 && (
+                    <span className="on-accent ml-3 border-2 border-line bg-green px-2 py-0.5 align-middle font-mono text-xs font-bold">{s.about.current}</span>
                   )}
-                </p>
-                <ul className="mt-4 space-y-2">
-                  {t(job.bullets).map((b) => (
-                    <li key={b} className="flex gap-2.5 leading-relaxed">
-                      <span aria-hidden="true" className="mt-2 h-2 w-2 shrink-0 bg-ink" />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
+                </h3>
+                <span className="shrink-0 font-mono text-sm text-faint">
+                  {t(job.start)} — {t(job.end)}
+                </span>
+              </div>
+              <p className="mt-1 text-muted">
+                {job.url ? (
+                  <a href={job.url} target="_blank" rel="noopener noreferrer" className="link inline-flex items-center gap-1 font-normal text-muted">
+                    {t(job.company)} <ArrowUpRight size={14} aria-hidden="true" />
+                  </a>
+                ) : (
+                  t(job.company)
+                )}
+              </p>
+              <ul className="mt-4 space-y-2.5">
+                {t(job.bullets).map((b) => (
+                  <li key={b} className="flex gap-3 leading-relaxed text-muted">
+                    <span aria-hidden="true" className="mt-2.5 h-1.5 w-1.5 shrink-0 bg-line-strong" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
             </li>
           ))}
         </ol>
-      </section>
+      </Row>
 
-      {/* SKILLS */}
-      <section aria-labelledby="skills">
-        <Heading Icon={Sparkles} id="skills">
-          {s.about.skills}
-        </Heading>
-        <div className="grid gap-5 sm:grid-cols-2">
+      <Row title={s.about.skills} id="skills">
+        <div className="grid gap-8 sm:grid-cols-2">
           {skills.map((g) => (
-            <div key={t(g.group)} className={`card on-accent p-5 ${g.accent}`}>
-              <h3 className="eyebrow mb-3">{t(g.group)}</h3>
-              <ul className="flex flex-wrap gap-2">
+            <div key={t(g.group)}>
+              <h3 className="font-bold">{t(g.group)}</h3>
+              <ul className="mt-3 flex flex-wrap gap-1.5">
                 {g.items.map((item) => (
-                  <li key={t(item)} className="chip">
+                  <li key={t(item)} className="tag">
                     {t(item)}
                   </li>
                 ))}
@@ -86,86 +79,63 @@ export default function About() {
             </div>
           ))}
         </div>
-        <div className="card on-accent mt-5 bg-purple p-5">
-          <h3 className="font-mono text-lg font-bold">⚡ {s.about.hybridTitle}</h3>
-          <p className="mt-2 leading-relaxed">{s.about.hybrid}</p>
+        <div className="card on-accent mt-10 bg-purple p-6">
+          <h3 className="font-bold">{s.about.hybridTitle}</h3>
+          <p className="mt-2 leading-relaxed text-muted">{s.about.hybrid}</p>
         </div>
-      </section>
+      </Row>
 
-      <div className="grid gap-14 lg:grid-cols-2 lg:gap-8">
-        {/* EDUCATION */}
-        <section aria-labelledby="edu">
-          <Heading Icon={GraduationCap} id="edu">
-            {s.about.education}
-          </Heading>
-          <div className="flex flex-col gap-5">
-            {education.map((e) => (
-              <article key={t(e.title)} className="card bg-surface p-5">
+      <Row title={s.about.education} id="edu">
+        <ul className="flex flex-col gap-8">
+          {education.map((e) => (
+            <li key={t(e.title)}>
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                 <h3 className="text-lg font-bold">{t(e.title)}</h3>
-                <p className="mt-1 font-mono text-sm font-bold text-muted">
-                  {e.school} · {t(e.period)}
-                </p>
-                <p className="mt-3 leading-relaxed">{t(e.detail)}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+                <span className="shrink-0 font-mono text-sm text-faint">{t(e.period)}</span>
+              </div>
+              <p className="mt-1 text-muted">{e.school}</p>
+              <p className="mt-2 leading-relaxed text-muted">{t(e.detail)}</p>
+            </li>
+          ))}
+        </ul>
+      </Row>
 
-        {/* CERTIFICATIONS */}
-        <section aria-labelledby="certs">
-          <Heading Icon={Award} id="certs">
-            {s.about.certifications}
-          </Heading>
-          <div className="flex flex-col gap-5">
-            {certifications.map((c) => (
-              <article key={t(c.title)} className="card bg-surface p-5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="text-lg font-bold">{t(c.title)}</h3>
-                  {c.badge && <span className="on-accent border-2 border-line bg-yellow px-2 py-0.5 font-mono text-xs font-bold">⭐ {t(c.badge)}</span>}
-                </div>
-                <p className="mt-1 font-mono text-sm font-bold text-muted">
-                  {c.issuer} · {c.year}
-                </p>
-                <p className="mt-3 leading-relaxed">{t(c.detail)}</p>
-                <a
-                  href={c.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-1 font-mono text-sm font-bold underline underline-offset-4 hover:no-underline"
-                >
-                  {s.about.credential} <ArrowUpRight size={14} aria-hidden="true" />
-                </a>
-              </article>
-            ))}
-          </div>
-        </section>
-      </div>
+      <Row title={s.about.certifications} id="certs">
+        <ul className="grid gap-4 sm:grid-cols-3">
+          {certifications.map((c) => (
+            <li key={t(c.title)} className="card flex flex-col p-5">
+              <div className="flex items-start justify-between gap-2">
+                <h3 className="font-bold">{t(c.title)}</h3>
+                {c.badge && <span className="on-accent shrink-0 -rotate-2 border-2 border-line bg-yellow px-2 py-0.5 font-mono text-xs font-bold">{t(c.badge)}</span>}
+              </div>
+              <p className="mt-1 text-sm text-faint">
+                {c.issuer} · {c.year}
+              </p>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">{t(c.detail)}</p>
+              <a href={c.url} target="_blank" rel="noopener noreferrer" className="link mt-4 inline-flex items-center gap-1 text-sm">
+                {s.about.credential} <ArrowUpRight size={14} aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Row>
 
-      {/* LANGUAGES & SOFT SKILLS */}
-      <section aria-labelledby="langs" className="grid gap-5 sm:grid-cols-2">
-        <div className="card on-accent bg-mint p-5">
-          <h2 id="langs" className="mb-3 flex items-center gap-2 font-mono text-lg font-bold">
-            <Languages size={18} aria-hidden="true" /> {s.about.languages}
-          </h2>
-          <ul className="flex flex-wrap gap-2">
-            {languages.map((l) => (
-              <li key={t(l.name)} className="chip">
-                {t(l.name)} — {t(l.level)}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="card on-accent bg-coral p-5">
-          <h2 className="mb-3 font-mono text-lg font-bold">{s.about.soft}</h2>
-          <ul className="flex flex-wrap gap-2">
-            {t(softSkills).map((k) => (
-              <li key={k} className="chip">
-                {k}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <Row title={`${s.about.languages} & ${s.about.soft}`} id="langs">
+        <ul className="flex flex-wrap gap-2">
+          {languages.map((l) => (
+            <li key={t(l.name)} className=" border-2 border-line bg-surface px-3.5 py-1.5 text-sm">
+              <span className="font-medium">{t(l.name)}</span> <span className="text-faint">· {t(l.level)}</span>
+            </li>
+          ))}
+        </ul>
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {t(softSkills).map((k) => (
+            <li key={k} className=" border-2 border-line px-3.5 py-1.5 text-sm text-muted">
+              {k}
+            </li>
+          ))}
+        </ul>
+      </Row>
     </div>
   );
 }

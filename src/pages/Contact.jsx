@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, Copy, Download, FileText, Mail, MapPin, Send } from "lucide-react";
+import { ArrowUpRight, Check, Copy, Download, FileText, Mail, MapPin, Send } from "lucide-react";
 import { usePreferences } from "../context/preferences";
 import { profile } from "../data/profile";
 import { cvFile } from "../data/ui";
@@ -12,7 +12,24 @@ import { GitHubIcon, LinkedInIcon } from "../components/Icons";
 const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT;
 
 const field =
-  "w-full border-2 border-line bg-surface p-3 text-ink shadow-neo-sm placeholder:text-muted/70 focus:shadow-neo focus:outline-none";
+  "w-full border-2 border-line bg-surface px-4 py-3 text-ink shadow-sm transition-shadow placeholder:text-faint focus:shadow-card focus:outline-none";
+
+function Channel({ href, icon, label, value, external }) {
+  return (
+    <a
+      href={href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      className="group flex items-center gap-4 border-2 border-line bg-surface p-4 shadow-sm transition-transform hover:-translate-y-0.5"
+    >
+      <span className="on-accent grid h-10 w-10 shrink-0 place-items-center border-2 border-line bg-green">{icon}</span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm text-faint">{label}</span>
+        <span className="block truncate font-medium">{value}</span>
+      </span>
+      <ArrowUpRight size={16} aria-hidden="true" className="text-faint transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+    </a>
+  );
+}
 
 export default function Contact() {
   const { t, s, lang } = usePreferences();
@@ -59,125 +76,115 @@ export default function Contact() {
   };
 
   return (
-    <div className="flex flex-col gap-10">
-      <header className="border-b-[3px] border-line pb-6">
-        <h1 className="font-mono text-4xl font-bold tracking-tight sm:text-5xl">{s.contact.title}</h1>
-        <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted">{s.contact.intro}</p>
+    <div className="container-page pt-12 pb-24 md:pt-20">
+      <header className="max-w-2xl pb-12">
+        <p className="eyebrow">{s.nav.contact}</p>
+        <h1 className="mt-5 text-4xl sm:text-6xl">{s.contact.title}</h1>
+        <p className="mt-5 text-xl leading-relaxed text-muted">{s.contact.intro}</p>
       </header>
 
-      <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
-        <form onSubmit={onSubmit} className="card on-accent relative flex flex-col gap-5 bg-yellow p-5 sm:p-7">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="name" className="eyebrow">
-              {s.contact.name}
-            </label>
-            <input id="name" name="name" type="text" required autoComplete="name" maxLength={120} placeholder={s.contact.namePh} className={field} />
+      <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-14">
+        <form onSubmit={onSubmit} className="card on-accent relative flex flex-col gap-5 bg-yellow p-6 sm:p-8">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="name" className="text-sm font-medium">
+                {s.contact.name}
+              </label>
+              <input id="name" name="name" type="text" required autoComplete="name" maxLength={120} placeholder={s.contact.namePh} className={field} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="email" className="text-sm font-medium">
+                {s.contact.email}
+              </label>
+              <input id="email" name="email" type="email" required autoComplete="email" maxLength={160} placeholder={s.contact.emailPh} className={field} />
+            </div>
           </div>
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="email" className="eyebrow">
-              {s.contact.email}
-            </label>
-            <input id="email" name="email" type="email" required autoComplete="email" maxLength={160} placeholder={s.contact.emailPh} className={field} />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="message" className="eyebrow">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="message" className="text-sm font-medium">
               {s.contact.message}
             </label>
-            <textarea id="message" name="message" required rows={6} maxLength={4000} placeholder={s.contact.messagePh} className={`${field} min-h-40 resize-y`} />
+            <textarea id="message" name="message" required rows={7} maxLength={4000} placeholder={s.contact.messagePh} className={`${field} min-h-44 resize-y`} />
           </div>
-          {/* honeypot */}
           <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
             <label>
               Website <input name="company_website" type="text" tabIndex={-1} autoComplete="off" />
             </label>
           </div>
 
-          <button type="submit" disabled={status === "sending"} className="btn bg-black text-white disabled:opacity-60">
-            <Send size={16} aria-hidden="true" /> {status === "sending" ? s.contact.sending : s.contact.send}
-          </button>
-
-          <p role="status" aria-live="polite" className="min-h-5 text-sm font-bold">
-            {status === "sent" && `✅ ${s.contact.sent}`}
-            {status === "error" && (
-              <>
-                ⚠️ {s.contact.error}{" "}
-                <a className="underline" href={`mailto:${profile.email}`}>
-                  {profile.email}
-                </a>
-              </>
-            )}
-            {status === "idle" && !ENDPOINT && <span className="font-medium text-muted">{s.contact.mailtoNote}</span>}
-          </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p role="status" aria-live="polite" className="text-sm text-faint">
+              {status === "sent" && <span className="font-bold">✓ {s.contact.sent}</span>}
+              {status === "error" && (
+                <span className="text-ink">
+                  {s.contact.error}{" "}
+                  <a className="link" href={`mailto:${profile.email}`}>
+                    {profile.email}
+                  </a>
+                </span>
+              )}
+              {status === "idle" && !ENDPOINT && s.contact.mailtoNote}
+            </p>
+            <button type="submit" disabled={status === "sending"} className="btn btn-dark shrink-0 disabled:opacity-60">
+              <Send size={16} aria-hidden="true" /> {status === "sending" ? s.contact.sending : s.contact.send}
+            </button>
+          </div>
         </form>
 
-        <div className="flex flex-col gap-8">
-          <section aria-labelledby="direct" className="card on-accent bg-mint p-5">
-            <h2 id="direct" className="mb-4 font-mono text-lg font-bold">
+        <aside className="flex flex-col gap-8">
+          <section aria-labelledby="direct">
+            <h2 id="direct" className="text-xl">
               {s.contact.direct}
             </h2>
-            <ul className="flex flex-col gap-3">
-              <li className="flex items-stretch gap-2">
-                <a href={`mailto:${profile.email}`} className="flex min-w-0 flex-1 items-center gap-3 border-2 border-line bg-surface p-3 shadow-neo-sm transition-transform hover:-translate-y-0.5">
-                  <Mail size={20} aria-hidden="true" className="shrink-0" />
-                  <span className="truncate font-bold">{profile.email}</span>
-                </a>
+            <div className="mt-4 flex flex-col gap-3">
+              <div className="flex gap-2">
+                <div className="min-w-0 flex-1">
+                  <Channel href={`mailto:${profile.email}`} icon={<Mail size={18} aria-hidden="true" />} label="Email" value={profile.email} />
+                </div>
                 <button
                   type="button"
                   onClick={copyEmail}
                   aria-label={s.contact.copy}
                   title={copied ? s.contact.copied : s.contact.copy}
-                  className="grid w-12 shrink-0 place-items-center border-2 border-line bg-surface shadow-neo-sm"
+                  className="grid w-14 shrink-0 place-items-center border-2 border-line bg-surface shadow-sm transition-transform hover:-translate-y-0.5"
                 >
-                  {copied ? <Check size={18} aria-hidden="true" /> : <Copy size={18} aria-hidden="true" />}
+                  {copied ? <Check size={18} aria-hidden="true" className="text-accent" /> : <Copy size={18} aria-hidden="true" />}
                 </button>
-              </li>
-              <li>
-                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 border-2 border-line bg-surface p-3 shadow-neo-sm transition-transform hover:-translate-y-0.5">
-                  <LinkedInIcon className="h-5 w-5 shrink-0" />
-                  <span className="font-bold">LinkedIn</span>
-                  <span className="ml-auto truncate text-sm text-muted">/in/gonzalo-gamenara</span>
-                </a>
-              </li>
-              <li>
-                <a href={profile.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 border-2 border-line bg-surface p-3 shadow-neo-sm transition-transform hover:-translate-y-0.5">
-                  <GitHubIcon className="h-5 w-5 shrink-0" />
-                  <span className="font-bold">GitHub</span>
-                  <span className="ml-auto truncate text-sm text-muted">@GonzaloGamenara</span>
-                </a>
-              </li>
-            </ul>
+              </div>
+              <Channel href={profile.linkedin} external icon={<LinkedInIcon className="h-4 w-4" />} label="LinkedIn" value="Gonzalo Gamenara" />
+              <Channel href={profile.github} external icon={<GitHubIcon className="h-[18px] w-[18px]" />} label="GitHub" value="@GonzaloGamenara" />
+            </div>
             <span className="sr-only" aria-live="polite">
               {copied ? s.contact.copied : ""}
             </span>
-            <dl className="mt-5 grid gap-2 border-t-2 border-line pt-4 text-sm">
+            <dl className="mt-5 flex flex-col gap-2 text-sm text-muted">
               <div className="flex items-center gap-2">
                 <dt className="sr-only">{s.contact.location}</dt>
-                <MapPin size={16} aria-hidden="true" />
-                <dd className="font-bold">{t(profile.location)}</dd>
+                <MapPin size={15} aria-hidden="true" className="text-faint" />
+                <dd>{t(profile.location)}</dd>
               </div>
               <div className="flex items-center gap-2">
                 <dt className="sr-only">{s.contact.availability}</dt>
-                <span className="mx-[3px] h-2.5 w-2.5 rounded-full bg-[#16a34a]" aria-hidden="true" />
-                <dd className="font-bold">{t(profile.availability)}</dd>
+                <span className="mx-[3.5px] h-2 w-2 rounded-full bg-accent-solid" aria-hidden="true" />
+                <dd>{t(profile.availability)}</dd>
               </div>
             </dl>
           </section>
 
-          <section aria-labelledby="cv" className="card on-accent bg-coral p-5">
-            <h2 id="cv" className="flex items-center gap-2 font-mono text-lg font-bold">
-              <FileText size={18} aria-hidden="true" /> {s.contact.cvTitle}
+          <section aria-labelledby="cv" className="card on-accent bg-pink p-6">
+            <h2 id="cv" className="flex items-center gap-2 font-bold">
+              <FileText size={18} aria-hidden="true" className="text-faint" /> {s.contact.cvTitle}
             </h2>
-            <p className="mt-2 leading-relaxed">{s.contact.cvText}</p>
-            <div className="mt-4 flex flex-col gap-3 sm:flex-row lg:flex-col 2xl:flex-row">
-              <a href={cvFile(lang)} download className="btn flex-1 bg-surface">
+            <p className="mt-2 text-sm leading-relaxed text-muted">{s.contact.cvText}</p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <a href={cvFile(lang)} download className="btn btn-dark">
                 <Download size={16} aria-hidden="true" /> {s.contact.cvDownload}
               </a>
-              <Link to="/cv" className="btn flex-1 bg-surface">
+              <Link to="/cv" className="btn btn-secondary">
                 {s.contact.cvView}
               </Link>
             </div>
           </section>
-        </div>
+        </aside>
       </div>
     </div>
   );
