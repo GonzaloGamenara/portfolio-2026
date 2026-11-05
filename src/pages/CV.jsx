@@ -8,7 +8,7 @@ import usePageMeta from "../hooks/usePageMeta";
 function Block({ title, children }) {
   return (
     <section className="break-inside-avoid">
-      <h2 className="mb-2 border-b-2 border-black pb-1 font-mono text-[13px] font-bold tracking-widest uppercase">{title}</h2>
+      <h2 className="mb-2 border-b-2 border-black pb-1 text-[11px] font-semibold tracking-[0.14em] text-black uppercase">{title}</h2>
       {children}
     </section>
   );
@@ -22,20 +22,20 @@ export default function CV() {
   const selected = projects.slice(0, 4);
 
   return (
-    <main className="min-h-dvh bg-neutral-200 py-6 text-black print:bg-white print:py-0">
+    <main className="min-h-dvh bg-neutral-100 py-8 text-black print:bg-white print:py-0">
       <nav className="no-print mx-auto mb-4 flex max-w-[210mm] justify-between gap-3 px-4">
-        <Link to="/contact" className="btn bg-white text-black">
+        <Link to="/contact" className="btn btn-secondary">
           <ArrowLeft size={16} aria-hidden="true" /> {s.cv.back}
         </Link>
-        <button type="button" onClick={() => window.print()} className="btn bg-[#f7c236] text-black">
+        <button type="button" onClick={() => window.print()} className="btn btn-primary">
           <Printer size={16} aria-hidden="true" /> {s.cv.print}
         </button>
       </nav>
 
       <article className="mx-auto flex min-h-[297mm] max-w-[210mm] flex-col gap-4 bg-white p-[12mm] text-[11.5px] leading-snug shadow-xl print:shadow-none" style={{ colorScheme: "light" }}>
-        <header className="flex items-start justify-between gap-6 border-b-[3px] border-black pb-3">
+        <header className="flex items-start justify-between gap-6 border-b-[3px] border-black pb-4">
           <div>
-            <h1 className="font-mono text-[28px] leading-none font-bold">{profile.name}</h1>
+            <h1 className="text-[30px] leading-none font-semibold tracking-tight">{profile.name}</h1>
             <p className="mt-1.5 text-[15px] font-bold">{t(profile.role)}</p>
             <p className="mt-1 max-w-[120mm] text-[11.5px]">{t(profile.summary)}</p>
           </div>
@@ -60,7 +60,7 @@ export default function CV() {
                         {t(job.start)} – {t(job.end)}
                       </span>
                     </div>
-                    <p className="font-mono text-[10.5px] font-bold text-neutral-600">{t(job.company)}</p>
+                    <p className="text-[11px] font-medium text-neutral-600">{t(job.company)}</p>
                     <ul className="mt-1 list-disc space-y-0.5 pl-4">
                       {t(job.bullets).map((b) => (
                         <li key={b}>{b}</li>

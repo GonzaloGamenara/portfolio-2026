@@ -1,80 +1,37 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { FolderGit2, House, Mail, Menu, Route, X } from "lucide-react";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { usePreferences } from "../context/preferences";
 import { profile } from "../data/profile";
 import { LanguageToggle, ThemeToggle } from "./Controls";
 import { GitHubIcon, LinkedInIcon } from "./Icons";
 
 const links = [
-  { to: "/", key: "home", Icon: House },
-  { to: "/about", key: "about", Icon: Route },
-  { to: "/projects", key: "projects", Icon: FolderGit2 },
-  { to: "/contact", key: "contact", Icon: Mail },
+  { to: "/projects", key: "projects" },
+  { to: "/about", key: "about" },
+  { to: "/contact", key: "contact" },
 ];
 
-function Logo({ onClick }) {
-  return (
-    <NavLink to="/" onClick={onClick} className="group flex items-center gap-3" aria-label={profile.name}>
-      <span className="on-accent grid h-11 w-11 shrink-0 place-items-center border-[3px] border-line bg-yellow font-mono text-lg font-bold shadow-neo-sm transition-transform group-hover:-rotate-6">
-        {profile.initials}
-      </span>
-      <span className="font-mono text-base leading-tight font-bold">
-        Gonzalo
-        <br />
-        Gamenara
-      </span>
-    </NavLink>
-  );
-}
-
-function NavItems({ onNavigate }) {
+function Brand({ onClick }) {
   const { s } = usePreferences();
   return (
-    <ul className="flex flex-col gap-2">
-      {links.map(({ to, key, Icon }) => (
-        <li key={to}>
-          <NavLink
-            to={to}
-            end={to === "/"}
-            onClick={onNavigate}
-            className={({ isActive }) =>
-              `flex items-center gap-3 border-2 px-4 py-3 font-mono text-base font-bold transition-colors ${
-                isActive
-                  ? "border-line bg-ink text-paper shadow-neo-sm"
-                  : "border-transparent hover:border-line hover:bg-surface/60"
-              }`
-            }
-          >
-            <Icon size={20} aria-hidden="true" />
-            {s.nav[key]}
-          </NavLink>
-        </li>
-      ))}
-    </ul>
+    <Link to="/" onClick={onClick} className="group flex items-center gap-3" aria-label={`${profile.name} · ${s.nav.home}`}>
+      <span className="on-accent grid h-10 w-10 place-items-center border-2 border-line bg-yellow font-mono text-sm font-bold shadow-sm transition-transform group-hover:-rotate-6">
+        {profile.initials}
+      </span>
+      <span className="font-mono text-[15px] leading-tight font-bold">{profile.name}</span>
+    </Link>
   );
 }
 
-function Socials() {
+export function Socials({ className = "" }) {
   return (
-    <div className="flex gap-2">
-      <a
-        href={profile.linkedin}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="LinkedIn"
-        className="grid h-10 w-10 place-items-center border-2 border-line bg-surface shadow-neo-sm transition-transform hover:-translate-y-0.5"
-      >
-        <LinkedInIcon className="h-4 w-4" />
+    <div className={`flex items-center gap-2 ${className}`}>
+      <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="btn-icon">
+        <GitHubIcon className="h-[18px] w-[18px]" />
       </a>
-      <a
-        href={profile.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="GitHub"
-        className="grid h-10 w-10 place-items-center border-2 border-line bg-surface shadow-neo-sm transition-transform hover:-translate-y-0.5"
-      >
-        <GitHubIcon className="h-5 w-5" />
+      <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="btn-icon">
+        <LinkedInIcon className="h-4 w-4" />
       </a>
     </div>
   );
@@ -87,18 +44,16 @@ export default function Layout() {
   const mainRef = useRef(null);
   const firstRender = useRef(true);
 
-  // New page: scroll to top and move focus to the content (screen-reader friendly)
+  // New page: back to top and move focus to the content (screen-reader friendly)
   useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
       return;
     }
-    mainRef.current?.scrollTo({ top: 0 });
     window.scrollTo({ top: 0 });
     mainRef.current?.focus({ preventScroll: true });
   }, [pathname]);
 
-  // Mobile drawer: Esc to close + lock page scroll while open
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && setOpen(false);
@@ -111,87 +66,102 @@ export default function Layout() {
   }, [open]);
 
   const close = () => setOpen(false);
+  const navClass = ({ isActive }) =>
+    `border-2 px-3.5 py-1.5 font-mono text-sm font-bold transition-colors ${
+      isActive ? "border-line bg-ink text-bg shadow-sm" : "border-transparent hover:border-line hover:bg-surface"
+    }`;
 
   return (
     <>
       <a
         href="#main"
-        className="sr-only z-[200] border-2 border-line bg-yellow px-4 py-2 font-bold text-on-accent focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+        className="on-accent sr-only z-[200] border-2 border-line bg-yellow px-4 py-2 font-bold focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
       >
         {s.skip}
       </a>
 
-      <div className="flex min-h-dvh lg:items-center lg:justify-center lg:p-8">
-        <div className="flex w-full flex-col border-line bg-frame lg:h-[calc(100dvh-4rem)] lg:max-h-[980px] lg:max-w-[1480px] lg:flex-row lg:border-[3px] lg:shadow-neo-lg">
-          {/* Mobile / tablet header */}
-          <header className="sticky top-0 z-50 flex items-center justify-between border-b-[3px] border-line bg-frame px-4 py-3 lg:hidden">
-            <Logo onClick={close} />
-            <button
-              type="button"
-              onClick={() => setOpen((o) => !o)}
-              aria-expanded={open}
-              aria-controls="mobile-nav"
-              aria-label={open ? s.menuClose : s.menuOpen}
-              className="grid h-11 w-11 place-items-center border-2 border-line bg-surface shadow-neo-sm"
-            >
-              {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
-            </button>
-          </header>
+      <header className="sticky top-0 z-50 border-b-2 border-line bg-frame">
+        <div className="container-page flex h-[68px] items-center justify-between gap-4">
+          <Brand onClick={close} />
 
-          {/* Mobile drawer */}
-          <div
-            id="mobile-nav"
-            className={`fixed inset-x-0 top-[71px] bottom-0 z-40 flex-col justify-between overflow-y-auto bg-frame p-5 lg:hidden ${
-              open ? "flex animate-slide-up" : "hidden"
-            }`}
+          <nav aria-label={s.navLabel} className="hidden items-center gap-1 md:flex">
+            {links.map(({ to, key }) => (
+              <NavLink key={to} to={to} className={navClass}>
+                {s.nav[key]}
+              </NavLink>
+            ))}
+          </nav>
+
+          <div className="hidden items-center gap-2 md:flex">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? s.menuClose : s.menuOpen}
+            className="btn-icon md:hidden"
           >
-            <nav aria-label={s.navLabel}>
-              <NavItems onNavigate={close} />
+            {open ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+          </button>
+        </div>
+
+        {open && (
+          <div id="mobile-nav" className="h-[calc(100dvh-68px)] animate-fade-up overflow-y-auto border-t-2 border-line bg-frame md:hidden">
+            <nav aria-label={s.navLabel} className="container-page flex flex-col gap-3 py-6">
+              {[{ to: "/", key: "home" }, ...links].map(({ to, key }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  end={to === "/"}
+                  onClick={close}
+                  className={({ isActive }) =>
+                    `flex items-center justify-between border-2 border-line px-4 py-4 font-mono text-xl font-bold shadow-card ${
+                      isActive ? "bg-ink text-bg" : "bg-surface"
+                    }`
+                  }
+                >
+                  {s.nav[key]}
+                  <ArrowRight size={20} aria-hidden="true" />
+                </NavLink>
+              ))}
             </nav>
-            <div className="flex items-center justify-between gap-3 border-t-[3px] border-line pt-5">
+            <div className="container-page flex items-center justify-between border-t-2 border-line py-5">
               <Socials />
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
                 <LanguageToggle />
                 <ThemeToggle />
               </div>
             </div>
           </div>
+        )}
+      </header>
 
-          {/* Desktop sidebar */}
-          <aside className="hidden w-60 shrink-0 flex-col justify-between p-6 lg:flex xl:w-64">
-            <div className="flex flex-col gap-10">
-              <Logo />
-              <nav aria-label={s.navLabel}>
-                <NavItems />
-              </nav>
-            </div>
-            <div className="flex flex-col gap-4 border-t-[3px] border-line pt-5">
-              <Socials />
-              <div className="flex gap-2">
-                <LanguageToggle />
-                <ThemeToggle />
-              </div>
-            </div>
-          </aside>
-
-          <main
-            id="main"
-            ref={mainRef}
-            tabIndex={-1}
-            className="flex-1 bg-paper outline-none lg:my-4 lg:mr-4 lg:overflow-y-auto lg:border-[3px] lg:border-line"
-          >
-            <div key={pathname} className="mx-auto w-full max-w-6xl animate-slide-up px-4 py-8 sm:px-6 md:px-10 md:py-10">
-              <Outlet />
-            </div>
-            <footer className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 border-t-2 border-dashed border-line/40 px-4 py-6 font-mono text-xs text-muted sm:px-6 md:px-10">
-              <span>
-                © {new Date().getFullYear()} {profile.name}
-              </span>
-              <span>{s.footer}</span>
-            </footer>
-          </main>
+      <main id="main" ref={mainRef} tabIndex={-1} className="outline-none">
+        <div key={pathname} className="animate-fade-up">
+          <Outlet />
         </div>
-      </div>
+      </main>
+
+      <footer className="border-t-2 border-line bg-frame">
+        <div className="container-page flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-mono font-bold">{profile.name}</p>
+            <p className="mt-1 text-sm text-muted">
+              © {new Date().getFullYear()} · {s.footer}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <a href={`mailto:${profile.email}`} className="link text-sm">
+              {profile.email}
+            </a>
+            <Socials />
+          </div>
+        </div>
+      </footer>
     </>
   );
 }

@@ -1,198 +1,183 @@
 @import "tailwindcss";
 
-/* Dark mode is driven by the .dark class on <html> (set before paint in index.html) */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+  Neo-brutalist system, used with restraint:
+  - cream paper + green brand + yellow for primary actions + pink as secondary accent
+  - 2px ink borders, hard offset shadows, square corners
+  - Space Mono for headings/labels, Space Grotesk for reading text
+*/
 @theme {
-  /* Neutral surfaces (overridden in .dark) */
-  --color-frame: #a3d9b1; /* window frame / sidebar */
-  --color-paper: #fcf5e3; /* content panel */
-  --color-surface: #ffffff; /* cards & inputs */
-  --color-ink: #0a0a0a; /* primary text */
-  --color-muted: #44403c; /* secondary text (AA on paper & surface) */
-  --color-line: #0a0a0a; /* borders & hard shadows */
-  --color-grid: #fcf5e3; /* page background grid lines */
+  --color-bg: #fcf5e3; /* paper */
+  --color-surface: #ffffff;
+  --color-subtle: #f6edd6;
+  --color-ink: #0a0a0a;
+  --color-muted: #3d3833;
+  --color-faint: #5a544e;
+  --color-line: #0a0a0a;
+  --color-line-strong: #0a0a0a;
+  --color-grid: rgb(10 10 10 / 0.06);
+  --color-frame: #a3d9b1; /* brand green (header / footer) */
 
-  /* Accents keep their hue in both themes; text on them is always dark */
   --color-yellow: #f7c236;
-  --color-yellow-soft: #f5d381;
   --color-pink: #fca5d3;
   --color-green: #a3d9b1;
-  --color-mint: #a1e3cb;
   --color-blue: #93c5fd;
   --color-purple: #d8b4fe;
   --color-orange: #fdba74;
+  --color-mint: #a1e3cb;
   --color-coral: #ffb0b0;
+
+  --color-accent: #15803d;
+  --color-accent-solid: #16a34a;
+  --color-accent-soft: #a3d9b1;
   --color-on-accent: #0a0a0a;
 
-  --shadow-neo-sm: 2px 2px 0 0 var(--color-line);
-  --shadow-neo: 4px 4px 0 0 var(--color-line);
-  --shadow-neo-lg: 6px 6px 0 0 var(--color-line);
+  --shadow-card: 4px 4px 0 0 var(--color-line);
+  --shadow-sm: 2px 2px 0 0 var(--color-line);
+  --shadow-lift: 7px 7px 0 0 var(--color-line);
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Space Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --animate-slide-up: slide-up 0.45s ease-out both;
-  --animate-marquee: marquee 30s linear infinite;
+  --animate-fade-up: fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .dark {
-  --color-frame: #1a3a25;
-  --color-paper: #121212;
-  --color-surface: #1e1e1e;
+  --color-bg: #121212;
+  --color-surface: #1c1c1c;
+  --color-subtle: #242424;
   --color-ink: #f4f4f5;
-  --color-muted: #b4b4bb;
+  --color-muted: #c9c9ce;
+  --color-faint: #a8a8b0;
   --color-line: #f4f4f5;
-  --color-grid: #24442f;
+  --color-line-strong: #f4f4f5;
+  --color-grid: rgb(163 217 177 / 0.07);
+  --color-frame: #1a3a25;
+  --color-accent: #4ade80;
   color-scheme: dark;
 }
 
-@keyframes slide-up {
+@keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
+    transform: none;
   }
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
     -webkit-text-size-adjust: 100%;
   }
-
   html:has(dialog[open]) {
     overflow: hidden;
   }
-
   body {
-    @apply font-sans text-ink antialiased;
+    @apply bg-bg font-sans text-ink antialiased;
     min-height: 100dvh;
-    background-color: var(--color-frame);
     background-image:
-      radial-gradient(circle at center, transparent 30%, rgb(0 0 0 / 0.28) 100%),
-      linear-gradient(
-        0deg,
-        transparent 24%,
-        var(--color-grid) 25%,
-        var(--color-grid) 26%,
-        transparent 27%,
-        transparent 74%,
-        var(--color-grid) 75%,
-        var(--color-grid) 76%,
-        transparent 77%
-      ),
-      linear-gradient(
-        90deg,
-        transparent 24%,
-        var(--color-grid) 25%,
-        var(--color-grid) 26%,
-        transparent 27%,
-        transparent 74%,
-        var(--color-grid) 75%,
-        var(--color-grid) 76%,
-        transparent 77%
-      );
-    background-size:
-      100% 100%,
-      200px 200px,
-      200px 200px;
-    background-attachment: fixed;
-    transition: background-color 0.3s;
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
-
   h1,
   h2,
   h3 {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: -0.03em;
     text-wrap: balance;
   }
-
   p {
     text-wrap: pretty;
   }
-
   ::selection {
     background: var(--color-yellow);
-    color: var(--color-on-accent);
+    color: #0a0a0a;
   }
-
   :focus-visible {
     outline: 3px solid var(--color-blue);
     outline-offset: 3px;
   }
-
   dialog::backdrop {
-    background: rgb(0 0 0 / 0.7);
-    backdrop-filter: blur(4px);
+    background: rgb(10 10 10 / 0.65);
+    backdrop-filter: blur(3px);
   }
 }
 
 @layer components {
-  /* Hard-shadow button that "presses" on hover */
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  /* Buttons press into their shadow */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 border-2 border-line px-5 py-3 font-mono text-sm font-bold uppercase tracking-wide shadow-neo transition-[transform,box-shadow,background-color] duration-150 select-none;
+    @apply inline-flex h-11 items-center justify-center gap-2 border-2 border-line px-5 text-[15px] font-bold whitespace-nowrap shadow-[3px_3px_0_0_var(--color-line)] transition-[transform,box-shadow,background-color] duration-150 select-none;
   }
   .btn:hover {
     transform: translate(2px, 2px);
-    box-shadow: var(--shadow-neo-sm);
+    box-shadow: 1px 1px 0 0 var(--color-line);
   }
   .btn:active {
-    transform: translate(4px, 4px);
+    transform: translate(3px, 3px);
     box-shadow: none;
+  }
+  .btn-primary {
+    @apply bg-yellow text-[#0a0a0a];
+  }
+  .btn-secondary {
+    @apply bg-surface text-ink;
+  }
+  .btn-dark {
+    @apply bg-[#0a0a0a] text-white;
+  }
+  /* text-style action, no box */
+  .btn-ghost {
+    @apply border-transparent px-1 shadow-none decoration-2 underline-offset-4 hover:underline;
+  }
+  .btn-ghost:hover,
+  .btn-ghost:active {
+    transform: none;
+    box-shadow: none;
+  }
+  .btn-icon {
+    @apply inline-grid h-10 w-10 place-items-center border-2 border-line bg-surface text-ink shadow-sm transition-transform duration-150 hover:-translate-y-0.5;
   }
 
   .card {
-    @apply border-[3px] border-line shadow-neo-lg;
+    @apply border-2 border-line bg-surface shadow-card;
   }
 
-  .chip {
-    @apply inline-flex items-center border-2 border-line bg-surface px-2.5 py-1 text-xs font-bold shadow-neo-sm;
+  .tag {
+    @apply inline-flex items-center border-[1.5px] border-line bg-surface px-2 py-0.5 font-mono text-[11.5px] font-bold text-ink;
   }
 
   .eyebrow {
-    @apply font-mono text-xs font-bold uppercase tracking-widest;
+    @apply inline-block -rotate-1 border-2 border-line bg-yellow px-2 py-0.5 font-mono text-xs font-bold tracking-wide text-[#0a0a0a] uppercase shadow-sm;
   }
 
-  /* Accent blocks always use dark text, whatever the theme */
-  .on-accent {
-    --color-ink: var(--color-on-accent);
-    --color-muted: #3f3a36;
-    --color-surface: #ffffff;
-    color: var(--color-on-accent);
+  .link {
+    @apply font-bold text-ink underline decoration-yellow decoration-[3px] underline-offset-4 transition-colors hover:bg-yellow hover:text-[#0a0a0a];
   }
-  /* children of an accent block are drawn as a "light island" (the block's own border keeps the theme) */
+
+  /* pastel blocks keep dark text in both themes */
+  .on-accent {
+    --color-ink: #0a0a0a;
+    --color-muted: #2f2a26;
+    --color-faint: #3d3833;
+    --color-surface: #ffffff;
+    color: #0a0a0a;
+  }
   .on-accent * {
     --color-line: #0a0a0a;
   }
-}
-
-/* Scrollbars */
-* {
-  scrollbar-color: var(--color-yellow) var(--color-paper);
-}
-::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
-}
-::-webkit-scrollbar-track {
-  background-color: var(--color-paper);
-  border-left: 3px solid var(--color-line);
-}
-::-webkit-scrollbar-thumb {
-  background-color: var(--color-yellow);
-  border: 3px solid var(--color-line);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -206,7 +191,6 @@
   }
 }
 
-/* Print: only used by the /cv page */
 @media print {
   @page {
     size: A4;
