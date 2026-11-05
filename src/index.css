@@ -184,6 +184,149 @@
   }
 }
 
+/* ---------- Micro-interactions (src/components/Effects.jsx, TiltPhoto.jsx) ----------
+   Small, transform/opacity-only touches. Everything here is switched off by the global
+   prefers-reduced-motion rule below (and Effects.jsx doesn't arm reveals then). */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* scroll reveal: only hidden once JS has armed it, so content never disappears without JS */
+[data-reveal] {
+  transition:
+    opacity 0.7s var(--ease-out-expo) var(--rd, 0ms),
+    translate 0.8s var(--ease-out-expo) var(--rd, 0ms);
+}
+html.js-reveal [data-reveal]:not(.is-in) {
+  opacity: 0;
+  translate: 0 22px;
+}
+
+/* grid flashlight: a stronger copy of the grid, visible only around the pointer */
+@media (hover: hover) and (pointer: fine) {
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgb(10 10 10 / 0.2) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(10 10 10 / 0.2) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: 0 0;
+    background-attachment: fixed;
+    mask-image: radial-gradient(260px circle at var(--mx, -999px) var(--my, -999px), #000 0%, rgb(0 0 0 / 0.5) 35%, transparent 72%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .dark body::before {
+    background-image:
+      linear-gradient(rgb(163 217 177 / 0.22) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(163 217 177 / 0.22) 1px, transparent 1px);
+  }
+  html[data-pointer="on"] body::before {
+    opacity: 1;
+  }
+}
+
+/* hero photo: 3D tilt towards the pointer, yellow plate in parallax */
+.tilt {
+  perspective: 900px;
+}
+.tilt-card {
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.5s var(--ease-out-expo);
+  will-change: transform;
+}
+.tilt-plate {
+  transform: translate(calc(12px + var(--px, 0px)), calc(12px + var(--py, 0px))) rotate(3deg);
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+/* the "Hola 👋" sticker waves every few seconds */
+.sticker-wave {
+  rotate: -4deg;
+  transform-origin: 20% 80%;
+  animation: sticker-wave 6s ease-in-out 2.5s infinite;
+}
+@keyframes sticker-wave {
+  0%, 84%, 100% { rotate: -4deg; }
+  87% { rotate: -14deg; }
+  90% { rotate: 6deg; }
+  93% { rotate: -11deg; }
+  96% { rotate: 2deg; }
+}
+
+/* slow idle spin for decorative stars */
+.idle-spin {
+  display: inline-block;
+  animation: idle-spin 14s linear infinite;
+}
+.idle-spin-rev {
+  animation-direction: reverse;
+  animation-duration: 18s;
+}
+@keyframes idle-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* arrows lean forward on hover */
+.btn .lucide-arrow-right,
+.btn .lucide-arrow-up-right,
+.link .lucide-arrow-up-right {
+  transition: translate 0.25s var(--ease-back);
+}
+.btn:hover .lucide-arrow-right {
+  translate: 4px 0;
+}
+.btn:hover .lucide-arrow-up-right,
+.link:hover .lucide-arrow-up-right {
+  translate: 2px -2px;
+}
+
+/* tags pop on hover */
+.tag {
+  transition:
+    translate 0.2s var(--ease-back),
+    rotate 0.2s var(--ease-back),
+    background-color 0.15s;
+}
+.tag:hover {
+  translate: 0 -2px;
+  rotate: -3deg;
+  background-color: var(--color-yellow);
+  color: #0a0a0a;
+}
+
+/* brand mark: a slightly bigger tilt on hover */
+header a.group:hover > span:first-child {
+  rotate: -12deg;
+}
+
+/* project modal pops in */
+dialog[open] {
+  animation: dialog-pop 0.38s var(--ease-back);
+}
+dialog[open]::backdrop {
+  animation: backdrop-in 0.3s ease-out;
+}
+@keyframes dialog-pop {
+  from {
+    opacity: 0;
+    scale: 0.94;
+    translate: 0 12px;
+  }
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
 /* ---------- First-visit intro (src/components/Intro.jsx) ----------
    "Through the letter": two block G's on paper become windows onto the site
    and the camera flies through one of them. Timings in ms from t0:

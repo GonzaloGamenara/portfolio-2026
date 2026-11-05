@@ -5,6 +5,7 @@ import { usePreferences } from "../context/preferences";
 import { profile } from "../data/profile";
 import { LanguageToggle, ThemeToggle } from "./Controls";
 import { GitHubIcon, LinkedInIcon } from "./Icons";
+import Effects from "./Effects";
 
 const links = [
   { to: "/projects", key: "projects" },
@@ -41,6 +42,7 @@ export default function Layout() {
   const { s } = usePreferences();
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const mainRef = useRef(null);
   const firstRender = useRef(true);
 
@@ -53,6 +55,14 @@ export default function Layout() {
     window.scrollTo({ top: 0 });
     mainRef.current?.focus({ preventScroll: true });
   }, [pathname]);
+
+  // header earns its hard shadow once the page scrolls
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -80,7 +90,7 @@ export default function Layout() {
         {s.skip}
       </a>
 
-      <header className="sticky top-0 z-50 border-b-2 border-line bg-frame">
+      <header className={`sticky top-0 z-50 border-b-2 border-line bg-frame transition-shadow duration-300 ${scrolled ? "shadow-[0_4px_0_0_var(--color-shadow)]" : ""}`}>
         <div className="container-page flex h-[68px] items-center justify-between gap-4">
           <Brand onClick={close} />
 
@@ -112,14 +122,15 @@ export default function Layout() {
         {open && (
           <div id="mobile-nav" className="h-[calc(100dvh-68px)] animate-fade-up overflow-y-auto border-t-2 border-line bg-frame md:hidden">
             <nav aria-label={s.navLabel} className="container-page flex flex-col gap-3 py-6">
-              {[{ to: "/", key: "home" }, ...links].map(({ to, key }) => (
+              {[{ to: "/", key: "home" }, ...links].map(({ to, key }, i) => (
                 <NavLink
                   key={to}
                   to={to}
                   end={to === "/"}
                   onClick={close}
+                  style={{ animationDelay: `${60 + i * 55}ms` }}
                   className={({ isActive }) =>
-                    `flex items-center justify-between border-2 border-line px-4 py-4 font-mono text-xl font-bold shadow-card ${
+                    `flex animate-fade-up items-center justify-between border-2 border-line px-4 py-4 font-mono text-xl font-bold shadow-card ${
                       isActive ? "bg-ink text-bg" : "bg-surface"
                     }`
                   }
@@ -140,6 +151,7 @@ export default function Layout() {
         )}
       </header>
 
+      <Effects />
       <main id="main" ref={mainRef} tabIndex={-1} className="outline-none">
         <div key={pathname} className="animate-fade-up">
           <Outlet />

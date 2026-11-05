@@ -5,7 +5,7 @@ import usePageMeta from "../hooks/usePageMeta";
 
 function Row({ title, children, id }) {
   return (
-    <section aria-labelledby={id} className="grid gap-6 border-t-2 border-line py-14 md:grid-cols-[14rem_1fr] md:gap-12">
+    <section data-reveal aria-labelledby={id} className="grid gap-6 border-t-2 border-line py-14 md:grid-cols-[14rem_1fr] md:gap-12">
       <h2 id={id} className="text-2xl md:sticky md:top-24 md:self-start">
         {title}
       </h2>
