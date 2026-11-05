@@ -184,6 +184,147 @@
   }
 }
 
+/* ---------- First-visit intro (src/components/Intro.jsx) ----------
+   Timeline (ms): type 150-750 · blocks 700-1250 · ready 1250 · card out 1350
+   · name slam 1450-1850 · panels in 1950-2300 · stage off 2300 · panels out 2300-2700 */
+@property --pct {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+.intro-typing {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  animation: intro-type 600ms steps(15, end) 150ms forwards;
+}
+.intro-cursor {
+  animation: intro-blink 0.45s steps(1) infinite;
+}
+.intro-block {
+  animation: intro-fill 1ms steps(1) forwards;
+}
+.intro-pct {
+  animation: intro-count 550ms steps(10, end) 700ms forwards;
+  counter-reset: pct var(--pct);
+}
+.intro-pct::after {
+  content: counter(pct) "%";
+}
+.intro-ready {
+  opacity: 0;
+  animation: intro-show 1ms steps(1) 1250ms forwards;
+}
+.intro-card {
+  animation: intro-card-out 260ms steps(4, end) 1350ms forwards;
+}
+.intro-name {
+  opacity: 0;
+  animation: intro-slam 420ms steps(7, end) 1450ms forwards;
+}
+.intro-stage {
+  animation:
+    intro-shake 180ms steps(3, end) 1700ms,
+    intro-off 1ms steps(1) 2300ms forwards;
+}
+.intro-panel {
+  transform: translateY(101%);
+  animation:
+    intro-panel-in 240ms steps(6, end) calc(1950ms + var(--i) * 55ms) forwards,
+    intro-panel-out 260ms steps(6, end) calc(2300ms + var(--i) * 55ms) forwards;
+}
+.intro-skip {
+  animation: intro-off 1ms steps(1) 1950ms forwards;
+}
+
+@keyframes intro-type {
+  to {
+    width: 15ch;
+  }
+}
+@keyframes intro-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes intro-fill {
+  to {
+    background: var(--color-yellow);
+  }
+}
+@keyframes intro-count {
+  to {
+    --pct: 100;
+  }
+}
+@keyframes intro-show {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes intro-card-out {
+  0% {
+    transform: none;
+  }
+  40% {
+    transform: translateY(-8px) rotate(-2deg);
+  }
+  100% {
+    transform: translateY(40px) rotate(6deg) scale(0.85);
+    opacity: 0;
+  }
+}
+@keyframes intro-slam {
+  0% {
+    opacity: 0;
+    transform: scale(3) rotate(-8deg);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(0.9) rotate(1deg);
+  }
+  65% {
+    transform: scale(1.07) rotate(-1deg);
+  }
+  85% {
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes intro-shake {
+  33% {
+    transform: translate(-6px, 4px);
+  }
+  66% {
+    transform: translate(5px, -3px);
+  }
+}
+@keyframes intro-off {
+  to {
+    visibility: hidden;
+  }
+}
+@keyframes intro-panel-in {
+  from {
+    transform: translateY(101%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes intro-panel-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-101%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

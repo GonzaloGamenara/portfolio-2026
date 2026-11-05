@@ -39,7 +39,7 @@ export const stats = [
   { value: "6+", label: { es: "Apps propias en producción", en: "Own apps in production" } },
   { value: "3", label: { es: "Años emprendiendo", en: "Years running a business" } },
   { value: "600+", label: { es: "Horas certificadas", en: "Certified hours" } },
-  { value: "7+", label: { es: "Años liderando equipos", en: "Years leading teams" } },
+  { value: "30+", label: { es: "Repositorios en GitHub", en: "GitHub repositories" } },
 ];
 
 export const experience = [
