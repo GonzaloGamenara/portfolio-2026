@@ -187,11 +187,12 @@
 /* ---------- First-visit intro (src/components/Intro.jsx) ----------
    "Through the letter": two block G's on paper become windows onto the site
    and the camera flies through one of them. Timings in ms from t0:
-     0–940      G's rise as one rigid piece (letter + shadow) out of a floor clip, caption fades in
+     80–980     G's fly in from below the screen as one rigid piece (letter + shadow), caption fades in
      700–1050   hold, caption tracks tighter
      1000–1250  yellow fill drains → the letters are now see-through windows
-     1150–2150  camera zoom into G #2 (custom in-out curve, accelerates hard);
-                grid fades, motion blur builds; the page emerges 0.62 → 1 into focus
+     1050–1310  grid fades out (and stops being painted)
+     1150–2150  camera zoom into G #2 (expo in-out); the page emerges 0.62 → 1 into focus
+     1680       overlay hidden: the hole already covers the screen
      2150       overlay removed
 */
 :root {
@@ -201,11 +202,10 @@
 }
 
 .ix-g {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  transform: translateY(118%);
-  filter: blur(3px);
-  animation: ix-g-in 820ms var(--ix-out-expo) 120ms forwards;
+  /* starts below the bottom edge of the screen (viewBox is 800 high, letters sit ~285–530) */
+  transform: translateY(1100px); /* enough for tall phones too (meet → taller visible area) */
+  filter: blur(5px);
+  animation: ix-g-in 900ms var(--ix-out-expo) 80ms forwards;
 }
 .ix-fill {
   animation: ix-drain 280ms var(--ix-in-out-soft) 1000ms forwards;
@@ -238,11 +238,20 @@
 }
 /* the grid must not fly at the camera: it fades as the push starts */
 .ix-gridlayer {
-  animation: ix-fade-out 320ms ease-in 1150ms forwards;
+  animation: ix-fade-out 260ms ease-in 1050ms forwards;
 }
-/* motion blur that builds with speed */
-.ix-svg {
-  animation: ix-mblur 1000ms var(--ix-zoom) 1150ms forwards;
+/* (no CSS blur on the SVG: repainting a blurred 50× vector every frame drops frames) */
+/* the overlay disappears as soon as the letter's hole covers the whole screen (mid-zoom,
+   see aimCamera's ×2 margin): from there on nothing of the letter is visible, and drawing
+   giant text any longer only risks raster artefacts (seen as one-frame black bars on
+   phones). The page finishes landing on its own underneath. */
+.intro {
+  animation: ix-gone 1ms linear 1680ms forwards; /* 1150 + 500 (mid-zoom) + 30 */
+}
+@keyframes ix-gone {
+  to {
+    visibility: hidden;
+  }
 }
 /* nothing moves until Space Mono is loaded and the camera is aimed */
 .intro:not(.ix-go),
@@ -280,6 +289,7 @@ html[data-intro="go"] #root {
 @keyframes ix-fade-out {
   to {
     opacity: 0;
+    visibility: hidden; /* stop painting it (the grid pattern is the most expensive layer to zoom) */
   }
 }
 @keyframes ix-fade-in {
@@ -301,15 +311,10 @@ html[data-intro="go"] #root {
     transform: scale(var(--ix-scale, 70));
   }
 }
-@keyframes ix-mblur {
-  0% { filter: blur(0); }
-  45% { filter: blur(2px); }
-  100% { filter: blur(12px); }
-}
 @keyframes ix-emerge {
   from {
     transform: scale(0.62);
-    filter: blur(10px) brightness(0.92);
+    filter: blur(6px) brightness(0.92);
   }
   to {
     transform: none;

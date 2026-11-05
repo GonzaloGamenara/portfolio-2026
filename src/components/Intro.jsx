@@ -1,17 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePreferences } from "../context/preferences";
 import { profile } from "../data/profile";
+import { GG_PATHS, GG_TARGET } from "./introGlyphs";
 
 const KEY = "intro_seen";
 const DURATION = 2250; // zoom ends at 1150 + 1000 ms, + margin (see "First-visit intro" in index.css)
 
-// Letters are real Space Mono Bold text (same face as the logo and headings).
-// viewBox is 800×800; these numbers are shared by the SVG and the canvas probe below.
-const FONT_SIZE = 330;
-const BASELINE = 515; // ≈ 400 + cap-height/2 → letters visually centred
-const FONT = `700 ${FONT_SIZE}px "Space Mono"`;
-
+// Letters are the real Space Mono Bold "G" outlines (same face as the logo and headings),
+// pre-extracted as paths — see introGlyphs.js for why not <text>.
 function shouldPlay() {
   try {
     if (sessionStorage.getItem(KEY)) return false;
@@ -27,48 +24,22 @@ function shouldPlay() {
 }
 
 /**
- * Find where to fly the camera: the middle of the spine of the 2nd "G", measured by
- * rasterising the exact same text on a canvas. Returns the transform-origin (in viewBox
- * units) and the zoom needed for that stroke to cover the whole screen.
+ * Zoom needed for the deepest circle of the 2nd G (GG_TARGET) to cover the farthest
+ * screen corner, so no edge of the letter can cross the screen at the end of the flight.
  */
 function aimCamera() {
-  const c = document.createElement("canvas");
-  c.width = c.height = 800;
-  const ctx = c.getContext("2d", { willReadFrequently: true });
-  ctx.font = FONT;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "alphabetic";
-  ctx.fillText("GG", 400, BASELINE);
-  const data = ctx.getImageData(0, 0, 800, 800).data;
-  const on = (x, y) => data[(y * 800 + x) * 4 + 3] > 128;
-
-  const row = 400;
-  let a = -1;
-  let b = -1;
-  for (let x = 405; x < 800; x++) {
-    if (on(x, row) && a < 0) a = x;
-    else if (!on(x, row) && a >= 0) {
-      b = x;
-      break;
-    }
-  }
-  if (a < 0 || b < 0) return null; // font not rendered: caller falls back
-  const cx = (a + b) / 2;
-  let top = row;
-  let bottom = row;
-  while (top > 0 && on(Math.round(cx), top - 1)) top--;
-  while (bottom < 799 && on(Math.round(cx), bottom + 1)) bottom++;
-  const cy = (top + bottom) / 2;
-
-  // visible area in viewBox units with preserveAspectRatio="meet"
-  const unit = 800 / Math.min(window.innerWidth, window.innerHeight);
-  const visW = window.innerWidth * unit;
-  const visH = window.innerHeight * unit;
-  // usable window = fill minus the inner half of the outline (7) and anti-aliasing
-  const needX = (visW + 2 * Math.abs(cx - 400)) / Math.max(1, b - a - 12);
-  const needY =
-    (visH + 2 * Math.abs(cy - 400)) / Math.max(1, bottom - top - 12);
-  return { ox: cx, oy: cy, scale: Math.ceil(Math.max(needX, needY) * 1.8) };
+  const { x, y, r } = GG_TARGET;
+  const usable = Math.max(1, r - 7); // minus inner half of the outline (3.5) + anti-aliasing
+  const unit = 800 / Math.min(window.innerWidth, window.innerHeight); // "meet" scaling
+  const halfW = (window.innerWidth * unit) / 2;
+  const halfH = (window.innerHeight * unit) / 2;
+  const farCorner = Math.hypot(
+    halfW + Math.abs(x - 400),
+    halfH + Math.abs(y - 400),
+  );
+  // ×2: with the symmetric expo in-out curve, progress hits 0.5 exactly at mid-zoom, so the
+  // hole covers the whole screen by then and the overlay can be dropped (see .intro in CSS)
+  return { ox: x, oy: y, scale: Math.ceil((farCorner / usable) * 2) };
 }
 
 /**
@@ -79,8 +50,7 @@ function aimCamera() {
 export default function Intro() {
   const { lang } = usePreferences();
   const [visible, setVisible] = useState(shouldPlay);
-  const [aim, setAim] = useState(null);
-  const started = useRef(false);
+  const [aim] = useState(aimCamera); // computed once for this screen size
 
   const finish = useCallback(() => {
     try {
@@ -92,30 +62,16 @@ export default function Intro() {
     setVisible(false);
   }, []);
 
-  // 1) cover the page and wait for Space Mono, 2) aim the camera, 3) run the timeline
+  // cover the page, aim the camera for this screen size, run the timeline
   useEffect(() => {
     if (!visible) return;
     const root = document.documentElement;
-    root.dataset.intro = "wait";
     root.style.overflow = "hidden";
     let timer;
-    let cancelled = false;
-
-    const go = () => {
-      if (cancelled || started.current) return;
-      started.current = true;
-      setAim(aimCamera() ?? { ox: 465, oy: 400, scale: 70 });
-      root.dataset.intro = "go";
-      if (!window.__introFreeze) timer = setTimeout(finish, DURATION);
-    };
-    Promise.race([
-      document.fonts?.load(FONT) ?? Promise.resolve(),
-      new Promise((r) => setTimeout(r, 700)),
-    ]).then(go, go);
-
+    root.dataset.intro = "go";
+    if (!window.__introFreeze) timer = setTimeout(finish, DURATION);
     window.addEventListener("keydown", finish);
     return () => {
-      cancelled = true;
       clearTimeout(timer);
       window.removeEventListener("keydown", finish);
       root.style.overflow = "";
@@ -125,17 +81,7 @@ export default function Intro() {
 
   if (!visible) return null;
 
-  const letters = (props) => (
-    <text
-      x="400"
-      y={BASELINE}
-      textAnchor="middle"
-      style={{ font: FONT }}
-      {...props}
-    >
-      GG
-    </text>
-  );
+  const letters = (props) => <path d={GG_PATHS.join(" ")} {...props} />;
 
   return createPortal(
     <div
@@ -161,29 +107,14 @@ export default function Intro() {
           <mask
             id="ix-holes"
             maskUnits="userSpaceOnUse"
-            x="-20000"
-            y="-20000"
-            width="40800"
-            height="40800"
+            x="-3000"
+            y="-3000"
+            width="6800"
+            height="6800"
           >
-            <rect
-              x="-20000"
-              y="-20000"
-              width="40800"
-              height="40800"
-              fill="#fff"
-            />
+            <rect x="-3000" y="-3000" width="6800" height="6800" fill="#fff" />
             {letters({ className: "ix-hole" })}
           </mask>
-          {/* floor the letters rise out of: just below the shadow's lowest edge */}
-          <clipPath id="ix-floor">
-            <rect
-              x="-20000"
-              y="-20000"
-              width="40800"
-              height={20000 + BASELINE + 30}
-            />
-          </clipPath>
           <pattern
             id="ix-grid"
             width="48"
@@ -203,40 +134,38 @@ export default function Intro() {
           {/* the paper, with the letters cut out of it */}
           <g mask="url(#ix-holes)">
             <rect
-              x="-20000"
-              y="-20000"
-              width="40800"
-              height="40800"
+              x="-3000"
+              y="-3000"
+              width="6800"
+              height="6800"
               style={{ fill: "var(--color-bg)" }}
             />
             <rect
               className="ix-gridlayer"
-              x="-20000"
-              y="-20000"
-              width="40800"
-              height="40800"
+              x="-3000"
+              y="-3000"
+              width="6800"
+              height="6800"
               fill="url(#ix-grid)"
             />
           </g>
 
-          {/* letter + shadow rise as ONE rigid piece out of a floor line (no fade, no sliding shadow) */}
-          <g clipPath="url(#ix-floor)">
-            <g className="ix-g">
-              <g className="ix-shadow-fade">
-                {letters({
-                  transform: "translate(16 16)",
-                  style: { font: FONT, fill: "var(--color-shadow)" },
-                })}
-              </g>
+          {/* letter + shadow fly in from below the screen as ONE rigid piece (shadow never slides) */}
+          <g className="ix-g">
+            <g className="ix-shadow-fade">
               {letters({
-                className: "ix-fill",
-                fill: "#f7c236",
-                strokeWidth: 7,
-                strokeLinejoin: "round",
-                paintOrder: "stroke",
-                style: { font: FONT, stroke: "var(--color-line)" },
+                transform: "translate(16 16)",
+                style: { fill: "var(--color-shadow)" },
               })}
             </g>
+            {letters({
+              className: "ix-fill",
+              fill: "#f7c236",
+              strokeWidth: 7,
+              strokeLinejoin: "round",
+              paintOrder: "stroke",
+              style: { stroke: "var(--color-line)" },
+            })}
           </g>
 
           <text
