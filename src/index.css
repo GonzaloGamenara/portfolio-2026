@@ -34,9 +34,11 @@
   --color-accent-soft: #a3d9b1;
   --color-on-accent: #0a0a0a;
 
-  --shadow-card: 4px 4px 0 0 var(--color-line);
-  --shadow-sm: 2px 2px 0 0 var(--color-line);
-  --shadow-lift: 7px 7px 0 0 var(--color-line);
+  --color-shadow: #0a0a0a; /* hard shadows (borders stay --color-line) */
+
+  --shadow-card: 4px 4px 0 0 var(--color-shadow);
+  --shadow-sm: 2px 2px 0 0 var(--color-shadow);
+  --shadow-lift: 7px 7px 0 0 var(--color-shadow);
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Space Mono", ui-monospace, SFMono-Regular, monospace;
@@ -51,9 +53,10 @@
   --color-ink: #f4f4f5;
   --color-muted: #c9c9ce;
   --color-faint: #a8a8b0;
-  --color-line: #f4f4f5;
-  --color-line-strong: #f4f4f5;
-  --color-grid: rgb(163 217 177 / 0.07);
+  --color-line: #e7e5e4;
+  --color-line-strong: #e7e5e4;
+  --color-shadow: #3f7a52; /* brand green, darker: depth without glare */
+  --color-grid: rgb(163 217 177 / 0.06);
   --color-frame: #1a3a25;
   --color-accent: #4ade80;
   color-scheme: dark;
@@ -119,11 +122,11 @@
 
   /* Buttons press into their shadow */
   .btn {
-    @apply inline-flex h-11 items-center justify-center gap-2 border-2 border-line px-5 text-[15px] font-bold whitespace-nowrap shadow-[3px_3px_0_0_var(--color-line)] transition-[transform,box-shadow,background-color] duration-150 select-none;
+    @apply inline-flex h-11 items-center justify-center gap-2 border-2 border-line px-5 text-[15px] font-bold whitespace-nowrap shadow-[3px_3px_0_0_var(--color-shadow)] transition-[transform,box-shadow,background-color] duration-150 select-none;
   }
   .btn:hover {
     transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 0 var(--color-line);
+    box-shadow: 1px 1px 0 0 var(--color-shadow);
   }
   .btn:active {
     transform: translate(3px, 3px);
@@ -177,6 +180,7 @@
   }
   .on-accent * {
     --color-line: #0a0a0a;
+    --color-shadow: #0a0a0a;
   }
 }
 

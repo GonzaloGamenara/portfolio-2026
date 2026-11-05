@@ -68,7 +68,7 @@ export const experience = [
     id: "entrevetas",
     role: { es: "Fundador & Desarrollador Full Stack", en: "Founder & Full Stack Developer" },
     company: "EntreVetas · Muebles de madera a medida",
-    url: "https://entrevetas-web.vercel.app",
+    url: "https://entrevetas.com.ar",
     start: { es: "Nov 2023", en: "Nov 2023" },
     end: { es: "Presente", en: "Present" },
     current: true,
