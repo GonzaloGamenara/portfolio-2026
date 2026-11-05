@@ -185,144 +185,296 @@
 }
 
 /* ---------- First-visit intro (src/components/Intro.jsx) ----------
-   Timeline (ms): type 150-750 · blocks 700-1250 · ready 1250 · card out 1350
-   · name slam 1450-1850 · panels in 1950-2300 · stage off 2300 · panels out 2300-2700 */
-@property --pct {
-  syntax: "<integer>";
-  initial-value: 0;
-  inherits: false;
-}
-.intro-typing {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 0;
-  animation: intro-type 600ms steps(15, end) 150ms forwards;
-}
-.intro-cursor {
-  animation: intro-blink 0.45s steps(1) infinite;
-}
-.intro-block {
-  animation: intro-fill 1ms steps(1) forwards;
-}
-.intro-pct {
-  animation: intro-count 550ms steps(10, end) 700ms forwards;
-  counter-reset: pct var(--pct);
-}
-.intro-pct::after {
-  content: counter(pct) "%";
-}
-.intro-ready {
-  opacity: 0;
-  animation: intro-show 1ms steps(1) 1250ms forwards;
-}
-.intro-card {
-  animation: intro-card-out 260ms steps(4, end) 1350ms forwards;
-}
-.intro-name {
-  opacity: 0;
-  animation: intro-slam 420ms steps(7, end) 1450ms forwards;
-}
-.intro-stage {
-  animation:
-    intro-shake 180ms steps(3, end) 1700ms,
-    intro-off 1ms steps(1) 2300ms forwards;
-}
-.intro-panel {
-  transform: translateY(101%);
-  animation:
-    intro-panel-in 240ms steps(6, end) calc(1950ms + var(--i) * 55ms) forwards,
-    intro-panel-out 260ms steps(6, end) calc(2300ms + var(--i) * 55ms) forwards;
-}
-.intro-skip {
-  animation: intro-off 1ms steps(1) 1950ms forwards;
+   Motion-designed sequence, all timings in ms from t0:
+     0–900     stage: grid draws in, grain + vignette
+     0–775     4 brand tiles fly in on arcs (X ease-out / Y ease-in), motion blur, overshoot spin
+     780       impact: squash & stretch, shockwave, particle burst, damped camera shake
+     940–1370  monogram rises to make room
+     1160–2040 "GONZALO" letters cascade up out of a mask
+     1330–2220 "GAMENARA" tag wipes in, then drops onto its hard shadow
+     1580–2280 role line resolves (tracking tightens)
+     2200–3310 exit: skewed colour panels sweep in/out (expo in-out) and reveal the page
+*/
+:root {
+  --ix-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ix-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ix-in-quad: cubic-bezier(0.55, 0, 0.75, 0.25);
+  --ix-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ix-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ix-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-@keyframes intro-type {
-  to {
-    width: 15ch;
+.ix-stage {
+  animation: ix-stage-out 450ms var(--ix-in-out) 2330ms forwards;
+}
+.ix-grid {
+  background-image:
+    linear-gradient(var(--color-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center;
+  opacity: 0;
+  transform: scale(1.08);
+  animation: ix-grid-in 900ms var(--ix-out-expo) forwards;
+}
+.ix-vignette {
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, rgb(0 0 0 / 0.08) 100%);
+}
+.dark .ix-vignette {
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 35%, rgb(0 0 0 / 0.55) 100%);
+}
+.ix-grain {
+  inset: -50%;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: ix-grain 0.5s steps(5) infinite; /* film grain is the one thing that should flicker */
+}
+.dark .ix-grain {
+  opacity: 0.08;
+}
+
+/* camera: damped shake on impact */
+.ix-camera {
+  animation: ix-shake 420ms linear 780ms;
+}
+
+/* monogram: rises after impact */
+.ix-mono {
+  transform: translateY(var(--ix-rise, 96px)) scale(1.2);
+  animation: ix-mono-rise 430ms var(--ix-in-out-soft) 940ms forwards;
+}
+/* how far the monogram sits below its final spot = half the (still hidden) name block */
+.ix-mono {
+  --ix-rise: 88px;
+}
+@media (min-width: 640px) {
+  .ix-mono {
+    --ix-rise: 118px;
+  }
+  .ix-role {
+    --ix-track: 0.32em;
   }
 }
-@keyframes intro-blink {
-  50% {
-    opacity: 0;
+@media (min-width: 1024px) {
+  .ix-mono {
+    --ix-rise: 136px;
   }
 }
-@keyframes intro-fill {
-  to {
-    background: var(--color-yellow);
-  }
+.ix-squash {
+  animation: ix-squash 380ms linear 780ms;
 }
-@keyframes intro-count {
-  to {
-    --pct: 100;
-  }
+
+/* tiles: X and Y on separate wrappers with different curves = curved flight path */
+.ix-tile-x {
+  transform: translateX(var(--fx));
+  animation: ix-to-origin-x 700ms var(--ix-out-quint) calc(var(--i) * 25ms) forwards;
 }
-@keyframes intro-show {
+.ix-tile-y {
+  transform: translateY(var(--fy));
+  animation: ix-to-origin-y 700ms var(--ix-in-quad) calc(var(--i) * 25ms) forwards;
+}
+.ix-tile {
+  opacity: 0;
+  transform: rotate(var(--fr)) scale(0.6);
+  filter: blur(6px);
+  animation:
+    ix-tile-spin 700ms var(--ix-back) calc(var(--i) * 25ms) forwards,
+    ix-tile-focus 520ms var(--ix-out-quint) calc(var(--i) * 25ms) forwards;
+}
+
+/* impact VFX */
+.ix-shock {
+  opacity: 0;
+  animation: ix-shock 700ms var(--ix-out-expo) 780ms forwards;
+}
+.ix-shock-2 {
+  animation-delay: 850ms;
+  animation-duration: 800ms;
+}
+.ix-flash {
+  opacity: 0;
+  animation: ix-flash 260ms ease-out 780ms;
+}
+.ix-particle {
+  opacity: 0;
+  animation: ix-particle 760ms var(--ix-out-expo) calc(780ms + var(--d, 0ms)) forwards;
+}
+
+/* type */
+.ix-letter {
+  display: inline-block;
+  transform: translateY(110%) rotate(8deg);
+  filter: blur(4px);
+  animation: ix-letter 650ms var(--ix-out-expo) calc(1160ms + var(--i) * 38ms) forwards;
+}
+.ix-tag {
+  clip-path: inset(0 100% 0 0);
+  transform: translate(6px, 6px) rotate(-2deg);
+  box-shadow: 0 0 0 0 var(--color-shadow);
+  animation:
+    ix-wipe 520ms var(--ix-in-out) 1330ms forwards,
+    ix-drop 420ms var(--ix-back) 1800ms forwards;
+}
+.ix-tag-text {
+  display: inline-block;
+  transform: translateX(-24%);
+  opacity: 0;
+  animation: ix-tag-text 620ms var(--ix-out-expo) 1420ms forwards;
+}
+.ix-role {
+  --ix-track: 0.18em;
+  opacity: 0;
+  letter-spacing: 0.9em;
+  filter: blur(3px);
+  animation: ix-role 700ms var(--ix-out-expo) 1580ms forwards;
+}
+.ix-skip {
+  opacity: 0;
+  animation:
+    ix-fade-in 400ms ease-out 600ms forwards,
+    ix-stage-out 200ms ease-in 2200ms forwards;
+}
+
+/* exit panels */
+.ix-panel {
+  transform: translateY(105%) skewY(-6deg);
+  transform-origin: bottom;
+  animation:
+    ix-panel-in 420ms var(--ix-in-out) calc(2200ms + var(--i) * 45ms) forwards,
+    ix-panel-out 520ms var(--ix-in-out) calc(2620ms + var(--i) * 55ms) forwards;
+}
+
+@keyframes ix-grid-in {
   to {
     opacity: 1;
-  }
-}
-@keyframes intro-card-out {
-  0% {
     transform: none;
   }
-  40% {
-    transform: translateY(-8px) rotate(-2deg);
-  }
-  100% {
-    transform: translateY(40px) rotate(6deg) scale(0.85);
-    opacity: 0;
-  }
 }
-@keyframes intro-slam {
-  0% {
-    opacity: 0;
-    transform: scale(3) rotate(-8deg);
-  }
-  45% {
-    opacity: 1;
-    transform: scale(0.9) rotate(1deg);
-  }
-  65% {
-    transform: scale(1.07) rotate(-1deg);
-  }
-  85% {
-    transform: scale(0.98);
-  }
-  100% {
-    opacity: 1;
+@keyframes ix-grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-6%, 4%); }
+  40% { transform: translate(5%, -7%); }
+  60% { transform: translate(-3%, 8%); }
+  80% { transform: translate(7%, 2%); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes ix-shake {
+  0% { transform: translate(0, 0); }
+  8% { transform: translate(-9px, 5px) rotate(-0.4deg); }
+  20% { transform: translate(7px, -4px) rotate(0.3deg); }
+  34% { transform: translate(-5px, 3px); }
+  50% { transform: translate(3px, -2px); }
+  68% { transform: translate(-1.5px, 1px); }
+  84% { transform: translate(0.5px, 0); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes ix-squash {
+  0% { transform: scale(1, 1); animation-timing-function: var(--ix-out-quint); }
+  16% { transform: scale(1.16, 0.84); animation-timing-function: var(--ix-in-out-soft); }
+  42% { transform: scale(0.94, 1.07); animation-timing-function: var(--ix-in-out-soft); }
+  66% { transform: scale(1.03, 0.97); animation-timing-function: var(--ix-in-out-soft); }
+  84% { transform: scale(0.99, 1.01); }
+  100% { transform: scale(1, 1); }
+}
+@keyframes ix-mono-rise {
+  to {
     transform: none;
   }
 }
-@keyframes intro-shake {
-  33% {
-    transform: translate(-6px, 4px);
-  }
-  66% {
-    transform: translate(5px, -3px);
+@keyframes ix-to-origin-x {
+  to {
+    transform: translateX(0);
   }
 }
-@keyframes intro-off {
+@keyframes ix-to-origin-y {
   to {
+    transform: translateY(0);
+  }
+}
+@keyframes ix-tile-spin {
+  0% { opacity: 0; transform: rotate(var(--fr)) scale(0.6); }
+  12% { opacity: 1; }
+  100% { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+@keyframes ix-tile-focus {
+  0% { filter: blur(6px); }
+  100% { filter: blur(0); }
+}
+@keyframes ix-shock {
+  0% { opacity: 0.9; transform: scale(0.55) rotate(45deg); border-width: 6px; }
+  100% { opacity: 0; transform: scale(3.4) rotate(45deg); border-width: 1px; }
+}
+@keyframes ix-flash {
+  0% { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+@keyframes ix-particle {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0) scale(1); }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--px), var(--py)) rotate(var(--pr)) scale(0.2); }
+}
+@keyframes ix-letter {
+  to {
+    transform: none;
+    filter: blur(0);
+  }
+}
+@keyframes ix-wipe {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes ix-drop {
+  to {
+    transform: translate(0, 0) rotate(-2deg);
+    box-shadow: 6px 6px 0 0 var(--color-shadow);
+  }
+}
+@keyframes ix-tag-text {
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes ix-role {
+  to {
+    opacity: 1;
+    letter-spacing: var(--ix-track, 0.32em);
+    filter: blur(0);
+  }
+}
+@keyframes ix-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ix-stage-out {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+    filter: blur(6px);
     visibility: hidden;
   }
 }
-@keyframes intro-panel-in {
-  from {
-    transform: translateY(101%);
-  }
+@keyframes ix-panel-in {
   to {
-    transform: translateY(0);
+    transform: translateY(0) skewY(0deg);
   }
 }
-@keyframes intro-panel-out {
+@keyframes ix-panel-out {
   from {
-    transform: translateY(0);
+    transform: translateY(0) skewY(0deg);
+    transform-origin: top;
   }
   to {
-    transform: translateY(-101%);
+    transform: translateY(-105%) skewY(6deg);
+    transform-origin: top;
   }
+}
+
+/* the page waits under the curtain, then rises in as the panels leave */
+html[data-intro="playing"] main > .animate-fade-up {
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
