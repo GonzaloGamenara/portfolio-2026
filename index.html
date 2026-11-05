@@ -2,31 +2,83 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Gonzalo Gamenara · Desarrollador Full Stack</title>
+    <meta
+      name="description"
+      content="Portfolio de Gonzalo Gamenara, desarrollador Full Stack en Buenos Aires: PHP/Laravel, Node.js, MySQL, Azure, React, Next.js y TypeScript, más análisis de datos con SQL, Python y Power BI."
+    />
+    <meta name="author" content="Gonzalo Gamenara" />
+    <meta name="theme-color" content="#a3d9b1" />
+    <link rel="canonical" href="https://portafolio-blond-six.vercel.app/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
-    <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💼</text></svg>' />
+    <!-- Open Graph / social previews -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:site_name" content="Gonzalo Gamenara" />
+    <meta property="og:url" content="https://portafolio-blond-six.vercel.app/" />
+    <meta property="og:title" content="Gonzalo Gamenara · Desarrollador Full Stack" />
+    <meta
+      property="og:description"
+      content="Full Stack con PHP/Laravel, Node.js, MySQL, Azure, React y TypeScript. Proyectos en producción y CV."
+    />
+    <meta property="og:image" content="https://portafolio-blond-six.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Gonzalo Gamenara — Full Stack Developer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Gonzalo Gamenara · Desarrollador Full Stack" />
+    <meta name="twitter:description" content="Full Stack con PHP/Laravel, Node.js, MySQL, Azure, React y TypeScript." />
+    <meta name="twitter:image" content="https://portafolio-blond-six.vercel.app/og-image.png" />
 
-    
-    <title>Gonzalo Gamenara | Desarrollador & Analista</title>
-    <meta name="description" content="Portfolio de Gonzalo Gamenara. Estudiante de Ingeniería en Informática enfocado en desarrollo frontend, diseño de interfaces (UI/UX) y creación de videojuegos." />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Gonzalo Gamenara",
+        "url": "https://portafolio-blond-six.vercel.app/",
+        "image": "https://portafolio-blond-six.vercel.app/og-image.png",
+        "email": "mailto:gonzagamenara@gmail.com",
+        "jobTitle": "Full Stack Developer",
+        "worksFor": { "@type": "Organization", "name": "Deheza (Shell)" },
+        "address": { "@type": "PostalAddress", "addressLocality": "San Martín", "addressRegion": "Buenos Aires", "addressCountry": "AR" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Universidad Nacional de San Martín (UNSAM)" },
+        "knowsAbout": ["PHP", "Laravel", "Node.js", "MySQL", "MariaDB", "Azure", "React", "TypeScript", "Next.js", "SQL", "Python", "Power BI"],
+        "sameAs": ["https://www.linkedin.com/in/gonzalo-gamenara-6bb130238/", "https://github.com/GonzaloGamenara"]
+      }
+    </script>
 
+    <!-- Apply saved / system theme before first paint (avoids a white flash) -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {}
+      })();
+    </script>
 
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://tudominio.vercel.app/" /> 
-    <meta property="og:site_name" content="Portfolio Gonzalo Gamenara" />
-    <meta property="og:title" content="Gonzalo Gamenara | Desarrollador & Analista" />
-    <meta property="og:description" content="Estudiante de Ingeniería en Informática enfocado en desarrollo frontend con React, diseño de interfaces (UI/UX) y creación de videojuegos." />
-    <meta property="og:image" content="https://api.dicebear.com/9.x/notionists/svg?seed=Gonza&backgroundColor=fca5d3" />
-
-
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://tudominio.vercel.app/" />
-    <meta property="twitter:title" content="Gonzalo Gamenara | Desarrollador & Analista" />
-    <meta property="twitter:description" content="Estudiante de Ingeniería en Informática enfocado en desarrollo frontend con React, diseño de interfaces (UI/UX) y creación de videojuegos." />
-    <meta property="twitter:image" content="https://api.dicebear.com/9.x/notionists/svg?seed=Gonza&backgroundColor=fca5d3" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap"
+    />
   </head>
   <body>
+    <noscript>
+      <p style="padding: 2rem; font-family: monospace">
+        Gonzalo Gamenara — Full Stack Developer. Email: gonzagamenara@gmail.com ·
+        <a href="https://www.linkedin.com/in/gonzalo-gamenara-6bb130238/">LinkedIn</a> ·
+        <a href="https://github.com/GonzaloGamenara">GitHub</a>
+      </p>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
