@@ -1,246 +1,184 @@
-const Contact = () => {
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Check, Copy, Download, FileText, Mail, MapPin, Send } from "lucide-react";
+import { usePreferences } from "../context/preferences";
+import { profile } from "../data/profile";
+import { cvFile } from "../data/ui";
+import usePageMeta from "../hooks/usePageMeta";
+import { GitHubIcon, LinkedInIcon } from "../components/Icons";
+
+// Optional: set VITE_CONTACT_ENDPOINT (e.g. a Formspree form URL) to receive messages directly.
+// Without it, the form opens the visitor's email client with everything pre-filled.
+const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT;
+
+const field =
+  "w-full border-2 border-line bg-surface p-3 text-ink shadow-neo-sm placeholder:text-muted/70 focus:shadow-neo focus:outline-none";
+
+export default function Contact() {
+  const { t, s, lang } = usePreferences();
+  usePageMeta(s.meta.contact, s.meta.contactDesc);
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const [copied, setCopied] = useState(false);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form));
+    if (data.company_website) return; // honeypot: bots fill hidden fields
+
+    if (!ENDPOINT) {
+      const subject = encodeURIComponent(`Portfolio · ${data.name}`);
+      const body = encodeURIComponent(`${data.message}\n\n— ${data.name} (${data.email})`);
+      window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
+      return;
+    }
+
+    setStatus("sending");
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ name: data.name, email: data.email, message: data.message, _subject: `Portfolio · ${data.name}` }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      setStatus("sent");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.location.href = `mailto:${profile.email}`;
+    }
+  };
+
   return (
-    <main className=" flex-1 p-6 md:p-10 overflow-y-auto animate-slide-up flex flex-col bg-[#FDFBF7] justify-between">
-      <div className="h-full w-full mx-auto flex flex-col gap-6 md:gap-8 my-auto">
-        <div className=" border-[3px] border-black bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-          <h1 className="font-mono font-bold text-4xl md:text-5xl text-black tracking-tight">
-            Contacto
-          </h1>
-          <p className="font-mono text-sm text-slate-600 mt-2">
-            Hablemos de propuestas laborales, proyectos o simplemente
-            colaboremos.
+    <div className="flex flex-col gap-10">
+      <header className="border-b-[3px] border-line pb-6">
+        <h1 className="font-mono text-4xl font-bold tracking-tight sm:text-5xl">{s.contact.title}</h1>
+        <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted">{s.contact.intro}</p>
+      </header>
+
+      <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
+        <form onSubmit={onSubmit} className="card on-accent relative flex flex-col gap-5 bg-yellow p-5 sm:p-7">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="name" className="eyebrow">
+              {s.contact.name}
+            </label>
+            <input id="name" name="name" type="text" required autoComplete="name" maxLength={120} placeholder={s.contact.namePh} className={field} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="email" className="eyebrow">
+              {s.contact.email}
+            </label>
+            <input id="email" name="email" type="email" required autoComplete="email" maxLength={160} placeholder={s.contact.emailPh} className={field} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="message" className="eyebrow">
+              {s.contact.message}
+            </label>
+            <textarea id="message" name="message" required rows={6} maxLength={4000} placeholder={s.contact.messagePh} className={`${field} min-h-40 resize-y`} />
+          </div>
+          {/* honeypot */}
+          <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+            <label>
+              Website <input name="company_website" type="text" tabIndex={-1} autoComplete="off" />
+            </label>
+          </div>
+
+          <button type="submit" disabled={status === "sending"} className="btn bg-black text-white disabled:opacity-60">
+            <Send size={16} aria-hidden="true" /> {status === "sending" ? s.contact.sending : s.contact.send}
+          </button>
+
+          <p role="status" aria-live="polite" className="min-h-5 text-sm font-bold">
+            {status === "sent" && `✅ ${s.contact.sent}`}
+            {status === "error" && (
+              <>
+                ⚠️ {s.contact.error}{" "}
+                <a className="underline" href={`mailto:${profile.email}`}>
+                  {profile.email}
+                </a>
+              </>
+            )}
+            {status === "idle" && !ENDPOINT && <span className="font-medium text-muted">{s.contact.mailtoNote}</span>}
           </p>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 font-mono h-full">
-          <div className="lg:col-span-2">
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="border-[3px] border-black bg-[#FFDE4D] p-6 md:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-5 h-full"
-            >
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xl font-bold text-black uppercase tracking-wide">
-                  Nombre / Empresa
-                </label>
-                <input
-                  type="text"
-                  placeholder="Ej. Nombre del Recruiter o Tech Company"
-                  className="w-full p-3 border-2 border-black bg-white focus:outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm text-slate-800"
-                  required
-                />
-              </div>
+        </form>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xl font-bold text-black uppercase tracking-wide">
-                  Tu Email
-                </label>
-                <input
-                  type="email"
-                  placeholder="recruiter@empresa.com"
-                  className="w-full p-3 border-2 border-black bg-white focus:outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm text-slate-800"
-                  required
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5 flex-1">
-                <label className="text-xl font-bold text-black uppercase tracking-wide">
-                  Mensaje
-                </label>
-                <textarea
-                  rows="5"
-                  placeholder="Contame sobre la propuesta laboral, feedback de mi portfolio o el proyecto que tenés en mente..."
-                  className="w-full p-3 border-2 border-black bg-white focus:outline-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm text-slate-800 resize-none flex-1 min-h-[140px]"
-                  required
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3.5 bg-black text-white font-bold text-sm uppercase tracking-wider border-2 border-black hover:bg-slate-900 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] shadow-[4px_4px_0px_0px_rgba(100,100,100,0.3)] transition-all mt-2"
-              >
-                Enviar Mensaje
-              </button>
-            </form>
-          </div>
-
-          <div className="flex flex-col gap-6 justify-between">
-            <div className="border-[3px] border-black bg-[#A1E3CB] p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-4">
-              <h2 className="font-bold text-lg uppercase tracking-wide text-black flex items-center gap-1.5">
-                <span>📩</span> Canales Directos
-              </h2>
-
-              <div className="flex flex-col gap-2.5">
-                <a
-                  href="mailto:gonzagamenara@gmail.com"
-                  className="flex items-center gap-3 bg-white p-2.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all text-xs"
-                >
-                  <span className="text-xl">✉️</span>
-                  <div className="truncate text-xl">
-                    <span className="block text-[9px] uppercase font-bold text-slate-400 leading-none">
-                      Email
-                    </span>
-                    <span className="font-bold text-black truncate">
-                      gonzagamenara@gmail.com
-                    </span>
-                  </div>
+        <div className="flex flex-col gap-8">
+          <section aria-labelledby="direct" className="card on-accent bg-mint p-5">
+            <h2 id="direct" className="mb-4 font-mono text-lg font-bold">
+              {s.contact.direct}
+            </h2>
+            <ul className="flex flex-col gap-3">
+              <li className="flex items-stretch gap-2">
+                <a href={`mailto:${profile.email}`} className="flex min-w-0 flex-1 items-center gap-3 border-2 border-line bg-surface p-3 shadow-neo-sm transition-transform hover:-translate-y-0.5">
+                  <Mail size={20} aria-hidden="true" className="shrink-0" />
+                  <span className="truncate font-bold">{profile.email}</span>
                 </a>
-
-                <a
-                  href="https://linkedin.com/in/tu-usuario"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 bg-white p-2.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all text-xs"
+                <button
+                  type="button"
+                  onClick={copyEmail}
+                  aria-label={s.contact.copy}
+                  title={copied ? s.contact.copied : s.contact.copy}
+                  className="grid w-12 shrink-0 place-items-center border-2 border-line bg-surface shadow-neo-sm"
                 >
-                  <span className="text-xl">💼</span>
-                  <div>
-                    <span className="text-xl block text-[9px] uppercase font-bold text-slate-400 leading-none">
-                      LinkedIn
-                    </span>
-                    <span className="font-bold text-black text-xl">
-                      Gonzalo Gamenara
-                    </span>
-                  </div>
+                  {copied ? <Check size={18} aria-hidden="true" /> : <Copy size={18} aria-hidden="true" />}
+                </button>
+              </li>
+              <li>
+                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 border-2 border-line bg-surface p-3 shadow-neo-sm transition-transform hover:-translate-y-0.5">
+                  <LinkedInIcon className="h-5 w-5 shrink-0" />
+                  <span className="font-bold">LinkedIn</span>
+                  <span className="ml-auto truncate text-sm text-muted">/in/gonzalo-gamenara</span>
                 </a>
-
-                <a
-                  href="https://github.com/GonzaloGamenara"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 bg-white p-2.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all text-xs"
-                >
-                  <span className="text-xl">💻</span>
-                  <div>
-                    <span className="block text-[9px] uppercase font-bold text-slate-400 leading-none">
-                      GitHub
-                    </span>
-                    <span className="font-bold text-black text-xl">
-                      @GonzaloGamenara
-                    </span>
-                  </div>
+              </li>
+              <li>
+                <a href={profile.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 border-2 border-line bg-surface p-3 shadow-neo-sm transition-transform hover:-translate-y-0.5">
+                  <GitHubIcon className="h-5 w-5 shrink-0" />
+                  <span className="font-bold">GitHub</span>
+                  <span className="ml-auto truncate text-sm text-muted">@GonzaloGamenara</span>
                 </a>
+              </li>
+            </ul>
+            <span className="sr-only" aria-live="polite">
+              {copied ? s.contact.copied : ""}
+            </span>
+            <dl className="mt-5 grid gap-2 border-t-2 border-line pt-4 text-sm">
+              <div className="flex items-center gap-2">
+                <dt className="sr-only">{s.contact.location}</dt>
+                <MapPin size={16} aria-hidden="true" />
+                <dd className="font-bold">{t(profile.location)}</dd>
               </div>
-            </div>
-
-            <div className="border-[3px] border-black bg-white p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-5 flex-1 justify-between font-mono">
-              <div>
-                <div className="flex items-center justify-between border-b-[3px] border-black pb-3 mb-4">
-                  <h2 className="font-bold text-lg uppercase tracking-wide text-black flex items-center gap-1.5">
-                    <span>📄</span> Currículum Vitae
-                  </h2>
-                  <span className="bg-black text-white text-[9px] font-black px-2 py-0.5 uppercase tracking-wider select-none shadow-[2px_2px_0px_0px_rgba(161,227,203,1)]">
-                    Ficha OK
-                  </span>
-                </div>
-
-                <div className="mb-4">
-                  <span className="text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 text-slate-500 uppercase tracking-wider border border-slate-200">
-                    01 / Identificación
-                  </span>
-                  <ul className="space-y-2 text-xs text-slate-700 mt-2">
-                    <li className="flex justify-between border-b border-dashed border-slate-200 pb-1 items-center">
-                      <span className="text-slate-400 font-bold text-[10px]">
-                        Nombre:
-                      </span>
-                      <span className="font-bold text-black">
-                        Gonzalo Gamenara
-                      </span>
-                    </li>
-                    <li className="flex justify-between border-b border-dashed border-slate-200 pb-1 items-center">
-                      <span className="text-slate-400 font-bold text-[10px]">
-                        Edad / Idioma:
-                      </span>
-                      <span className="font-bold text-black">
-                        26 años • Inglés B1+
-                      </span>
-                    </li>
-                    <li className="flex justify-between border-b border-dashed border-slate-200 pb-1 items-center">
-                      <span className="text-slate-400 font-bold text-[10px]">
-                        Ubicación:
-                      </span>
-                      <span className="font-bold text-black">
-                        San Martín, BSAS
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="mb-4">
-                  <span className="text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 text-slate-500 uppercase tracking-wider border border-slate-200">
-                    02 / Académico
-                  </span>
-                  <ul className="space-y-2 text-xs text-slate-700 mt-2">
-                    <li className="flex justify-between border-b border-dashed border-slate-200 pb-1 items-center">
-                      <span className="text-slate-400 font-bold text-[10px]">
-                        Grado:
-                      </span>
-                      <span className="font-bold text-black text-right text-[11px]">
-                        Lic. Software (UNSAM)
-                      </span>
-                    </li>
-                    <li className="flex justify-between border-b border-dashed border-slate-200 pb-1 items-center">
-                      <span className="text-slate-400 font-bold text-[10px]">
-                        Especialidad:
-                      </span>
-                      <span className="font-bold text-black text-[11px]">
-                        Data Analytics (Coder)
-                      </span>
-                    </li>
-                    <li className="flex justify-between border-b border-dashed border-slate-200 pb-1 items-center">
-                      <span className="text-slate-400 font-bold text-[10px]">
-                        Bases:
-                      </span>
-                      <span className="font-bold text-slate-800 text-[11px]">
-                        Sec. Técnico & Economía
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <span className="text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 text-slate-500 uppercase tracking-wider border border-slate-200">
-                    03 / Trayectoria Comercial
-                  </span>
-                  <ul className="space-y-2 text-xs text-slate-700 mt-2">
-                    <li className="flex justify-between border-b border-dashed border-slate-200 pb-1 items-center">
-                      <span className="text-slate-400 font-bold text-[10px]">
-                        Management:
-                      </span>
-                      <span className="font-bold text-slate-800 text-right text-[11px]">
-                        Encargado Gral (5a)
-                      </span>
-                    </li>
-                    <li className="flex justify-between border-b border-dashed border-slate-200 pb-1 items-center">
-                      <span className="text-slate-400 font-bold text-[10px]">
-                        Equipos / Barra:
-                      </span>
-                      <span className="font-bold text-slate-800 text-[11px]">
-                        Jefe de Barra (Asterix)
-                      </span>
-                    </li>
-                    <li className="flex justify-between border-b border-dashed border-slate-200 pb-1 items-center">
-                      <span className="text-slate-400 font-bold text-[10px]">
-                        Atención / Presión:
-                      </span>
-                      <span className="font-bold text-slate-800 text-[11px]">
-                        McDonald's S.A.
-                      </span>
-                    </li>
-                  </ul>
-                </div>
+              <div className="flex items-center gap-2">
+                <dt className="sr-only">{s.contact.availability}</dt>
+                <span className="mx-[3px] h-2.5 w-2.5 rounded-full bg-[#16a34a]" aria-hidden="true" />
+                <dd className="font-bold">{t(profile.availability)}</dd>
               </div>
+            </dl>
+          </section>
 
-              <a
-                href="/tu-cv-file.pdf"
-                download="CV_Gonzalo_Gamenara.pdf"
-                className="w-full py-3 bg-[#FFB0B0] text-black font-black text-xs uppercase tracking-wider text-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all transform hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-[0px] active:translate-y-[0px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] block select-none"
-              >
-                Descargar CV (PDF) 📥
+          <section aria-labelledby="cv" className="card on-accent bg-coral p-5">
+            <h2 id="cv" className="flex items-center gap-2 font-mono text-lg font-bold">
+              <FileText size={18} aria-hidden="true" /> {s.contact.cvTitle}
+            </h2>
+            <p className="mt-2 leading-relaxed">{s.contact.cvText}</p>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row lg:flex-col 2xl:flex-row">
+              <a href={cvFile(lang)} download className="btn flex-1 bg-surface">
+                <Download size={16} aria-hidden="true" /> {s.contact.cvDownload}
               </a>
+              <Link to="/cv" className="btn flex-1 bg-surface">
+                {s.contact.cvView}
+              </Link>
             </div>
-          </div>
+          </section>
         </div>
       </div>
-    </main>
+    </div>
   );
-};
-
-export default Contact;
+}

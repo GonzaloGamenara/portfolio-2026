@@ -1,213 +1,221 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+/* Dark mode is driven by the .dark class on <html> (set before paint in index.html) */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Variables base (Modo Claro) */
-  --color-background-general: #a3d9b1;
-  --color-background-border-general: #fcf5e3;
+  /* Neutral surfaces (overridden in .dark) */
+  --color-frame: #a3d9b1; /* window frame / sidebar */
+  --color-paper: #fcf5e3; /* content panel */
+  --color-surface: #ffffff; /* cards & inputs */
+  --color-ink: #0a0a0a; /* primary text */
+  --color-muted: #44403c; /* secondary text (AA on paper & surface) */
+  --color-line: #0a0a0a; /* borders & hard shadows */
+  --color-grid: #fcf5e3; /* page background grid lines */
 
-  --color-neo-green: #a3d9b1;
-  --color-neo-yellow: #f7c236;
-  --color-neo-yellow-light: #f5d381;
-  --color-neo-pink: #fca5d3;
-  --color-neo-bg: #fcf5e3;
-  --color-neo-border: #000000;
+  /* Accents keep their hue in both themes; text on them is always dark */
+  --color-yellow: #f7c236;
+  --color-yellow-soft: #f5d381;
+  --color-pink: #fca5d3;
+  --color-green: #a3d9b1;
+  --color-mint: #a1e3cb;
+  --color-blue: #93c5fd;
+  --color-purple: #d8b4fe;
+  --color-orange: #fdba74;
+  --color-coral: #ffb0b0;
+  --color-on-accent: #0a0a0a;
 
-  --shadow-neo: 4px 4px 0px rgba(0, 0, 0, 1);
-  --shadow-neo-hover: 2px 2px 0px rgba(0, 0, 0, 1);
+  --shadow-neo-sm: 2px 2px 0 0 var(--color-line);
+  --shadow-neo: 4px 4px 0 0 var(--color-line);
+  --shadow-neo-lg: 6px 6px 0 0 var(--color-line);
 
-  --font-mono: "Space Mono", monospace;
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --animate-slide-up: slide-up 0.6s ease-out both;
-  --animate-marquee: marquee 25s linear infinite;
-  --animate-main-morph: main-morph 2s ease-in-out both;
-  --animate-scale-up: scale-up 0.5s ease-out both;
+  --animate-slide-up: slide-up 0.45s ease-out both;
+  --animate-marquee: marquee 30s linear infinite;
 }
 
-@keyframes scale-up {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+.dark {
+  --color-frame: #1a3a25;
+  --color-paper: #121212;
+  --color-surface: #1e1e1e;
+  --color-ink: #f4f4f5;
+  --color-muted: #b4b4bb;
+  --color-line: #f4f4f5;
+  --color-grid: #24442f;
+  color-scheme: dark;
 }
 
 @keyframes slide-up {
-  0% {
+  from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(16px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
 @keyframes marquee {
-  0% {
-    transform: translateX(0%);
+  from {
+    transform: translateX(0);
   }
-  100% {
+  to {
     transform: translateX(-50%);
   }
-}
-
-@keyframes main-morph {
-  0% {
-    width: 0vw;
-    height: 0vh;
-  }
-  50% {
-    transform: rotate(10deg);
-    width: 5vw;
-    height: 85vh;
-  }
-  90% {
-    transform: rotate(-2deg);
-  }
-  95% {
-    transform: rotate(2deg);
-    width: 70vw;
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-/* Modo Oscuro: Sobrescritura de variables mediante clase global */
-.dark {
-  --color-neo-bg: #121212;
-  --color-neo-green: #1a3a25;
-  --color-neo-border: #ffffff;
-  --shadow-neo: 4px 4px 0px rgba(255, 255, 255, 1);
-  --shadow-neo-hover: 2px 2px 0px rgba(255, 255, 255, 1);
-  --color-background-general: #121212;
-  --color-background-border-general: #1a1a1a;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html:has(dialog[open]) {
+    overflow: hidden;
   }
 
   body {
-    @apply transition-colors duration-300 antialiased;
-    width: 100%;
-    min-height: 100vh;
-
-    background-color: #a3d9b1;
-
+    @apply font-sans text-ink antialiased;
+    min-height: 100dvh;
+    background-color: var(--color-frame);
     background-image:
-      radial-gradient(
-        circle at center,
-        transparent 20%,
-        rgba(0, 0, 0, 0.3) 100%
-      ),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 25%),
-      linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent 25%),
-      linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent 25%),
-      linear-gradient(to left, rgba(0, 0, 0, 0.2), transparent 25%),
-      radial-gradient(ellipse at top left, rgba(0, 0, 0, 0.2), transparent 40%),
-      radial-gradient(
-        ellipse at top right,
-        rgba(0, 0, 0, 0.2),
-        transparent 40%
-      ),
-      radial-gradient(
-        ellipse at bottom right,
-        rgba(0, 0, 0, 0.2),
-        transparent 40%
-      ),
-      radial-gradient(
-        ellipse at bottom left,
-        rgba(0, 0, 0, 0.2),
-        transparent 40%
-      ),
+      radial-gradient(circle at center, transparent 30%, rgb(0 0 0 / 0.28) 100%),
       linear-gradient(
         0deg,
         transparent 24%,
-        var(--color-background-border-general) 25%,
-        var(--color-background-border-general) 26%,
+        var(--color-grid) 25%,
+        var(--color-grid) 26%,
         transparent 27%,
         transparent 74%,
-        var(--color-background-border-general) 75%,
-        var(--color-background-border-general) 76%,
-        transparent 77%,
-        transparent
+        var(--color-grid) 75%,
+        var(--color-grid) 76%,
+        transparent 77%
       ),
       linear-gradient(
         90deg,
         transparent 24%,
-        var(--color-background-border-general) 25%,
-        var(--color-background-border-general) 26%,
+        var(--color-grid) 25%,
+        var(--color-grid) 26%,
         transparent 27%,
         transparent 74%,
-        var(--color-background-border-general) 75%,
-        var(--color-background-border-general) 76%,
-        transparent 77%,
-        transparent
+        var(--color-grid) 75%,
+        var(--color-grid) 76%,
+        transparent 77%
       );
-
     background-size:
       100% 100%,
-      100% 25%,
-      100% 25%,
-      25% 100%,
-      25% 100%,
-      40% 40%,
-      40% 40%,
-      40% 40%,
-      40% 40%,
       200px 200px,
       200px 200px;
+    background-attachment: fixed;
+    transition: background-color 0.3s;
+  }
 
-    background-position:
-      center center,
-      top center,
-      bottom center,
-      left center,
-      right center,
-      top left,
-      top right,
-      bottom right,
-      bottom left,
-      0 0,
-      0 0;
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
 
-    background-repeat:
-      no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
-      no-repeat, no-repeat, no-repeat, repeat, repeat;
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-yellow);
+    color: var(--color-on-accent);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-blue);
+    outline-offset: 3px;
+  }
+
+  dialog::backdrop {
+    background: rgb(0 0 0 / 0.7);
+    backdrop-filter: blur(4px);
   }
 }
 
+@layer components {
+  /* Hard-shadow button that "presses" on hover */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-line px-5 py-3 font-mono text-sm font-bold uppercase tracking-wide shadow-neo transition-[transform,box-shadow,background-color] duration-150 select-none;
+  }
+  .btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-neo-sm);
+  }
+  .btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+  }
+
+  .card {
+    @apply border-[3px] border-line shadow-neo-lg;
+  }
+
+  .chip {
+    @apply inline-flex items-center border-2 border-line bg-surface px-2.5 py-1 text-xs font-bold shadow-neo-sm;
+  }
+
+  .eyebrow {
+    @apply font-mono text-xs font-bold uppercase tracking-widest;
+  }
+
+  /* Accent blocks always use dark text, whatever the theme */
+  .on-accent {
+    --color-ink: var(--color-on-accent);
+    --color-muted: #3f3a36;
+    --color-surface: #ffffff;
+    color: var(--color-on-accent);
+  }
+  /* children of an accent block are drawn as a "light island" (the block's own border keeps the theme) */
+  .on-accent * {
+    --color-line: #0a0a0a;
+  }
+}
+
+/* Scrollbars */
+* {
+  scrollbar-color: var(--color-yellow) var(--color-paper);
+}
 ::-webkit-scrollbar {
   width: 14px;
   height: 14px;
 }
-
 ::-webkit-scrollbar-track {
-  background-color: #fcf5e3;
-  border-left: 3px solid #000000;
+  background-color: var(--color-paper);
+  border-left: 3px solid var(--color-line);
 }
-
 ::-webkit-scrollbar-thumb {
-  background-color: #f7c236;
-  border: 3px solid #000000;
+  background-color: var(--color-yellow);
+  border: 3px solid var(--color-line);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: #a3d9b1;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-::-webkit-scrollbar-thumb:active {
-  background-color: #fca5d3;
-}
-
-@supports (scrollbar-color: auto) {
-  html {
-    scrollbar-color: #f7c236 #fcf5e3;
+/* Print: only used by the /cv page */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    background: #fff !important;
+  }
+  .no-print {
+    display: none !important;
   }
 }

@@ -1,53 +1,22 @@
-const Marquee = () => {
-  const skills = [
-    "⚡ React",
-    "•",
-    "🎨 Tailwind",
-    "•",
-    "📜 JavaScript",
-    "•",
-    "🚀 Node.js",
-    "•",
-    "🐍 Python",
-    "•",
-    "☕ Java",
-    "•",
-    "⚙️ C++",
-    "•",
-    "📊 SQL",
-    "•",
-    "🍃 MongoDB",
-    "•",
-    "📈 PowerBI",
-  ];
+import { marquee } from "../data/profile";
 
+export default function Marquee() {
+  const row = (hidden) => (
+    <ul className="flex shrink-0 items-center gap-6 pr-6" aria-hidden={hidden || undefined}>
+      {marquee.map((item) => (
+        <li key={item} className="flex items-center gap-6 font-mono text-sm font-bold whitespace-nowrap uppercase sm:text-base">
+          {item}
+          <span aria-hidden="true">✦</span>
+        </li>
+      ))}
+    </ul>
+  );
   return (
-    <div className="w-full bg-neo-yellow border-y-[3px] border-black overflow-hidden py-2.5 sm:py-3 my-6 sm:my-8 shadow-neo relative md:rotate-1 md:hover:rotate-0 transition-transform duration-300">
-      <div className="flex animate-marquee w-max select-none">
-        <div className="flex gap-4 sm:gap-6 px-2 sm:px-3 shrink-0">
-          {skills.map((skill, index) => (
-            <span
-              key={index}
-              className="text-base sm:text-sm font-black uppercase whitespace-nowrap"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-
-        <div className="flex gap-4 sm:gap-6 px-2 sm:px-3 shrink-0">
-          {skills.map((skill, index) => (
-            <span
-              key={`dup-${index}`}
-              className="text-base sm:text-sm font-black uppercase whitespace-nowrap"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
+    <div className="on-accent -mx-4 overflow-hidden border-y-[3px] border-line bg-yellow py-3 sm:mx-0 sm:border-x-[3px] sm:shadow-neo md:-rotate-1">
+      <div className="flex w-max animate-marquee motion-reduce:animate-none">
+        {row(false)}
+        {row(true)}
       </div>
     </div>
   );
-};
-
-export default Marquee;
+}
