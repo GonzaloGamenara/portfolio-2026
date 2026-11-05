@@ -187,8 +187,8 @@
 /* ---------- First-visit intro (src/components/Intro.jsx) ----------
    "Through the letter": two block G's on paper become windows onto the site
    and the camera flies through one of them. Timings in ms from t0:
-     0–700      G's rise out of a mask (expo out, blur → sharp), caption fades in
-     700–1050   hold: shadows press in, caption tracks tighter
+     0–940      G's rise as one rigid piece (letter + shadow) out of a floor clip, caption fades in
+     700–1050   hold, caption tracks tighter
      1000–1250  yellow fill drains → the letters are now see-through windows
      1150–2150  camera zoom into G #2 (custom in-out curve, accelerates hard);
                 grid fades, motion blur builds; the page emerges 0.62 → 1 into focus
@@ -203,14 +203,9 @@
 .ix-g {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  transform: translateY(115%);
-  opacity: 0;
-  filter: blur(6px);
-  animation: ix-g-in 760ms var(--ix-out-expo) 120ms forwards;
-}
-.ix-shadow {
-  transform: translate(0, 0);
-  animation: ix-shadow 520ms var(--ix-out-expo) 420ms forwards;
+  transform: translateY(118%);
+  filter: blur(3px);
+  animation: ix-g-in 820ms var(--ix-out-expo) 120ms forwards;
 }
 .ix-fill {
   animation: ix-drain 280ms var(--ix-in-out-soft) 1000ms forwards;
@@ -274,13 +269,7 @@ html[data-intro="go"] #root {
 @keyframes ix-g-in {
   to {
     transform: none;
-    opacity: 1;
     filter: blur(0);
-  }
-}
-@keyframes ix-shadow {
-  to {
-    transform: translate(16px, 16px);
   }
 }
 @keyframes ix-drain {

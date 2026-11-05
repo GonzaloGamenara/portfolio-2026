@@ -19,8 +19,10 @@ function shouldPlay() {
     /* storage blocked: play once per page load */
   }
   const url = new URL(window.location.href);
-  if (url.searchParams.has("nointro") || url.pathname.startsWith("/cv")) return false;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  if (url.searchParams.has("nointro") || url.pathname.startsWith("/cv"))
+    return false;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+    return false;
   return true;
 }
 
@@ -64,7 +66,8 @@ function aimCamera() {
   const visH = window.innerHeight * unit;
   // usable window = fill minus the inner half of the outline (7) and anti-aliasing
   const needX = (visW + 2 * Math.abs(cx - 400)) / Math.max(1, b - a - 12);
-  const needY = (visH + 2 * Math.abs(cy - 400)) / Math.max(1, bottom - top - 12);
+  const needY =
+    (visH + 2 * Math.abs(cy - 400)) / Math.max(1, bottom - top - 12);
   return { ox: cx, oy: cy, scale: Math.ceil(Math.max(needX, needY) * 1.8) };
 }
 
@@ -105,7 +108,10 @@ export default function Intro() {
       root.dataset.intro = "go";
       if (!window.__introFreeze) timer = setTimeout(finish, DURATION);
     };
-    Promise.race([document.fonts?.load(FONT) ?? Promise.resolve(), new Promise((r) => setTimeout(r, 1200))]).then(go, go);
+    Promise.race([
+      document.fonts?.load(FONT) ?? Promise.resolve(),
+      new Promise((r) => setTimeout(r, 700)),
+    ]).then(go, go);
 
     window.addEventListener("keydown", finish);
     return () => {
@@ -120,7 +126,13 @@ export default function Intro() {
   if (!visible) return null;
 
   const letters = (props) => (
-    <text x="400" y={BASELINE} textAnchor="middle" style={{ font: FONT }} {...props}>
+    <text
+      x="400"
+      y={BASELINE}
+      textAnchor="middle"
+      style={{ font: FONT }}
+      {...props}
+    >
       GG
     </text>
   );
@@ -130,36 +142,101 @@ export default function Intro() {
       className={`intro fixed inset-0 z-[300] cursor-pointer select-none ${aim ? "ix-go" : ""}`}
       aria-hidden="true"
       onClick={finish}
-      style={aim ? { "--ix-ox": `${aim.ox}px`, "--ix-oy": `${aim.oy}px`, "--ix-scale": aim.scale } : undefined}
+      style={
+        aim
+          ? {
+              "--ix-ox": `${aim.ox}px`,
+              "--ix-oy": `${aim.oy}px`,
+              "--ix-scale": aim.scale,
+            }
+          : undefined
+      }
     >
-      <svg className="ix-svg absolute inset-0 h-full w-full" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid meet">
+      <svg
+        className="ix-svg absolute inset-0 h-full w-full"
+        viewBox="0 0 800 800"
+        preserveAspectRatio="xMidYMid meet"
+      >
         <defs>
-          <mask id="ix-holes" maskUnits="userSpaceOnUse" x="-20000" y="-20000" width="40800" height="40800">
-            <rect x="-20000" y="-20000" width="40800" height="40800" fill="#fff" />
+          <mask
+            id="ix-holes"
+            maskUnits="userSpaceOnUse"
+            x="-20000"
+            y="-20000"
+            width="40800"
+            height="40800"
+          >
+            <rect
+              x="-20000"
+              y="-20000"
+              width="40800"
+              height="40800"
+              fill="#fff"
+            />
             {letters({ className: "ix-hole" })}
           </mask>
-          <pattern id="ix-grid" width="48" height="48" patternUnits="userSpaceOnUse">
-            <path d="M48 0H0V48" fill="none" style={{ stroke: "var(--color-grid)" }} strokeWidth="2" />
+          {/* floor the letters rise out of: just below the shadow's lowest edge */}
+          <clipPath id="ix-floor">
+            <rect
+              x="-20000"
+              y="-20000"
+              width="40800"
+              height={20000 + BASELINE + 30}
+            />
+          </clipPath>
+          <pattern
+            id="ix-grid"
+            width="48"
+            height="48"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M48 0H0V48"
+              fill="none"
+              style={{ stroke: "var(--color-grid)" }}
+              strokeWidth="2"
+            />
           </pattern>
         </defs>
 
         <g className="ix-world">
           {/* the paper, with the letters cut out of it */}
           <g mask="url(#ix-holes)">
-            <rect x="-20000" y="-20000" width="40800" height="40800" style={{ fill: "var(--color-bg)" }} />
-            <rect className="ix-gridlayer" x="-20000" y="-20000" width="40800" height="40800" fill="url(#ix-grid)" />
+            <rect
+              x="-20000"
+              y="-20000"
+              width="40800"
+              height="40800"
+              style={{ fill: "var(--color-bg)" }}
+            />
+            <rect
+              className="ix-gridlayer"
+              x="-20000"
+              y="-20000"
+              width="40800"
+              height="40800"
+              fill="url(#ix-grid)"
+            />
           </g>
 
-          <g className="ix-g">
-            <g className="ix-shadow-fade">{letters({ className: "ix-shadow", style: { font: FONT, fill: "var(--color-shadow)" } })}</g>
-            {letters({
-              className: "ix-fill",
-              fill: "#f7c236",
-              strokeWidth: 7,
-              strokeLinejoin: "round",
-              paintOrder: "stroke",
-              style: { font: FONT, stroke: "var(--color-line)" },
-            })}
+          {/* letter + shadow rise as ONE rigid piece out of a floor line (no fade, no sliding shadow) */}
+          <g clipPath="url(#ix-floor)">
+            <g className="ix-g">
+              <g className="ix-shadow-fade">
+                {letters({
+                  transform: "translate(16 16)",
+                  style: { font: FONT, fill: "var(--color-shadow)" },
+                })}
+              </g>
+              {letters({
+                className: "ix-fill",
+                fill: "#f7c236",
+                strokeWidth: 7,
+                strokeLinejoin: "round",
+                paintOrder: "stroke",
+                style: { font: FONT, stroke: "var(--color-line)" },
+              })}
+            </g>
           </g>
 
           <text
@@ -167,7 +244,12 @@ export default function Intro() {
             y="625"
             textAnchor="middle"
             className="ix-caption"
-            style={{ fill: "var(--color-muted)", fontFamily: "var(--font-mono)", fontSize: 15, fontWeight: 700 }}
+            style={{
+              fill: "var(--color-muted)",
+              fontFamily: "var(--font-mono)",
+              fontSize: 15,
+              fontWeight: 700,
+            }}
           >
             {profile.name.toUpperCase()} · PORTFOLIO
           </text>
@@ -175,7 +257,9 @@ export default function Intro() {
       </svg>
 
       <span className="ix-skip absolute right-4 bottom-4 border-2 border-line bg-surface px-2.5 py-1 font-mono text-[11px] font-bold shadow-sm">
-        {lang === "es" ? "clic o tecla para saltar" : "click or press a key to skip"}
+        {lang === "es"
+          ? "clic o tecla para saltar"
+          : "click or press a key to skip"}
       </span>
     </div>,
     document.body,
