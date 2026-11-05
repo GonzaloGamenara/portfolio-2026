@@ -190,8 +190,8 @@
      0–700      G's rise out of a mask (expo out, blur → sharp), caption fades in
      700–1050   hold: shadows press in, caption tracks tighter
      1000–1250  yellow fill drains → the letters are now see-through windows
-     1150–2150  camera zoom into G #2 (custom in-out curve, accelerates hard)
-                + the page counter-zooms 1.18 → 1 and comes into focus
+     1150–2150  camera zoom into G #2 (custom in-out curve, accelerates hard);
+                grid fades, motion blur builds; the page emerges 0.62 → 1 into focus
      2150       overlay removed
 */
 :root {
@@ -206,11 +206,11 @@
   transform: translateY(115%);
   opacity: 0;
   filter: blur(6px);
-  animation: ix-g-in 760ms var(--ix-out-expo) calc(120ms + var(--i) * 110ms) forwards;
+  animation: ix-g-in 760ms var(--ix-out-expo) 120ms forwards;
 }
 .ix-shadow {
   transform: translate(0, 0);
-  animation: ix-shadow 520ms var(--ix-out-expo) calc(420ms + var(--i) * 110ms) forwards;
+  animation: ix-shadow 520ms var(--ix-out-expo) 420ms forwards;
 }
 .ix-fill {
   animation: ix-drain 280ms var(--ix-in-out-soft) 1000ms forwards;
@@ -237,8 +237,22 @@
 }
 .ix-world {
   transform-box: view-box;
-  transform-origin: 465px 400px; /* centre of the 2nd G's spine (see Intro.jsx geometry) */
+  /* centre of the 2nd G's spine, measured at runtime (Intro.jsx → aimCamera) */
+  transform-origin: var(--ix-ox, 465px) var(--ix-oy, 400px);
   animation: ix-zoom 1000ms var(--ix-zoom) 1150ms forwards;
+}
+/* the grid must not fly at the camera: it fades as the push starts */
+.ix-gridlayer {
+  animation: ix-fade-out 320ms ease-in 1150ms forwards;
+}
+/* motion blur that builds with speed */
+.ix-svg {
+  animation: ix-mblur 1000ms var(--ix-zoom) 1150ms forwards;
+}
+/* nothing moves until Space Mono is loaded and the camera is aimed */
+.intro:not(.ix-go),
+.intro:not(.ix-go) * {
+  animation-play-state: paused !important;
 }
 .ix-skip {
   opacity: 0;
@@ -247,10 +261,14 @@
     ix-fade-out 150ms ease-in 1150ms forwards;
 }
 
-/* the page behind: pushed in and soft, then lands in focus as we fly through */
-html[data-intro="playing"] body > #root > header,
-html[data-intro="playing"] body > #root > main {
-  animation: ix-counter 1000ms var(--ix-zoom) 1150ms both;
+/* the page behind: far away and soft, it rushes forward into focus as we fly through */
+html[data-intro] #root {
+  transform-origin: 50% 50vh;
+  animation: ix-emerge 1000ms var(--ix-zoom) 1150ms both;
+  animation-play-state: paused;
+}
+html[data-intro="go"] #root {
+  animation-play-state: running;
 }
 
 @keyframes ix-g-in {
@@ -291,13 +309,18 @@ html[data-intro="playing"] body > #root > main {
     transform: scale(1);
   }
   to {
-    transform: scale(60);
+    transform: scale(var(--ix-scale, 70));
   }
 }
-@keyframes ix-counter {
+@keyframes ix-mblur {
+  0% { filter: blur(0); }
+  45% { filter: blur(2px); }
+  100% { filter: blur(12px); }
+}
+@keyframes ix-emerge {
   from {
-    transform: scale(1.18);
-    filter: blur(8px);
+    transform: scale(0.62);
+    filter: blur(10px) brightness(0.92);
   }
   to {
     transform: none;
