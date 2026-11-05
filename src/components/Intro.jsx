@@ -3,30 +3,19 @@ import { usePreferences } from "../context/preferences";
 import { profile } from "../data/profile";
 
 const KEY = "intro_seen";
-const REVEAL_AT = 2620; // panels start leaving: the page rises in underneath
-const DURATION = 3330; // last panel out (2620 + 3*55 + 520) + margin
+const DURATION = 2200; // zoom ends at 1150 + 1000 ms (see "First-visit intro" in index.css)
 
-// Brand tiles: where each one flies in from (vw/vh so it works on any screen) and its spin
-const TILES = [
-  { c: "bg-yellow", fx: "-62vw", fy: "-52vh", fr: "-140deg", letter: "G" },
-  { c: "bg-pink", fx: "60vw", fy: "-56vh", fr: "120deg" },
-  { c: "bg-green", fx: "-58vw", fy: "54vh", fr: "100deg" },
-  { c: "bg-blue", fx: "64vw", fy: "50vh", fr: "-110deg", letter: "G" },
+// Block "G" as ONE outline polygon in a 300×300 box, stroke 70 (no inner seams when it
+// becomes a window). Known geometry lets the camera aim at the centre of a stroke.
+const G_OUTLINE = [
+  [0, 0], [300, 0], [300, 70], [70, 70], [70, 230], [230, 230],
+  [230, 210], [150, 210], [150, 150], [300, 150], [300, 300], [0, 300],
 ];
+const gPath = (x, y) => `M${G_OUTLINE.map(([px, py]) => `${x + px} ${y + py}`).join("L")}Z`;
 
-// Impact particles: deterministic "random" burst (no Math.random → same on every render)
-const PARTICLES = Array.from({ length: 16 }, (_, i) => {
-  const a = (i / 16) * Math.PI * 2 + (i % 3) * 0.21;
-  const r = 150 + ((i * 47) % 110);
-  return {
-    px: `${Math.round(Math.cos(a) * r)}px`,
-    py: `${Math.round(Math.sin(a) * r)}px`,
-    pr: `${(i % 2 ? 1 : -1) * (90 + ((i * 37) % 180))}deg`,
-    size: 6 + ((i * 5) % 9),
-    d: `${(i % 4) * 12}ms`,
-    c: ["bg-yellow", "bg-pink", "bg-green", "bg-blue"][i % 4],
-  };
-});
+// viewBox 0 0 800 800: G #1 at x=70, G #2 at x=430, both at y=250.
+// Camera target = centre of G #2's spine: (430 + 35, 250 + 150) = (465, 400) → .ix-world origin.
+const LETTERS = [gPath(70, 250), gPath(430, 250)];
 
 function shouldPlay() {
   try {
@@ -41,16 +30,13 @@ function shouldPlay() {
 }
 
 /**
- * First-visit intro. Pure CSS keyframes (see "First-visit intro" in index.css):
- * curved tile flights, squash & stretch impact with shockwave and particles,
- * masked type reveal and a skewed panel transition into the page.
- * Decorative (aria-hidden); any click or key skips it.
+ * First-visit intro: two block G's on paper turn into windows onto the site and the
+ * camera flies through one of them while the page counter-zooms into focus.
+ * Pure CSS keyframes on an SVG mask. Decorative (aria-hidden); any click or key skips it.
  */
 export default function Intro() {
-  const { lang, t } = usePreferences();
+  const { lang } = usePreferences();
   const [visible, setVisible] = useState(shouldPlay);
-
-  const reveal = () => delete document.documentElement.dataset.intro;
 
   const finish = useCallback(() => {
     try {
@@ -58,7 +44,7 @@ export default function Intro() {
     } catch {
       /* ignore */
     }
-    reveal();
+    delete document.documentElement.dataset.intro;
     setVisible(false);
   }, []);
 
@@ -68,89 +54,60 @@ export default function Intro() {
     root.dataset.intro = "playing";
     root.style.overflow = "hidden";
     if (window.__introFreeze) return; // test hook: frame-by-frame capture drives the timeline
-    const revealTimer = setTimeout(reveal, REVEAL_AT);
-    const doneTimer = setTimeout(finish, DURATION);
+    const timer = setTimeout(finish, DURATION);
     window.addEventListener("keydown", finish);
     return () => {
-      clearTimeout(revealTimer);
-      clearTimeout(doneTimer);
+      clearTimeout(timer);
       window.removeEventListener("keydown", finish);
       root.style.overflow = "";
-      reveal();
+      delete root.dataset.intro;
     };
   }, [visible, finish]);
 
   if (!visible) return null;
 
-  const [first, last] = profile.name.toUpperCase().split(" ");
-
   return (
-    <div className="intro fixed inset-0 z-[300] cursor-pointer overflow-hidden select-none" aria-hidden="true" onClick={finish}>
-      <div className="ix-stage absolute inset-0 bg-bg">
-        <div className="ix-grid absolute inset-0" />
+    <div className="intro fixed inset-0 z-[300] cursor-pointer select-none" aria-hidden="true" onClick={finish}>
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <mask id="ix-holes" maskUnits="userSpaceOnUse" x="-20000" y="-20000" width="40800" height="40800">
+            <rect x="-20000" y="-20000" width="40800" height="40800" fill="#fff" />
+            {LETTERS.map((d, i) => (
+              <path key={i} d={d} className="ix-hole" />
+            ))}
+          </mask>
+          <pattern id="ix-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+            <path d="M48 0H0V48" fill="none" style={{ stroke: "var(--color-grid)" }} strokeWidth="2" />
+          </pattern>
+        </defs>
 
-        <div className="ix-camera absolute inset-0 grid place-items-center px-6">
-          <div className="flex flex-col items-center">
-            {/* monogram + impact VFX */}
-            <div className="ix-mono relative grid place-items-center">
-              <span className="ix-shock pointer-events-none absolute h-28 w-28 border-line border-solid" />
-              <span className="ix-shock ix-shock-2 pointer-events-none absolute h-28 w-28 border-solid border-yellow" />
-              {PARTICLES.map((p, i) => (
-                <span
-                  key={i}
-                  className={`ix-particle absolute border-[1.5px] border-line ${p.c}`}
-                  style={{ width: p.size, height: p.size, "--px": p.px, "--py": p.py, "--pr": p.pr, "--d": p.d }}
-                />
-              ))}
+        <g className="ix-world">
+          {/* the paper, with the letters cut out of it */}
+          <g mask="url(#ix-holes)">
+            <rect x="-20000" y="-20000" width="40800" height="40800" style={{ fill: "var(--color-bg)" }} />
+            <rect x="-20000" y="-20000" width="40800" height="40800" fill="url(#ix-grid)" />
+          </g>
 
-              <div className="ix-squash grid grid-cols-2 gap-1.5">
-                {TILES.map((tile, i) => (
-                  <div key={tile.c} className="ix-tile-x" style={{ "--fx": tile.fx, "--i": i }}>
-                    <div className="ix-tile-y" style={{ "--fy": tile.fy, "--i": i }}>
-                      <div
-                        className={`ix-tile on-accent grid h-14 w-14 place-items-center border-2 border-line font-mono text-2xl font-bold shadow-card sm:h-16 sm:w-16 ${tile.c}`}
-                        style={{ "--fr": tile.fr, "--i": i }}
-                      >
-                        {tile.letter}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <span className="ix-flash pointer-events-none absolute h-56 w-56 rounded-full bg-[radial-gradient(circle,rgb(255_255_255/0.9)_0%,rgb(255_255_255/0)_65%)] mix-blend-soft-light dark:mix-blend-screen dark:opacity-0" />
-            </div>
+          {LETTERS.map((d, i) => (
+            <g key={i} className="ix-g" style={{ "--i": i }}>
+              <g className="ix-shadow-fade">
+                <path d={d} className="ix-shadow" style={{ fill: "var(--color-shadow)", "--i": i }} />
+              </g>
+              <path d={d} className="ix-fill" fill="#f7c236" style={{ stroke: "var(--color-line)" }} strokeWidth="6" strokeLinejoin="miter" paintOrder="stroke" />
+            </g>
+          ))}
 
-            {/* name */}
-            <p className="mt-9 font-mono text-5xl leading-none font-bold tracking-tighter sm:text-7xl lg:text-8xl">
-              <span className="block overflow-hidden pb-[0.08em]">
-                {first.split("").map((ch, i) => (
-                  <span key={i} className="ix-letter" style={{ "--i": i }}>
-                    {ch}
-                  </span>
-                ))}
-              </span>
-            </p>
-            <p className="mt-3 font-mono text-4xl leading-none font-bold tracking-tighter sm:text-6xl lg:text-7xl">
-              <span className="ix-tag on-accent inline-block border-2 border-line bg-yellow px-3 py-1">
-                <span className="ix-tag-text">{last}</span>
-              </span>
-            </p>
-            <p className="ix-role mt-7 text-center font-mono text-[11px] font-bold text-muted uppercase sm:text-xs">
-              {t({ es: "Desarrollador Full Stack", en: "Full Stack Developer" })} · Buenos Aires
-            </p>
-          </div>
-        </div>
-
-        <div className="ix-vignette pointer-events-none absolute inset-0" />
-        <div className="ix-grain pointer-events-none absolute" />
-      </div>
-
-      {/* exit curtain */}
-      <div className="pointer-events-none absolute inset-0 flex">
-        {["bg-yellow", "bg-pink", "bg-green", "bg-blue"].map((c, i) => (
-          <span key={c} className={`ix-panel -mx-px h-full flex-1 border-x-2 border-[#0a0a0a] ${c}`} style={{ "--i": i }} />
-        ))}
-      </div>
+          <text
+            x="400"
+            y="640"
+            textAnchor="middle"
+            className="ix-caption"
+            style={{ fill: "var(--color-muted)", fontFamily: "var(--font-mono)", fontSize: 15, fontWeight: 700 }}
+          >
+            {profile.name.toUpperCase()} · PORTFOLIO
+          </text>
+        </g>
+      </svg>
 
       <span className="ix-skip absolute right-4 bottom-4 border-2 border-line bg-surface px-2.5 py-1 font-mono text-[11px] font-bold shadow-sm">
         {lang === "es" ? "clic o tecla para saltar" : "click or press a key to skip"}
