@@ -19,7 +19,7 @@ export default function CV() {
   const { t, s, lang } = usePreferences();
   usePageMeta(`${s.meta.cv} · ${profile.name}`, s.meta.homeDesc);
   const L = (es, en) => (lang === "es" ? es : en);
-  const selected = projects.slice(0, 5);
+  const selected = projects.slice(0, 4);
 
   return (
     <main className="min-h-dvh bg-neutral-200 py-6 text-black print:bg-white print:py-0">

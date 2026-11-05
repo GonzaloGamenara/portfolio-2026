@@ -96,33 +96,6 @@ export const projects = [
     },
   },
   {
-    slug: "move-uptempo",
-    title: "Move Uptempo",
-    year: "2026",
-    accent: "bg-pink",
-    tags: ["frontend"],
-    kind: { es: "Sitio institucional", en: "Brand website" },
-    stack: ["React", "Vite", "JavaScript"],
-    image: "/projects/moveuptempo.webp",
-    url: "https://move-uptempo.vercel.app",
-    summary: {
-      es: "Sitio para un ecosistema de danza en Zona Oeste: escuela, teatro musical con funciones, crew de competencia y espacio de bienestar.",
-      en: "Website for a dance ecosystem in Buenos Aires: school, musical theatre shows, competition crew and wellness space.",
-    },
-    details: {
-      es: [
-        "Cuatro marcas bajo una misma identidad visual editorial.",
-        "Accesos directos a cursos y venta de entradas para las funciones.",
-        "Panel para gestionar el contenido.",
-      ],
-      en: [
-        "Four brands under one editorial visual identity.",
-        "Direct paths to courses and show tickets.",
-        "Admin panel to manage content.",
-      ],
-    },
-  },
-  {
     slug: "gastos",
     title: "Gastos",
     year: "2026",
@@ -227,6 +200,14 @@ export const projects = [
 
 // Earlier / learning projects: listed compactly, no demo.
 export const archive = [
+  {
+    title: "Move Uptempo",
+    stack: "React · Vite",
+    desc: {
+      es: "Sitio para un ecosistema de danza y teatro musical en Zona Oeste (proyecto en pausa).",
+      en: "Website for a dance and musical-theatre ecosystem in Buenos Aires (on hold).",
+    },
+  },
   {
     title: "Hearo",
     stack: "React · Node.js · Socket.io · MongoDB",

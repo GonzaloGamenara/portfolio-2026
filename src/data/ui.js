@@ -11,9 +11,9 @@ export const ui = {
     langSwitch: "Switch to English",
     footer: "Hecho con React, Tailwind y mucho café.",
     meta: {
-      home: "Gonzalo Gamenara · Desarrollador Full Stack & Analista de Datos",
+      home: "Gonzalo Gamenara · Desarrollador Full Stack",
       homeDesc:
-        "Portfolio de Gonzalo Gamenara: desarrollador Full Stack (React, Next.js, TypeScript, Supabase) y analista de datos (SQL, Python, Power BI) en Buenos Aires.",
+        "Portfolio de Gonzalo Gamenara, desarrollador Full Stack en Buenos Aires: PHP/Laravel, Node.js, MySQL, Azure, React, Next.js y TypeScript, más análisis de datos con SQL, Python y Power BI.",
       about: "Trayectoria",
       aboutDesc: "Experiencia, formación, certificaciones y habilidades de Gonzalo Gamenara.",
       projects: "Proyectos",
@@ -89,7 +89,7 @@ export const ui = {
       cvDownload: "Descargar PDF",
       cvView: "Ver online",
       location: "Ubicación",
-      availability: "Disponibilidad",
+      availability: "Situación actual",
     },
     cv: {
       print: "Imprimir / Guardar PDF",
@@ -115,9 +115,9 @@ export const ui = {
     langSwitch: "Cambiar a español",
     footer: "Built with React, Tailwind and lots of coffee.",
     meta: {
-      home: "Gonzalo Gamenara · Full Stack Developer & Data Analyst",
+      home: "Gonzalo Gamenara · Full Stack Developer",
       homeDesc:
-        "Portfolio of Gonzalo Gamenara: Full Stack developer (React, Next.js, TypeScript, Supabase) and data analyst (SQL, Python, Power BI) based in Buenos Aires.",
+        "Portfolio of Gonzalo Gamenara, Full Stack developer in Buenos Aires: PHP/Laravel, Node.js, MySQL, Azure, React, Next.js and TypeScript, plus data analysis with SQL, Python and Power BI.",
       about: "Background",
       aboutDesc: "Experience, education, certifications and skills of Gonzalo Gamenara.",
       projects: "Projects",
@@ -192,7 +192,7 @@ export const ui = {
       cvDownload: "Download PDF",
       cvView: "View online",
       location: "Location",
-      availability: "Availability",
+      availability: "Currently",
     },
     cv: {
       print: "Print / Save as PDF",

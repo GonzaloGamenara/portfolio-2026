@@ -14,20 +14,20 @@ export const profile = {
     en: "Buenos Aires, Argentina",
   },
   role: {
-    es: "Desarrollador Full Stack & Analista de Datos",
-    en: "Full Stack Developer & Data Analyst",
+    es: "Desarrollador Full Stack",
+    en: "Full Stack Developer",
   },
   availability: {
-    es: "Disponible · Remoto o híbrido",
-    en: "Open to work · Remote or hybrid",
+    es: "Full Stack en Deheza (Shell)",
+    en: "Full Stack Dev at Deheza (Shell)",
   },
   headline: {
-    es: "Construyo productos web de punta a punta, y los uso para vender.",
-    en: "I build web products end to end, and I use them to sell.",
+    es: "Conecto backend, frontend e infraestructura para que el sistema funcione de punta a punta.",
+    en: "I connect backend, frontend and infrastructure so the whole system works end to end.",
   },
   summary: {
-    es: "Desarrollo con React, Next.js, TypeScript y Supabase, y analizo datos con SQL, Python y Power BI. Hoy diseño, programo y opero el e-commerce de mi propia marca de muebles, EntreVetas, mientras curso la Licenciatura en Desarrollo de Software en la UNSAM.",
-    en: "I build with React, Next.js, TypeScript and Supabase, and analyse data with SQL, Python and Power BI. Today I design, code and run the e-commerce of my own furniture brand, EntreVetas, while studying a Software Development degree at UNSAM.",
+    es: "Trabajo como Desarrollador Full Stack en Deheza (Shell): backend en PHP/Laravel y Node.js sobre MySQL y MariaDB, frontends en React con TypeScript y servicios en Azure. En paralelo desarrollo y opero el e-commerce de mi propia marca de muebles, EntreVetas, y curso la Licenciatura en Desarrollo de Software en la UNSAM.",
+    en: "I work as a Full Stack Developer at Deheza (Shell): PHP/Laravel and Node.js backends on MySQL and MariaDB, React + TypeScript frontends and Azure services. On the side I build and run the e-commerce of my own furniture brand, EntreVetas, and study a Software Development degree at UNSAM.",
   },
   pitch: {
     es: "Vengo de más de 7 años liderando equipos en comercio y gastronomía. Eso me dejó algo que no se aprende en un tutorial: pensar el software como una herramienta para el negocio, hablar con clientes reales y entregar bajo presión.",
@@ -36,13 +36,34 @@ export const profile = {
 };
 
 export const stats = [
-  { value: "7+", label: { es: "Apps en producción", en: "Apps in production" } },
+  { value: "6+", label: { es: "Apps propias en producción", en: "Own apps in production" } },
   { value: "3", label: { es: "Años emprendiendo", en: "Years running a business" } },
   { value: "600+", label: { es: "Horas certificadas", en: "Certified hours" } },
   { value: "7+", label: { es: "Años liderando equipos", en: "Years leading teams" } },
 ];
 
 export const experience = [
+  {
+    id: "deheza",
+    role: { es: "Desarrollador Full Stack", en: "Full Stack Developer" },
+    company: "Deheza (Shell)",
+    start: { es: "Jul 2026", en: "Jul 2026" },
+    end: { es: "Presente", en: "Present" },
+    current: true,
+    accent: "bg-yellow",
+    bullets: {
+      es: [
+        "Desarrollo y mantenimiento de backend en PHP con Laravel y Node.js, sobre bases MySQL y MariaDB.",
+        "Interfaces en React con JavaScript y TypeScript conectadas a las APIs internas.",
+        "Integración entre sistemas y despliegue de servicios en Azure.",
+      ],
+      en: [
+        "Backend development and maintenance in PHP with Laravel and Node.js, on MySQL and MariaDB databases.",
+        "React interfaces in JavaScript and TypeScript connected to internal APIs.",
+        "Systems integration and service deployment on Azure.",
+      ],
+    },
+  },
   {
     id: "entrevetas",
     role: { es: "Fundador & Desarrollador Full Stack", en: "Founder & Full Stack Developer" },
@@ -67,19 +88,19 @@ export const experience = [
   },
   {
     id: "freelance",
-    role: { es: "Desarrollador Web Freelance", en: "Freelance Web Developer" },
-    company: { es: "Proyectos propios y para clientes", en: "Client & personal projects" },
+    role: { es: "Desarrollador Web", en: "Web Developer" },
+    company: { es: "Proyectos propios", en: "Personal projects" },
     start: { es: "2025", en: "2025" },
     end: { es: "Presente", en: "Present" },
     current: true,
     accent: "bg-blue",
     bullets: {
       es: [
-        "Sitios y aplicaciones a medida, del relevamiento al deploy en Vercel: Move Uptempo, MIGRA, Titular y Gastos, entre otros.",
+        "Productos propios del relevamiento al deploy en Vercel: MIGRA, Titular y Gastos, entre otros.",
         "Foco en mobile-first, performance y una identidad visual propia para cada producto.",
       ],
       en: [
-        "Custom sites and apps, from discovery to Vercel deploy: Move Uptempo, MIGRA, Titular and Gastos, among others.",
+        "Own products from discovery to Vercel deploy: MIGRA, Titular and Gastos, among others.",
         "Focus on mobile-first, performance and a distinct visual identity for each product.",
       ],
     },
@@ -102,7 +123,7 @@ export const experience = [
     company: "Asterix Bar",
     start: { es: "Abr 2018", en: "Apr 2018" },
     end: { es: "Ene 2020", en: "Jan 2020" },
-    accent: "bg-yellow",
+    accent: "bg-orange",
     bullets: {
       es: ["Coordinación del equipo de barra en noches de alto volumen y atención al público bajo presión."],
       en: ["Led the bar team on high-volume nights, with customer service under pressure."],
@@ -174,7 +195,7 @@ export const skills = [
   {
     group: { es: "Backend & bases de datos", en: "Backend & databases" },
     accent: "bg-pink",
-    items: ["Node.js", "Express", "Supabase", "PostgreSQL", "MySQL", "MongoDB", "Socket.io", "REST APIs"],
+    items: ["PHP", "Laravel", "Node.js", "Express", "MySQL", "MariaDB", "PostgreSQL", "Supabase", "MongoDB", "REST APIs"],
   },
   {
     group: { es: "Datos", en: "Data" },
@@ -184,18 +205,21 @@ export const skills = [
   {
     group: { es: "Herramientas & prácticas", en: "Tools & practices" },
     accent: "bg-blue",
-    items: ["Git & GitHub", "Vercel", "Scrum", { es: "Análisis funcional", en: "Functional analysis" }, "Meta Ads", "Java", "C++"],
+    items: ["Azure", "Git & GitHub", "Vercel", "Scrum", { es: "Análisis funcional", en: "Functional analysis" }, "Meta Ads", "Java", "C++"],
   },
 ];
 
 export const marquee = [
+  "PHP",
+  "Laravel",
   "React",
   "Next.js",
   "TypeScript",
   "Tailwind",
   "Node.js",
   "Supabase",
-  "PostgreSQL",
+  "MySQL",
+  "Azure",
   "Python",
   "SQL",
   "Power BI",

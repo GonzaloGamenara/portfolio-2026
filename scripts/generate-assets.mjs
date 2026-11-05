@@ -57,8 +57,8 @@ try {
     </style></head><body><div class="card">
       <img src="data:image/webp;base64,${photo}">
       <div><h1>Gonzalo<br>Gamenara</h1>
-      <p class="role">Full Stack Developer &amp; Data Analyst</p>
-      <p class="stack">React · Next.js · TypeScript · Supabase<br>SQL · Python · Power BI</p>
+      <p class="role">Full Stack Developer</p>
+      <p class="stack">PHP · Laravel · Node.js · MySQL · Azure<br>React · TypeScript · Next.js</p>
       <span class="url">portafolio-blond-six.vercel.app</span></div>
     </div></body></html>`);
   await og.waitForLoadState("networkidle");
