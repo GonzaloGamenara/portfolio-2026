@@ -84,7 +84,7 @@ export default function Contact() {
       </header>
 
       <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-14">
-        <form onSubmit={onSubmit} className="card on-accent relative flex flex-col gap-5 bg-yellow p-6 sm:p-8">
+        <form data-reveal onSubmit={onSubmit} className="card on-accent relative flex flex-col gap-5 bg-yellow p-6 sm:p-8">
           <div className="grid gap-5 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <label htmlFor="name" className="text-sm font-medium">
@@ -130,7 +130,7 @@ export default function Contact() {
           </div>
         </form>
 
-        <aside className="flex flex-col gap-8">
+        <aside data-reveal style={{ "--rd": "120ms" }} className="flex flex-col gap-8">
           <section aria-labelledby="direct">
             <h2 id="direct" className="text-xl">
               {s.contact.direct}

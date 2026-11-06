@@ -80,7 +80,7 @@ export function FeaturedProject({ project, onOpen, reverse = false, priority = f
   const { t, s } = usePreferences();
   const title = t(project.title);
   return (
-    <article className="group grid items-center gap-8 md:grid-cols-[1.15fr_1fr] md:gap-14">
+    <article data-reveal className="group grid items-center gap-8 md:grid-cols-[1.15fr_1fr] md:gap-14">
       <button
         type="button"
         onClick={() => onOpen(project.slug)}
@@ -124,7 +124,7 @@ export default function ProjectCard({ project, onOpen, priority = false, heading
   const title = t(project.title);
 
   return (
-    <article className={`group relative flex flex-col border-2 border-line bg-surface ${lift}`}>
+    <article className={`group relative flex w-full flex-col border-2 border-line bg-surface ${lift}`}>
       <BrowserFrame project={project} priority={priority} bordered={false} />
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-baseline justify-between gap-3">

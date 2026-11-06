@@ -49,7 +49,9 @@ export default function Projects() {
         ) : (
           <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
             {visible.map((p, i) => (
-              <ProjectCard key={p.slug} project={p} onOpen={modal.open} priority={i < 3} headingLevel={2} />
+              <div key={p.slug} data-reveal style={{ "--rd": `${(i % 3) * 90}ms` }} className="flex">
+                <ProjectCard project={p} onOpen={modal.open} priority={i < 3} headingLevel={2} />
+              </div>
             ))}
           </div>
         )}

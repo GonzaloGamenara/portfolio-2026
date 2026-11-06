@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function SectionTitle({ eyebrow, title, intro, link, linkLabel, id, as: Tag = "h2" }) {
   return (
-    <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div data-reveal className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="max-w-2xl">
         {eyebrow && <p className="eyebrow mb-3">{eyebrow}</p>}
         <Tag id={id} className="text-3xl font-bold sm:text-4xl">

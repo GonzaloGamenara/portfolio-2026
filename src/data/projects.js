@@ -19,7 +19,7 @@ export const projects = [
     kind: { es: "E-commerce · Negocio real", en: "E-commerce · Real business" },
     stack: ["Next.js", "TypeScript", "React", "Supabase", "Vercel"],
     image: "/projects/entrevetas.webp",
-    url: "https://entrevetas-web.vercel.app",
+    url: "https://entrevetas.com.ar",
     summary: {
       es: "La tienda online de mi propia marca de muebles de madera: catálogo con precios, pedidos a medida y piezas con entrega inmediata.",
       en: "The online store of my own solid-wood furniture brand: priced catalogue, custom orders and ready-to-ship pieces.",

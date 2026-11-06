@@ -34,9 +34,11 @@
   --color-accent-soft: #a3d9b1;
   --color-on-accent: #0a0a0a;
 
-  --shadow-card: 4px 4px 0 0 var(--color-line);
-  --shadow-sm: 2px 2px 0 0 var(--color-line);
-  --shadow-lift: 7px 7px 0 0 var(--color-line);
+  --color-shadow: #0a0a0a; /* hard shadows (borders stay --color-line) */
+
+  --shadow-card: 4px 4px 0 0 var(--color-shadow);
+  --shadow-sm: 2px 2px 0 0 var(--color-shadow);
+  --shadow-lift: 7px 7px 0 0 var(--color-shadow);
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Space Mono", ui-monospace, SFMono-Regular, monospace;
@@ -51,9 +53,10 @@
   --color-ink: #f4f4f5;
   --color-muted: #c9c9ce;
   --color-faint: #a8a8b0;
-  --color-line: #f4f4f5;
-  --color-line-strong: #f4f4f5;
-  --color-grid: rgb(163 217 177 / 0.07);
+  --color-line: #e7e5e4;
+  --color-line-strong: #e7e5e4;
+  --color-shadow: #3f7a52; /* brand green, darker: depth without glare */
+  --color-grid: rgb(163 217 177 / 0.06);
   --color-frame: #1a3a25;
   --color-accent: #4ade80;
   color-scheme: dark;
@@ -119,11 +122,11 @@
 
   /* Buttons press into their shadow */
   .btn {
-    @apply inline-flex h-11 items-center justify-center gap-2 border-2 border-line px-5 text-[15px] font-bold whitespace-nowrap shadow-[3px_3px_0_0_var(--color-line)] transition-[transform,box-shadow,background-color] duration-150 select-none;
+    @apply inline-flex h-11 items-center justify-center gap-2 border-2 border-line px-5 text-[15px] font-bold whitespace-nowrap shadow-[3px_3px_0_0_var(--color-shadow)] transition-[transform,box-shadow,background-color] duration-150 select-none;
   }
   .btn:hover {
     transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 0 var(--color-line);
+    box-shadow: 1px 1px 0 0 var(--color-shadow);
   }
   .btn:active {
     transform: translate(3px, 3px);
@@ -177,6 +180,288 @@
   }
   .on-accent * {
     --color-line: #0a0a0a;
+    --color-shadow: #0a0a0a;
+  }
+}
+
+/* ---------- Micro-interactions (src/components/Effects.jsx, TiltPhoto.jsx) ----------
+   Small, transform/opacity-only touches. Everything here is switched off by the global
+   prefers-reduced-motion rule below (and Effects.jsx doesn't arm reveals then). */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* scroll reveal: only hidden once JS has armed it, so content never disappears without JS */
+[data-reveal] {
+  transition:
+    opacity 0.7s var(--ease-out-expo) var(--rd, 0ms),
+    translate 0.8s var(--ease-out-expo) var(--rd, 0ms);
+}
+html.js-reveal [data-reveal]:not(.is-in) {
+  opacity: 0;
+  translate: 0 22px;
+}
+
+/* grid flashlight: a stronger copy of the grid, visible only around the pointer */
+@media (hover: hover) and (pointer: fine) {
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgb(10 10 10 / 0.2) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(10 10 10 / 0.2) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: 0 0;
+    background-attachment: fixed;
+    mask-image: radial-gradient(260px circle at var(--mx, -999px) var(--my, -999px), #000 0%, rgb(0 0 0 / 0.5) 35%, transparent 72%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .dark body::before {
+    background-image:
+      linear-gradient(rgb(163 217 177 / 0.22) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(163 217 177 / 0.22) 1px, transparent 1px);
+  }
+  html[data-pointer="on"] body::before {
+    opacity: 1;
+  }
+}
+
+/* hero photo: 3D tilt towards the pointer, yellow plate in parallax */
+.tilt {
+  perspective: 900px;
+}
+.tilt-card {
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.5s var(--ease-out-expo);
+  will-change: transform;
+}
+.tilt-plate {
+  transform: translate(calc(12px + var(--px, 0px)), calc(12px + var(--py, 0px))) rotate(3deg);
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+/* the "Hola 👋" sticker waves every few seconds */
+.sticker-wave {
+  rotate: -4deg;
+  transform-origin: 20% 80%;
+  animation: sticker-wave 6s ease-in-out 2.5s infinite;
+}
+@keyframes sticker-wave {
+  0%, 84%, 100% { rotate: -4deg; }
+  87% { rotate: -14deg; }
+  90% { rotate: 6deg; }
+  93% { rotate: -11deg; }
+  96% { rotate: 2deg; }
+}
+
+/* slow idle spin for decorative stars */
+.idle-spin {
+  display: inline-block;
+  animation: idle-spin 14s linear infinite;
+}
+.idle-spin-rev {
+  animation-direction: reverse;
+  animation-duration: 18s;
+}
+@keyframes idle-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* arrows lean forward on hover */
+.btn .lucide-arrow-right,
+.btn .lucide-arrow-up-right,
+.link .lucide-arrow-up-right {
+  transition: translate 0.25s var(--ease-back);
+}
+.btn:hover .lucide-arrow-right {
+  translate: 4px 0;
+}
+.btn:hover .lucide-arrow-up-right,
+.link:hover .lucide-arrow-up-right {
+  translate: 2px -2px;
+}
+
+/* tags pop on hover */
+.tag {
+  transition:
+    translate 0.2s var(--ease-back),
+    rotate 0.2s var(--ease-back),
+    background-color 0.15s;
+}
+.tag:hover {
+  translate: 0 -2px;
+  rotate: -3deg;
+  background-color: var(--color-yellow);
+  color: #0a0a0a;
+}
+
+/* brand mark: a slightly bigger tilt on hover */
+header a.group:hover > span:first-child {
+  rotate: -12deg;
+}
+
+/* project modal pops in */
+dialog[open] {
+  animation: dialog-pop 0.38s var(--ease-back);
+}
+dialog[open]::backdrop {
+  animation: backdrop-in 0.3s ease-out;
+}
+@keyframes dialog-pop {
+  from {
+    opacity: 0;
+    scale: 0.94;
+    translate: 0 12px;
+  }
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- First-visit intro (src/components/Intro.jsx) ----------
+   "Through the letter": two block G's on paper become windows onto the site
+   and the camera flies through one of them. Timings in ms from t0:
+     80–980     G's fly in from below the screen as one rigid piece (letter + shadow), caption fades in
+     700–1050   hold, caption tracks tighter
+     1000–1250  yellow fill drains → the letters are now see-through windows
+     1050–1310  grid fades out (and stops being painted)
+     1150–2150  camera zoom into G #2 (expo in-out); the page emerges 0.62 → 1 into focus
+     1680       overlay hidden: the hole already covers the screen
+     2150       overlay removed
+*/
+:root {
+  --ix-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ix-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --ix-zoom: cubic-bezier(0.83, 0, 0.17, 1); /* "expo in-out": slow push, violent middle, soft landing */
+}
+
+.ix-g {
+  /* starts below the bottom edge of the screen (viewBox is 800 high, letters sit ~285–530) */
+  transform: translateY(1100px); /* enough for tall phones too (meet → taller visible area) */
+  filter: blur(5px);
+  animation: ix-g-in 900ms var(--ix-out-expo) 80ms forwards;
+}
+.ix-fill {
+  animation: ix-drain 280ms var(--ix-in-out-soft) 1000ms forwards;
+}
+.ix-shadow-fade {
+  animation: ix-fade-out 250ms var(--ix-in-out-soft) 1000ms forwards;
+}
+.ix-caption {
+  opacity: 0;
+  letter-spacing: 0.6em;
+  animation:
+    ix-caption-in 900ms var(--ix-out-expo) 520ms forwards,
+    ix-fade-out 200ms ease-in 1000ms forwards;
+}
+/* mask: letters start "solid paper" (white) and turn into holes (black) as the fill drains */
+.ix-hole {
+  fill: #fff;
+  animation: ix-hole-open 280ms var(--ix-in-out-soft) 1000ms forwards;
+}
+@keyframes ix-hole-open {
+  to {
+    fill: #000;
+  }
+}
+.ix-world {
+  transform-box: view-box;
+  /* centre of the 2nd G's spine, measured at runtime (Intro.jsx → aimCamera) */
+  transform-origin: var(--ix-ox, 465px) var(--ix-oy, 400px);
+  animation: ix-zoom 1000ms var(--ix-zoom) 1150ms forwards;
+}
+/* the grid must not fly at the camera: it fades as the push starts */
+.ix-gridlayer {
+  animation: ix-fade-out 260ms ease-in 1050ms forwards;
+}
+/* (no CSS blur on the SVG: repainting a blurred 50× vector every frame drops frames) */
+/* the overlay disappears as soon as the letter's hole covers the whole screen (mid-zoom,
+   see aimCamera's ×2 margin): from there on nothing of the letter is visible, and drawing
+   giant text any longer only risks raster artefacts (seen as one-frame black bars on
+   phones). The page finishes landing on its own underneath. */
+.intro {
+  animation: ix-gone 1ms linear 1680ms forwards; /* 1150 + 500 (mid-zoom) + 30 */
+}
+@keyframes ix-gone {
+  to {
+    visibility: hidden;
+  }
+}
+/* nothing moves until Space Mono is loaded and the camera is aimed */
+.intro:not(.ix-go),
+.intro:not(.ix-go) * {
+  animation-play-state: paused !important;
+}
+.ix-skip {
+  opacity: 0;
+  animation:
+    ix-fade-in 300ms ease-out 500ms forwards,
+    ix-fade-out 150ms ease-in 1150ms forwards;
+}
+
+/* the page behind: far away and soft, it rushes forward into focus as we fly through */
+html[data-intro] #root {
+  transform-origin: 50% 50vh;
+  animation: ix-emerge 1000ms var(--ix-zoom) 1150ms both;
+  animation-play-state: paused;
+}
+html[data-intro="go"] #root {
+  animation-play-state: running;
+}
+
+@keyframes ix-g-in {
+  to {
+    transform: none;
+    filter: blur(0);
+  }
+}
+@keyframes ix-drain {
+  to {
+    fill-opacity: 0;
+  }
+}
+@keyframes ix-fade-out {
+  to {
+    opacity: 0;
+    visibility: hidden; /* stop painting it (the grid pattern is the most expensive layer to zoom) */
+  }
+}
+@keyframes ix-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ix-caption-in {
+  to {
+    opacity: 1;
+    letter-spacing: 0.35em;
+  }
+}
+@keyframes ix-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(var(--ix-scale, 70));
+  }
+}
+@keyframes ix-emerge {
+  from {
+    transform: scale(0.62);
+    filter: blur(6px) brightness(0.92);
+  }
+  to {
+    transform: none;
+    filter: none;
   }
 }
 

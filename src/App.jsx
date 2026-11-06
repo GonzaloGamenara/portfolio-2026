@@ -7,10 +7,12 @@ import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
 import CV from "./pages/CV";
 import NotFound from "./pages/NotFound";
+import Intro from "./components/Intro";
 
 export default function App() {
   return (
     <PreferencesProvider>
+      <Intro />
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>

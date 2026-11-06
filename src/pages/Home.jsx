@@ -11,6 +11,7 @@ import { FeaturedProject } from "../components/ProjectCard";
 import ProjectModal from "../components/ProjectModal";
 import SectionTitle from "../components/SectionTitle";
 import { Socials } from "../components/Layout";
+import TiltPhoto from "../components/TiltPhoto";
 
 const statColors = ["bg-yellow", "bg-pink", "bg-green", "bg-blue"];
 
@@ -62,24 +63,24 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative order-1 mx-auto w-48 sm:w-56 md:order-2 md:w-72 lg:w-80">
-            <div aria-hidden="true" className="absolute inset-0 translate-x-3 translate-y-3 rotate-3 border-2 border-line bg-yellow" />
+          <TiltPhoto className="relative order-1 mx-auto w-48 sm:w-56 md:order-2 md:w-72 lg:w-80">
+            <div aria-hidden="true" className="tilt-plate absolute inset-0 border-2 border-line bg-yellow" />
             <img
               src={photo}
               alt={s.home.photoAlt}
               width="447"
               height="559"
               fetchPriority="high"
-              className="relative aspect-[4/5] w-full border-2 border-line bg-pink object-cover"
+              className="tilt-card relative aspect-[4/5] w-full border-2 border-line bg-pink object-cover"
             />
-            <span className="on-accent absolute -bottom-4 -left-4 rotate-[-4deg] border-2 border-line bg-pink px-2.5 py-1 font-mono text-xs font-bold shadow-sm">
+            <span className="sticker-wave on-accent absolute -bottom-4 -left-4 border-2 border-line bg-pink px-2.5 py-1 font-mono text-xs font-bold shadow-sm">
               {t({ es: "Hola 👋", en: "Hi 👋" })}
             </span>
-          </div>
+          </TiltPhoto>
         </div>
 
         {/* METRICS */}
-        <dl className="card mt-14 grid grid-cols-2 md:mt-20 lg:grid-cols-4">
+        <dl data-reveal className="card mt-14 grid grid-cols-2 md:mt-20 lg:grid-cols-4">
           {stats.map((stat, i) => (
             <div
               key={i}
@@ -89,7 +90,12 @@ export default function Home() {
                 <span aria-hidden="true" className={`h-2.5 w-2.5 shrink-0 border-[1.5px] border-line ${statColors[i]}`} />
                 {t(stat.label)}
               </dt>
-              <dd className="order-1 font-mono text-3xl font-bold tracking-tight sm:text-4xl">{stat.value}</dd>
+              <dd className="order-1 font-mono text-3xl font-bold tracking-tight tabular-nums sm:text-4xl">
+                <span aria-hidden="true" data-count={stat.value}>
+                  {stat.value}
+                </span>
+                <span className="sr-only">{stat.value}</span>
+              </dd>
             </div>
           ))}
         </dl>
@@ -118,8 +124,8 @@ export default function Home() {
       <section aria-labelledby="stack-title" className="container-page py-16 md:py-24">
         <SectionTitle id="stack-title" eyebrow={s.home.stack} title={s.home.stackTitle} intro={s.home.stackIntro} />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {skills.map((g) => (
-            <div key={t(g.group)} className="card flex flex-col">
+          {skills.map((g, i) => (
+            <div key={t(g.group)} data-reveal style={{ "--rd": `${i * 80}ms` }} className="card flex flex-col">
               <h3 className={`on-accent border-b-2 border-line px-5 py-3 font-mono text-sm ${g.accent}`}>{t(g.group)}</h3>
               <ul className="flex flex-wrap gap-1.5 p-5">
                 {g.items.map((item) => (
@@ -143,10 +149,10 @@ export default function Home() {
           link="/about"
           linkLabel={s.home.seeTrajectory}
         />
-        <ol className="card divide-y-2 divide-line">
+        <ol data-reveal className="card divide-y-2 divide-line">
           {experience.map((job, i) => (
-            <li key={job.id} className="grid gap-2 p-5 sm:grid-cols-[12rem_1fr_auto] sm:items-center sm:gap-6 sm:px-6">
-              <span className="w-fit border-[1.5px] border-line bg-subtle px-2 py-0.5 font-mono text-xs font-bold">
+            <li key={job.id} className="group grid gap-2 p-5 transition-colors duration-200 hover:bg-subtle sm:grid-cols-[12rem_1fr_auto] sm:items-center sm:gap-6 sm:px-6">
+              <span className="w-fit border-[1.5px] border-line bg-subtle px-2 py-0.5 font-mono text-xs font-bold transition-[background-color,transform] duration-200 group-hover:-rotate-2 group-hover:bg-yellow group-hover:text-[#0a0a0a]">
                 {t(job.start)} — {t(job.end)}
               </span>
               <div>
@@ -163,7 +169,9 @@ export default function Home() {
 
       {/* CTA */}
       <section aria-labelledby="cta-title" className="container-page pb-20 md:pb-28">
-        <div className="on-accent border-2 border-line bg-pink px-6 py-12 text-center shadow-lift sm:px-12 sm:py-16">
+        <div data-reveal className="on-accent relative overflow-hidden border-2 border-line bg-pink px-6 py-12 text-center shadow-lift sm:px-12 sm:py-16">
+          <span aria-hidden="true" className="idle-spin absolute top-5 left-6 font-mono text-3xl">✦</span>
+          <span aria-hidden="true" className="idle-spin idle-spin-rev absolute right-7 bottom-5 font-mono text-2xl">✦</span>
           <h2 id="cta-title" className="text-3xl sm:text-4xl">
             {s.home.ctaTitle}
           </h2>

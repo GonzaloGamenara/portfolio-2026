@@ -25,7 +25,7 @@ export default function ProjectModal({ project, onClose }) {
       onClose={onClose}
       onClick={onBackdrop}
       aria-labelledby="project-modal-title"
-      className="m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-3xl overflow-hidden border-2 border-line bg-bg p-0 text-ink shadow-[8px_8px_0_0_#0a0a0a]"
+      className="m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-3xl overflow-hidden border-2 border-line bg-bg p-0 text-ink shadow-[8px_8px_0_0_var(--color-shadow)]"
     >
       {project && (
         <div className="flex max-h-[92dvh] flex-col">
