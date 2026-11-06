@@ -16,7 +16,7 @@ const links = [
 function Brand({ onClick }) {
   const { s } = usePreferences();
   return (
-    <Link to="/" onClick={onClick} className="group flex items-center gap-3" aria-label={`${profile.name} · ${s.nav.home}`}>
+    <Link viewTransition to="/" onClick={onClick} className="group flex items-center gap-3" aria-label={`${profile.name} · ${s.nav.home}`}>
       <span className="on-accent grid h-10 w-10 place-items-center border-2 border-line bg-yellow font-mono text-sm font-bold shadow-sm transition-transform group-hover:-rotate-6">
         {profile.initials}
       </span>
@@ -90,13 +90,13 @@ export default function Layout() {
         {s.skip}
       </a>
 
-      <header className={`sticky top-0 z-50 border-b-2 border-line bg-frame transition-shadow duration-300 ${scrolled ? "shadow-[0_4px_0_0_var(--color-shadow)]" : ""}`}>
+      <header className={`vt-header sticky top-0 z-50 border-b-2 border-line bg-frame transition-shadow duration-300 ${scrolled ? "shadow-[0_4px_0_0_var(--color-shadow)]" : ""}`}>
         <div className="container-page flex h-[68px] items-center justify-between gap-4">
           <Brand onClick={close} />
 
           <nav aria-label={s.navLabel} className="hidden items-center gap-1 md:flex">
             {links.map(({ to, key }) => (
-              <NavLink key={to} to={to} className={navClass}>
+              <NavLink viewTransition key={to} to={to} className={navClass}>
                 {s.nav[key]}
               </NavLink>
             ))}
@@ -123,7 +123,7 @@ export default function Layout() {
           <div id="mobile-nav" className="h-[calc(100dvh-68px)] animate-fade-up overflow-y-auto border-t-2 border-line bg-frame md:hidden">
             <nav aria-label={s.navLabel} className="container-page flex flex-col gap-3 py-6">
               {[{ to: "/", key: "home" }, ...links].map(({ to, key }, i) => (
-                <NavLink
+                <NavLink viewTransition
                   key={to}
                   to={to}
                   end={to === "/"}
@@ -152,7 +152,7 @@ export default function Layout() {
       </header>
 
       <Effects />
-      <main id="main" ref={mainRef} tabIndex={-1} className="outline-none">
+      <main id="main" ref={mainRef} tabIndex={-1} className="vt-page outline-none">
         <div key={pathname} className="animate-fade-up">
           <Outlet />
         </div>

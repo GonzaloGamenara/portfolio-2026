@@ -19,6 +19,8 @@ export const projects = [
     kind: { es: "E-commerce · Negocio real", en: "E-commerce · Real business" },
     stack: ["Next.js", "TypeScript", "React", "Supabase", "Vercel"],
     image: "/projects/entrevetas.webp",
+    imageFull: "/projects/entrevetas-full.webp", // full-page capture: scrolls on hover
+    scrollDur: "9s",
     url: "https://entrevetas.com.ar",
     summary: {
       es: "La tienda online de mi propia marca de muebles de madera: catálogo con precios, pedidos a medida y piezas con entrega inmediata.",
@@ -49,6 +51,7 @@ export const projects = [
     kind: { es: "Health-tech · Mobile-first", en: "Health-tech · Mobile-first" },
     stack: ["React", "TypeScript", "Vite"],
     image: "/projects/migra.webp",
+    // no full-page capture: the live app shows real personal data (see PENDIENTES.md)
     url: "https://migra-nine.vercel.app",
     summary: {
       es: "Diario clínico de migrañas: registrás una crisis en dos toques, controlás la medicación y generás un informe para tu neurólogo.",
@@ -77,6 +80,8 @@ export const projects = [
     kind: { es: "Agregador de noticias", en: "News aggregator" },
     stack: ["Next.js", "TypeScript", "React"],
     image: "/projects/titular.webp",
+    imageFull: "/projects/titular-full.webp", // full-page capture: scrolls on hover
+    scrollDur: "9s",
     url: "https://news-rho-neon.vercel.app",
     summary: {
       es: "Noticias de cine, videojuegos, teatro, libros, tecnología y ciencia en un solo feed, ordenado por lo que te gusta.",

@@ -327,6 +327,71 @@ dialog[open]::backdrop {
   }
 }
 
+/* project captures "browse" the whole site on hover (full-page screenshot slides up) */
+.shot-frame {
+  container-type: size;
+}
+.shot-scroll {
+  translate: 0 0;
+  transition: translate 0.9s var(--ease-out-expo);
+}
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .shot-scroll {
+    translate: 0 calc(-100% + 100cqh);
+    transition: translate var(--shot-dur, 8s) cubic-bezier(0.45, 0, 0.55, 1) 0.25s;
+  }
+}
+
+/* magnetic buttons (Effects.jsx sets --mg-x/--mg-y); keep .btn's own press transitions */
+[data-magnetic] {
+  translate: var(--mg-x, 0) var(--mg-y, 0);
+  transition:
+    translate 0.4s var(--ease-out-expo),
+    transform 0.15s,
+    box-shadow 0.15s,
+    background-color 0.15s;
+}
+
+/* page transitions (View Transitions API via <Link viewTransition>): the header stays
+   put, the old page lifts away and the new one rises in. Browsers without the API just
+   navigate instantly. */
+.vt-header {
+  view-transition-name: site-header;
+}
+.vt-page {
+  view-transition-name: page;
+}
+::view-transition-group(site-header),
+::view-transition-group(page),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-old(page) {
+  animation: vt-out 0.2s cubic-bezier(0.7, 0, 0.84, 0) both;
+}
+::view-transition-new(page) {
+  animation: vt-in 0.6s var(--ease-out-expo) 0.2s both; /* starts when the old page is gone: no double image */
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    translate: 0 -28px;
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    translate: 0 48px;
+  }
+}
+/* when view transitions run, the old per-page fade-up would double the motion */
+@supports (view-transition-name: none) {
+  html:not([data-intro]) main > .animate-fade-up {
+    animation: none;
+  }
+}
+
 /* ---------- First-visit intro (src/components/Intro.jsx) ----------
    "Through the letter": two block G's on paper become windows onto the site
    and the camera flies through one of them. Timings in ms from t0:
@@ -466,6 +531,11 @@ html[data-intro="go"] #root {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
   *,
   *::before,
   *::after {

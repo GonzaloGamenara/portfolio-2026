@@ -53,7 +53,7 @@ export default function Home() {
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">{t(profile.summary)}</p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link to="/projects" className="btn btn-primary">
+              <Link viewTransition to="/projects" data-magnetic className="btn btn-primary">
                 {s.home.viewProjects} <ArrowRight size={16} aria-hidden="true" />
               </Link>
               <a href={cvFile(lang)} download className="btn btn-secondary">
@@ -177,7 +177,7 @@ export default function Home() {
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg">{s.home.ctaText}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link to="/contact" className="btn btn-dark">
+            <Link viewTransition to="/contact" data-magnetic className="btn btn-dark">
               {s.home.ctaButton} <ArrowRight size={16} aria-hidden="true" />
             </Link>
             <a href={`mailto:${profile.email}`} className="btn bg-white text-[#0a0a0a]">

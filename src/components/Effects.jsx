@@ -27,6 +27,8 @@ function countUp(el) {
  *   [data-reveal]  fades/slides in when it enters the viewport (stagger with --rd)
  *   [data-count]   numbers count up the first time they are seen
  *   --mx / --my    pointer position for the grid "flashlight" (desktop only, see CSS)
+ *   [data-magnetic] buttons lean towards the pointer (desktop only)
+ *   Konami code    replays the first-visit intro
  */
 export default function Effects() {
   const { pathname } = useLocation();
@@ -60,6 +62,65 @@ export default function Effects() {
       counters.forEach((el) => (el.textContent = el.dataset.count));
     };
   }, [pathname]);
+
+  // magnetic buttons: [data-magnetic] leans towards the pointer while hovered
+  useEffect(() => {
+    if (reduced() || !finePointer()) return;
+    const els = [...document.querySelectorAll("[data-magnetic]")];
+    const offs = els.map((el) => {
+      const move = (e) => {
+        const r = el.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height / 2);
+        // subtle: ~8% of the distance, capped at 4px
+        const clamp = (v) => Math.max(-4, Math.min(4, v));
+        el.style.setProperty("--mg-x", `${clamp(dx * 0.08).toFixed(1)}px`);
+        el.style.setProperty("--mg-y", `${clamp(dy * 0.12).toFixed(1)}px`);
+      };
+      const leave = () => {
+        el.style.removeProperty("--mg-x");
+        el.style.removeProperty("--mg-y");
+      };
+      el.addEventListener("pointermove", move);
+      el.addEventListener("pointerleave", leave);
+      return () => {
+        el.removeEventListener("pointermove", move);
+        el.removeEventListener("pointerleave", leave);
+        leave();
+      };
+    });
+    return () => offs.forEach((off) => off());
+  }, [pathname]);
+
+  // easter egg: Konami code (↑↑↓↓←→←→BA) replays the intro
+  useEffect(() => {
+    const code = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+    let i = 0;
+    const onKey = (e) => {
+      if (e.target.closest?.("input, textarea, [contenteditable]")) return;
+      const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      i = k === code[i] ? i + 1 : k === code[0] ? 1 : 0;
+      if (i === code.length) {
+        try {
+          sessionStorage.removeItem("intro_seen");
+        } catch {
+          /* ignore */
+        }
+        window.scrollTo(0, 0);
+        window.location.reload();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    try {
+      if (!sessionStorage.getItem("egg_hint")) {
+        console.info("%c↑ ↑ ↓ ↓ ← → ← → B A", "font: 700 14px monospace; background:#f7c236; color:#0a0a0a; padding:4px 8px; border:2px solid #0a0a0a");
+        sessionStorage.setItem("egg_hint", "1");
+      }
+    } catch {
+      /* storage blocked: no hint */
+    }
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   // pointer flashlight on the background grid
   useEffect(() => {

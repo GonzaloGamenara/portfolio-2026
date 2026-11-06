@@ -12,7 +12,7 @@ export default function SectionTitle({ eyebrow, title, intro, link, linkLabel, i
         {intro && <p className="mt-3 text-lg leading-relaxed text-muted">{intro}</p>}
       </div>
       {link && (
-        <Link to={link} className="btn btn-ghost -ml-3 self-start sm:ml-0 sm:self-auto">
+        <Link viewTransition to={link} className="btn btn-ghost -ml-3 self-start sm:ml-0 sm:self-auto">
           {linkLabel} <ArrowRight size={16} aria-hidden="true" />
         </Link>
       )}

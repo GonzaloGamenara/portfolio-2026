@@ -124,7 +124,7 @@ export default function Contact() {
               )}
               {status === "idle" && !ENDPOINT && s.contact.mailtoNote}
             </p>
-            <button type="submit" disabled={status === "sending"} className="btn btn-dark shrink-0 disabled:opacity-60">
+            <button type="submit" disabled={status === "sending"} data-magnetic className="btn btn-dark shrink-0 disabled:opacity-60">
               <Send size={16} aria-hidden="true" /> {status === "sending" ? s.contact.sending : s.contact.send}
             </button>
           </div>
@@ -176,10 +176,10 @@ export default function Contact() {
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">{s.contact.cvText}</p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <a href={cvFile(lang)} download className="btn btn-dark">
+              <a href={cvFile(lang)} download data-magnetic className="btn btn-dark">
                 <Download size={16} aria-hidden="true" /> {s.contact.cvDownload}
               </a>
-              <Link to="/cv" className="btn btn-secondary">
+              <Link viewTransition to="/cv" className="btn btn-secondary">
                 {s.contact.cvView}
               </Link>
             </div>
