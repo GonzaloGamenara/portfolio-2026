@@ -28,16 +28,29 @@ export function BrowserFrame({ project, priority = false, className = "", border
           {isWeb ? host(project.url) : "Power BI · dashboard"}
         </span>
       </div>
-      <div className="relative aspect-[16/10] overflow-hidden bg-subtle">
-        <img
-          src={project.image}
-          alt=""
-          width="960"
-          height="600"
-          loading={priority ? "eager" : "lazy"}
-          decoding="async"
-          className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
-        />
+      <div className="shot-frame relative aspect-[16/10] overflow-hidden bg-subtle">
+        {project.imageFull ? (
+          // full-page capture that "browses" the site on hover (see .shot-scroll in CSS)
+          <img
+            src={project.imageFull}
+            alt=""
+            width="800"
+            loading={priority ? "eager" : "lazy"}
+            decoding="async"
+            className="shot-scroll absolute inset-x-0 top-0 h-auto w-full"
+            style={{ "--shot-dur": project.scrollDur }}
+          />
+        ) : (
+          <img
+            src={project.image}
+            alt=""
+            width="960"
+            height="600"
+            loading={priority ? "eager" : "lazy"}
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+          />
+        )}
         {project.video && (
           <>
             <video

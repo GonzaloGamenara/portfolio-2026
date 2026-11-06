@@ -24,10 +24,10 @@ export default function CV() {
   return (
     <main className="min-h-dvh bg-neutral-100 py-8 text-black print:bg-white print:py-0">
       <nav className="no-print mx-auto mb-4 flex max-w-[210mm] justify-between gap-3 px-4">
-        <Link to="/contact" className="btn btn-secondary">
+        <Link viewTransition to="/contact" className="btn btn-secondary">
           <ArrowLeft size={16} aria-hidden="true" /> {s.cv.back}
         </Link>
-        <button type="button" onClick={() => window.print()} className="btn btn-primary">
+        <button type="button" onClick={() => window.print()} data-magnetic className="btn btn-primary">
           <Printer size={16} aria-hidden="true" /> {s.cv.print}
         </button>
       </nav>
