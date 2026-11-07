@@ -1,8 +1,8 @@
 # Pendientes / ideas para próximas sesiones
 
 ## ⚠️ Privacidad
-- [ ] MIGRA en vivo (migra-nine.vercel.app) muestra datos de salud reales (comidas, sueño, topiramato) a cualquiera, sin login. Agregar login o un modo demo con datos ficticios antes de mostrarla en el portfolio.
-- [ ] Cuando haya modo demo: nueva captura de MIGRA (miniatura + página completa para el efecto de scroll) y actualizar la descripción con las funciones nuevas.
+- [x] MIGRA en vivo ahora pide login; el portfolio enlaza a `/demo` (datos ficticios).
+- [x] Capturas nuevas desde las demos de MIGRA y Gastos (miniatura + página completa) y descripciones actualizadas.
 
 ## Contenido (lo que más suma para conseguir laburo)
 - [ ] Deheza (Shell): agregar 1–2 logros concretos con números (qué sistema, qué se automatizó, impacto).

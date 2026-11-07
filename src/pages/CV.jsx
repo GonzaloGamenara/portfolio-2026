@@ -77,7 +77,7 @@ export default function CV() {
                   <li key={p.slug}>
                     <strong>{t(p.title)}</strong> <span className="font-mono text-[10px] text-neutral-600">· {p.stack.slice(0, 4).join(", ")}</span>
                     <br />
-                    {t(p.summary)}
+                    {t(p.cvSummary ?? p.summary)}
                     {p.url && p.tags.some((tag) => tag !== "data") && (
                       <span className="font-mono text-[10px] text-neutral-600"> {p.url.replace(/^https:\/\//, "").replace(/\/$/, "")}</span>
                     )}

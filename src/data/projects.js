@@ -51,22 +51,32 @@ export const projects = [
     kind: { es: "Health-tech · Mobile-first", en: "Health-tech · Mobile-first" },
     stack: ["React", "TypeScript", "Vite"],
     image: "/projects/migra.webp",
-    // no full-page capture: the live app shows real personal data (see PENDIENTES.md)
-    url: "https://migra-nine.vercel.app",
+    imageFull: "/projects/migra-full.webp", // full-page capture of the demo: scrolls on hover
+    scrollDur: "4s",
+    url: "https://migra-nine.vercel.app/demo",
+    urlLabel: { es: "Probar la demo", en: "Try the demo" },
+    cvSummary: {
+      es: "Diario clínico de migraña: síntomas, desencadenantes y medicación, con informe para el neurólogo.",
+      en: "Clinical migraine diary: symptoms, triggers and medication, with a report for the neurologist.",
+    },
     summary: {
-      es: "Diario clínico de migrañas: registrás una crisis en dos toques, controlás la medicación y generás un informe para tu neurólogo.",
-      en: "A clinical migraine diary: log an attack in two taps, track medication and generate a report for your neurologist.",
+      es: "Diario clínico de migraña: registrás síntomas, comidas, hidratación y desencadenantes en segundos, controlás la medicación y llevás un informe listo para el neurólogo.",
+      en: "A clinical migraine diary: log symptoms, meals, hydration and triggers in seconds, track medication and bring a ready-made report to your neurologist.",
     },
     details: {
       es: [
-        "\"Modo crisis\" pensado para usarse con dolor: interfaz mínima, contraste alto y acciones grandes.",
-        "Control de abuso de medicación (MOH) con límites mensuales y alertas.",
-        "Informe clínico listo para llevar a la consulta con el especialista.",
+        "Registro en un toque de lo importante (\"algo raro\", dolor, agua, café) y una línea de tiempo del día para ver qué pasó antes de cada síntoma.",
+        "Seguimiento de desencadenantes: estrés, horas de pantalla, actividad, clima, sueño y comidas salteadas.",
+        "Control de medicación: toma nocturna con hora real y aviso de abuso de fármacos de rescate.",
+        "Historial e informe clínico para la consulta; modo \"Atenuar\" para usarla con dolor.",
+        "Cuentas privadas con login; la demo pública usa datos ficticios.",
       ],
       en: [
-        "\"Crisis mode\" designed to be used while in pain: minimal UI, high contrast and big targets.",
-        "Medication-overuse (MOH) tracking with monthly limits and alerts.",
-        "Clinical report ready to bring to the specialist.",
+        "One-tap logging of what matters (\"something off\", pain, water, coffee) and a daily timeline to see what happened before each symptom.",
+        "Trigger tracking: stress, screen time, activity, weather, sleep and skipped meals.",
+        "Medication tracking: bedtime dose with real time and rescue-medication overuse alerts.",
+        "History and clinical report for appointments; a dimmed mode to use it while in pain.",
+        "Private accounts with login; the public demo uses fictional data.",
       ],
     },
   },
@@ -109,14 +119,33 @@ export const projects = [
     kind: { es: "Finanzas personales", en: "Personal finance" },
     stack: ["Next.js", "TypeScript", "React"],
     image: "/projects/gastos.webp",
-    url: "https://moneybillscontrollergonza.vercel.app",
+    imageFull: "/projects/gastos-full.webp", // full-page capture of the demo: scrolls on hover
+    scrollDur: "4s",
+    url: "https://moneybillscontrollergonza.vercel.app/demo",
+    urlLabel: { es: "Probar la demo", en: "Try the demo" },
+    cvSummary: {
+      es: "Finanzas personales: gastos en segundos, techos por categoría y cuánto podés gastar hoy.",
+      en: "Personal finance: expenses in seconds, category caps and how much you can spend today.",
+    },
     summary: {
-      es: "Anotá gastos e ingresos en segundos y mirá a dónde se va tu plata.",
-      en: "Log expenses and income in seconds and see where your money goes.",
+      es: "Finanzas personales sin vueltas: anotás un gasto en segundos, ponés techos por categoría y la app te dice cuánto podés gastar hoy para llegar a fin de mes.",
+      en: "No-nonsense personal finance: log an expense in seconds, set category caps and the app tells you how much you can spend today to make it to month-end.",
     },
     details: {
-      es: ["Autenticación con cuentas de usuario.", "Carga rápida de movimientos y resumen por categoría."],
-      en: ["User accounts with authentication.", "Fast entry of transactions and per-category summary."],
+      es: [
+        "\"Hoy podés gastar\": presupuesto diario calculado con tus techos, lo comprometido y los días que faltan.",
+        "Gastos fijos, tarjetas y suscripciones, con aviso cuando algo sube de precio.",
+        "Techos por categoría, patrimonio, cierre de mes y división de cuentas entre personas.",
+        "Pensada para usarse rápido: atajos de teclado (N gasto, I ingreso, / buscar).",
+        "Cuentas con login; la demo pública usa datos ficticios y se borra al cerrar la pestaña.",
+      ],
+      en: [
+        "\"You can spend today\": a daily budget computed from your caps, commitments and days left.",
+        "Fixed costs, cards and subscriptions, with an alert when something gets more expensive.",
+        "Category caps, net worth, month-end close and splitting bills between people.",
+        "Built for speed: keyboard shortcuts (N expense, I income, / search).",
+        "Accounts with login; the public demo uses fictional data and resets when you close the tab.",
+      ],
     },
   },
   {
